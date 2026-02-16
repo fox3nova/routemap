@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NovaReader v1.4.0 (Design)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 核心解析庫 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/epub.js/0.3.93/epub.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['PingFang TC', 'Microsoft JhengHei', 'sans-serif'], serif: ['Songti TC', 'serif'] },
+                    colors: { 
+                        brand: { 50: '#f5f3ff', 100: '#ede9fe', 500: '#8b5cf6', 600: '#7c3aed', 900: '#4c1d95' }, 
+                        dark: { bg: '#0f172a', panel: '#1e293b' } 
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+                        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+                        shimmer: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(100%)' } }
+                    },
+                    typography: (theme) => ({
+                        DEFAULT: { css: { maxWidth: 'none', color: theme('colors.gray.700'), p: { marginTop: '1.2em', marginBottom: '1.2em', lineHeight: '1.8' } } },
+                        dark: { css: { color: theme('colors.gray.300') } }
+                    })
+                }
+            }
+        }
+    </script>
+    <style>
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        #reader-content { min-height: 100vh; padding-bottom: 60vh; } 
+        .epub-container { height: 100vh; width: 100%; overflow: hidden; }
+        .loader { width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid #8b5cf6; border-radius: 50%; animation: spin 1s infinite linear; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        input[type="file"] { display: none; }
+        
+        .speaking-highlight {
+            background-color: rgba(139, 92, 246, 0.15);
+            border-left: 4px solid #8b5cf6;
+            padding-left: 1em;
+            border-radius: 0 4px 4px 0;
+        }
+        .dark .speaking-highlight { background-color: rgba(139, 92, 246, 0.25); }
+        
+        /* 玻璃擬態背景 */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .dark .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-dark-bg text-gray-800 dark:text-gray-200 h-screen flex overflow-hidden transition-colors duration-500 font-sans selection:bg-brand-500 selection:text-white">
+
+    <!-- Loading -->
+    <div id="global-loader" class="fixed inset-0 bg-white/95 dark:bg-dark-bg/95 z-[100] flex flex-col items-center justify-center hidden backdrop-blur-sm">
+        <div class="loader mb-4" style="width: 50px; height: 50px; border-width: 4px;"></div>
+        <p id="loader-msg" class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-blue-500">準備中...</p>
+    </div>
+
+    <!-- Backdrop -->
+    <div id="backdrop" class="fixed inset-0 bg-black/40 z-40 hidden transition-opacity opacity-0 backdrop-blur-sm" onclick="toggleSidebar(false)"></div>
+
+    <!-- 側邊欄 -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-80 bg-white/95 dark:bg-dark-panel/95 backdrop-blur-xl border-r border-gray-100 dark:border-gray-800 transform -translate-x-full transition-transform duration-300 z-50 flex flex-col shadow-2xl">
+        <div class="p-6 border-b dark:border-gray-700 flex justify-between items-center bg-gradient-to-r from-white to-gray-50 dark:from-dark-panel dark:to-slate-800">
+            <div>
+                <h1 class="font-black text-2xl text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-blue-500 tracking-tight">NovaReader</h1>
+                <p class="text-[10px] text-gray-400 font-mono tracking-widest">PRO EDITION</p>
+            </div>
+            <button id="close-sidebar" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-gray-400 hover:text-gray-600"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- 導入 -->
+        <div class="p-4 border-b border-gray-100 dark:border-gray-800">
+            <button onclick="document.getElementById('file-input').click()" class="w-full py-3 bg-brand-50 dark:bg-brand-900/30 hover:bg-brand-100 dark:hover:bg-brand-900/50 text-brand-600 dark:text-brand-400 rounded-xl border border-brand-200 dark:border-brand-800/50 transition-all flex items-center justify-center gap-2 group">
+                <i class="fas fa-plus circle p-1 bg-brand-200 dark:bg-brand-800 rounded-full text-xs group-hover:scale-110 transition-transform"></i>
+                <span class="font-bold text-sm">導入新書</span>
+            </button>
+            <input type="file" id="file-input" accept=".pdf,.epub,.docx,.doc,.txt" onclick="this.value=null">
+        </div>
+
+        <!-- 書庫 -->
+        <div class="px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex flex-col" style="height: 200px; min-height: 200px;">
+            <div class="flex justify-between items-center mb-2">
+                <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                    書庫 <span id="db-status" class="w-1.5 h-1.5 rounded-full bg-yellow-500 animate-pulse" title="檢查中..."></span>
+                </h4>
+                <div class="flex gap-1">
+                    <button id="refresh-db-btn" class="w-6 h-6 flex items-center justify-center rounded hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-400 hover:text-brand-500 transition-colors" title="重新整理"><i class="fas fa-sync text-xs"></i></button>
+                    <button id="clear-db-btn" class="w-6 h-6 flex items-center justify-center rounded hover:bg-red-50 dark:hover:bg-red-900/20 text-gray-400 hover:text-red-500 transition-colors" title="清空"><i class="fas fa-trash text-xs"></i></button>
+                </div>
+            </div>
+            <ul id="book-list" class="space-y-1 text-sm flex-1 overflow-y-auto no-scrollbar rounded-lg">
+                <li class="text-center text-gray-400 text-xs py-8">正在讀取資料庫...</li>
+            </ul>
+        </div>
+
+        <!-- 目錄 -->
+        <div class="flex-1 overflow-y-auto px-4 pt-3 flex flex-col min-h-0 bg-gray-50/50 dark:bg-black/10">
+            <h4 class="text-xs font-bold text-gray-400 uppercase mb-2 sticky top-0 bg-transparent z-10">目錄</h4>
+            <ul id="toc-list" class="space-y-1 text-sm pb-4"><li class="text-center text-gray-400 py-4 text-xs italic">無目錄資訊</li></ul>
+        </div>
+
+        <!-- 朗讀控制 -->
+        <div class="p-4 border-t dark:border-gray-700 space-y-3 bg-white dark:bg-dark-panel shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold uppercase text-gray-500 flex items-center gap-1"><i class="fas fa-wave-square text-brand-500"></i> AI 朗讀</span>
+                <button id="tts-btn" disabled class="text-brand-500 disabled:opacity-30 hover:scale-110 hover:text-brand-600 transition-all w-8 h-8 flex items-center justify-center rounded-full bg-brand-50 dark:bg-brand-900/20"><i class="fas fa-play text-sm ml-0.5"></i></button>
+            </div>
+            <select id="voice-select" class="w-full text-xs p-2.5 rounded-lg border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 outline-none focus:border-brand-500 transition-colors cursor-pointer"></select>
+            <div class="text-[10px] text-gray-400 text-center truncate font-mono" id="tts-status">準備就緒</div>
+        </div>
+    </aside>
+
+    <!-- 主內容 -->
+    <main class="flex-1 flex flex-col relative w-full h-full">
+        <!-- 導航列 -->
+        <header class="h-16 flex items-center justify-between px-4 md:px-8 border-b border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md z-40 transition-all">
+            <div class="flex items-center gap-4">
+                <button id="toggle-sidebar" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-500 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all active:scale-95 group">
+                    <i class="fas fa-bars text-lg group-hover:rotate-180 transition-transform duration-300"></i>
+                </button>
+                <h1 id="doc-title" class="font-bold text-gray-700 dark:text-gray-200 text-base md:text-lg truncate max-w-[200px] md:max-w-xl opacity-0 transition-opacity duration-500">
+                    NovaReader
+                </h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1 mr-2">
+                    <button id="font-decrease" class="w-8 h-8 flex items-center justify-center rounded hover:bg-white dark:hover:bg-gray-700 text-gray-500 transition-shadow font-serif text-sm">A</button>
+                    <button id="font-increase" class="w-8 h-8 flex items-center justify-center rounded hover:bg-white dark:hover:bg-gray-700 text-gray-500 transition-shadow font-serif text-lg">A</button>
+                </div>
+                <button id="theme-toggle" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 hover:text-yellow-500 dark:hover:text-yellow-400 transition-colors"><i class="fas fa-moon"></i></button>
+                <button id="fullscreen-toggle" class="w-10 h-10 flex items-center justify-center rounded-full bg-brand-600 text-white shadow-lg shadow-brand-600/30 hover:bg-brand-500 hover:scale-105 hover:rotate-90 transition-all"><i class="fas fa-expand"></i></button>
+            </div>
+        </header>
+
+        <!-- 滾動容器 -->
+        <div id="scroll-container" class="flex-1 overflow-y-auto scroll-smooth relative bg-white dark:bg-dark-bg">
+            <div id="reader-container" class="max-w-4xl mx-auto min-h-screen px-4 md:px-12 py-8">
+                
+                <!-- 預設歡迎畫面 (大改版) -->
+                <div id="welcome-screen" class="flex flex-col items-center justify-center min-h-[70vh] animate-fade-in-up">
+                    
+                    <!-- 背景裝飾 -->
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-500/10 dark:bg-brand-500/5 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+
+                    <!-- 英雄卡片 -->
+                    <div class="relative group cursor-pointer mb-8" onclick="document.getElementById('file-input').click()">
+                        <div class="absolute inset-0 bg-gradient-to-r from-brand-400 to-blue-500 rounded-3xl blur opacity-30 group-hover:opacity-50 transition-opacity duration-500"></div>
+                        <div class="relative bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/50 dark:border-gray-700/50 group-hover:-translate-y-2 transition-transform duration-300">
+                            <div class="w-20 h-20 bg-gradient-to-br from-brand-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg mb-4 mx-auto animate-float">
+                                <i class="fas fa-book-open text-3xl text-white"></i>
+                            </div>
+                            <h2 class="text-3xl md:text-4xl font-black text-gray-800 dark:text-white mb-2 text-center tracking-tight">NovaReader</h2>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 text-center font-medium tracking-widest">ULTIMATE EDITION</p>
+                        </div>
+                    </div>
+
+                    <!-- 主按鈕 -->
+                    <button onclick="document.getElementById('file-input').click()" class="group relative px-8 py-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full font-bold shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300 flex items-center gap-3 overflow-hidden">
+                        <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 dark:via-black/10 to-transparent -translate-x-full group-hover:animate-shimmer"></span>
+                        <i class="fas fa-folder-open"></i>
+                        <span>開啟您的書籍</span>
+                    </button>
+
+                    <!-- 功能特點 -->
+                    <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                        <div class="space-y-1">
+                            <div class="w-10 h-10 mx-auto rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 mb-2"><i class="fas fa-save"></i></div>
+                            <h3 class="text-xs font-bold text-gray-700 dark:text-gray-300">自動存檔</h3>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="w-10 h-10 mx-auto rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2"><i class="fas fa-history"></i></div>
+                            <h3 class="text-xs font-bold text-gray-700 dark:text-gray-300">進度記憶</h3>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="w-10 h-10 mx-auto rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-2"><i class="fas fa-headphones"></i></div>
+                            <h3 class="text-xs font-bold text-gray-700 dark:text-gray-300">AI 朗讀</h3>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="w-10 h-10 mx-auto rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 mb-2"><i class="fas fa-file-alt"></i></div>
+                            <h3 class="text-xs font-bold text-gray-700 dark:text-gray-300">多格式</h3>
+                        </div>
+                    </div>
+
+                    <!-- 警告訊息 -->
+                    <div id="storage-warning" class="mt-8 hidden animate-fade-in-up">
+                        <div class="flex items-center gap-2 px-4 py-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-xs rounded-full border border-red-100 dark:border-red-900/30">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <span>File 協議限制：請將此檔案拖入 Chrome/Edge 瀏覽器開啟以獲得最佳體驗</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 閱讀內容區 (預設隱藏) -->
+                <div id="reader-content" class="prose dark:prose-invert prose-lg md:prose-xl max-w-none focus:outline-none hidden"></div>
+            </div>
+        </div>
+
+        <!-- 底部進度條 -->
+        <div class="h-1 bg-gray-100 dark:bg-gray-800 w-full fixed bottom-0 left-0 z-50">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-brand-400 to-brand-600 w-0 transition-all shadow-[0_0_10px_rgba(139,92,246,0.5)]"></div>
+        </div>
+    </main>
+
+    <script>
+        localforage.config({ name: 'NovaReaderDB_V4', storeName: 'books' });
+        const settingsDB = localforage.createInstance({ name: 'NovaReaderDB_V4', storeName: 'settings' });
+
+        const state = {
+            fontSize: parseInt(localStorage.getItem('fontSize')) || 22,
+            theme: localStorage.getItem('theme') || 'light',
+            currentFileName: null,
+            rendition: null,
+            tts: { synth: window.speechSynthesis, speaking: false, currentParaIndex: -1, paragraphs: [], timer: null, watchdog: null }
+        };
+
+        const els = {
+            fileInput: document.getElementById('file-input'),
+            readerContent: document.getElementById('reader-content'),
+            welcomeScreen: document.getElementById('welcome-screen'),
+            loader: document.getElementById('global-loader'),
+            loaderMsg: document.getElementById('loader-msg'),
+            sidebar: document.getElementById('sidebar'),
+            backdrop: document.getElementById('backdrop'),
+            docTitle: document.getElementById('doc-title'),
+            tocList: document.getElementById('toc-list'),
+            bookList: document.getElementById('book-list'),
+            ttsStatus: document.getElementById('tts-status'),
+            ttsBtn: document.getElementById('tts-btn'),
+            scrollContainer: document.getElementById('scroll-container'),
+            dbStatus: document.getElementById('db-status')
+        };
+
+        // --- Toggle Sidebar ---
+        function toggleSidebar(force) {
+            const isClosed = els.sidebar.classList.contains('-translate-x-full');
+            const show = force !== undefined ? force : isClosed;
+            if (show) {
+                els.sidebar.classList.remove('-translate-x-full');
+                els.backdrop.classList.remove('hidden');
+                setTimeout(() => els.backdrop.classList.remove('opacity-0'), 10);
+            } else {
+                els.sidebar.classList.add('-translate-x-full');
+                els.backdrop.classList.add('opacity-0');
+                setTimeout(() => els.backdrop.classList.add('hidden'), 300);
+            }
+        }
+        document.getElementById('toggle-sidebar').onclick = () => toggleSidebar(true);
+        document.getElementById('close-sidebar').onclick = () => toggleSidebar(false);
+
+        // --- 啟動邏輯 ---
+        window.addEventListener('load', async () => {
+            applyTheme();
+            applyFontSize();
+            
+            if (window.location.protocol === 'file:') {
+                document.getElementById('storage-warning').classList.remove('hidden');
+                els.dbStatus.className = "w-1.5 h-1.5 rounded-full bg-red-500";
+                els.dbStatus.title = "File 模式";
+            } else {
+                els.dbStatus.className = "w-1.5 h-1.5 rounded-full bg-green-500";
+            }
+
+            try {
+                if (navigator.storage && navigator.storage.persist) await navigator.storage.persist();
+                await refreshBookList();
+                
+                const lastBookName = await settingsDB.getItem('lastOpenBook');
+                if (lastBookName) {
+                    showLoader(true, `恢復中: ${lastBookName}`);
+                    const fileData = await localforage.getItem(lastBookName);
+                    if (fileData) await loadBookData(fileData, lastBookName);
+                    else await settingsDB.removeItem('lastOpenBook'); // 檔案遺失，停留在歡迎頁
+                }
+            } catch (e) {
+                console.error(e);
+            } finally {
+                showLoader(false);
+            }
+        });
+
+        // --- 檔案導入 ---
+        els.fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            showLoader(true, "處理中...");
+            toggleSidebar(false);
+            try {
+                try {
+                    await localforage.setItem(file.name, file);
+                    await settingsDB.setItem('lastOpenBook', file.name);
+                    await refreshBookList();
+                } catch(err) {
+                    console.warn("Storage failed:", err);
+                }
+                await loadBookData(file, file.name);
+            } catch (err) {
+                alert("讀取失敗: " + err.message);
+            } finally {
+                showLoader(false);
+            }
+        });
+
+        // --- 核心載入 ---
+        async function loadBookData(blob, fileName) {
+            state.currentFileName = fileName;
+            els.docTitle.innerText = fileName;
+            els.docTitle.classList.remove('opacity-0');
+            resetReader();
+            
+            // 切換視圖
+            els.welcomeScreen.classList.add('hidden');
+            els.readerContent.classList.remove('hidden');
+            
+            const ext = fileName.split('.').pop().toLowerCase();
+            try {
+                if (ext === 'pdf') await setupPdfWorker();
+                if (ext === 'pdf') await renderPdf(blob);
+                else if (ext === 'epub') await renderEpub(blob);
+                else if (ext === 'docx') await renderDocx(blob);
+                else if (ext === 'txt') await renderTxt(blob);
+                else throw new Error("不支援格式");
+
+                applyFontSize();
+                setupTTSVoices();
+                prepareTTSData();
+                
+                setTimeout(() => restoreProgress(fileName), 300);
+                setTimeout(() => restoreProgress(fileName), 1000);
+            } catch (e) {
+                alert("錯誤: " + e.message);
+                // 失敗時返回歡迎頁
+                els.welcomeScreen.classList.remove('hidden');
+                els.readerContent.classList.add('hidden');
+            }
+        }
+
+        // --- 渲染引擎 (同 v1.3.5) ---
+        async function setupPdfWorker() {
+            if (pdfjsLib.GlobalWorkerOptions.workerSrc) return;
+            const workerUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+            try {
+                const res = await fetch(workerUrl);
+                if(res.ok) { const blob = await res.blob(); pdfjsLib.GlobalWorkerOptions.workerSrc = URL.createObjectURL(blob); return; }
+            } catch(e) {}
+            pdfjsLib.GlobalWorkerOptions.workerSrc = workerUrl;
+        }
+        async function renderPdf(blob) {
+            const ab = await blob.arrayBuffer(); const pdf = await pdfjsLib.getDocument({data: ab}).promise; let html = "";
+            for (let i = 1; i <= pdf.numPages; i++) {
+                if (i % 5 === 0) { els.loaderMsg.innerText = `PDF ${Math.round(i/pdf.numPages*100)}%`; await new Promise(r => setTimeout(r, 0)); }
+                const page = await pdf.getPage(i); const textContent = await page.getTextContent(); const text = textContent.items.map(s => s.str).join(' ');
+                if(text.trim()) html += `<div class="pdf-page mb-8"><p>${text}</p></div>`;
+            }
+            els.readerContent.innerHTML = html || "<p>空白 PDF</p>";
+        }
+        async function renderEpub(blob) {
+            const ab = await blob.arrayBuffer(); els.readerContent.innerHTML = ""; els.readerContent.style.height = "auto";
+            return new Promise((resolve, reject) => {
+                const book = ePub(ab); const rendition = book.renderTo("reader-content", { width: "100%", height: "100%", flow: "scrolled-doc", manager: "continuous" });
+                state.rendition = rendition; rendition.display().then(() => { book.loaded.navigation.then(nav => generateEpubTOC(nav.toc, rendition)); resolve(); }).catch(reject);
+            });
+        }
+        async function renderDocx(blob) { const ab = await blob.arrayBuffer(); const res = await mammoth.convertToHtml({ arrayBuffer: ab }); els.readerContent.innerHTML = res.value; generateHeadersTOC(); }
+        async function renderTxt(blob) {
+            const text = await blob.text();
+            const html = text.split(/\n\s*\n/).map(line => {
+                const t = line.trim(); if (!t) return "";
+                if (/^\s*(第[0-9一二三四五六七八九十百千萬]+卷|Volume\s+\d+)/i.test(t)) return `<h1>${t}</h1>`;
+                if (/^\s*(第[0-9一二三四五六七八九十百千萬]+章|Chapter\s+\d+|Episode\s+\d+|序章|楔子|尾聲|番外)/i.test(t)) return `<h2>${t}</h2>`;
+                return `<p>${t}</p>`;
+            }).join(""); els.readerContent.innerHTML = html; generateHeadersTOC();
+        }
+
+        // --- 位置記憶 ---
+        function getCurrentParaIndex() {
+            const top = els.scrollContainer.scrollTop; const paras = els.readerContent.querySelectorAll('p, h1, h2, h3');
+            if (!paras.length) return 0;
+            for (let i = 0; i < paras.length; i++) { if (paras[i].offsetTop >= top) return i; } return 0;
+        }
+        els.scrollContainer.addEventListener('scroll', () => {
+            if(!state.currentFileName) return;
+            const h = els.scrollContainer.scrollHeight - els.scrollContainer.clientHeight;
+            const p = h > 0 ? els.scrollContainer.scrollTop : 0;
+            document.getElementById('progress-bar').style.width = `${(els.scrollContainer.scrollTop/h)*100}%`;
+            clearTimeout(window.saveScrollTimer);
+            window.saveScrollTimer = setTimeout(() => {
+                localStorage.setItem(`idx_${state.currentFileName}`, getCurrentParaIndex());
+                localStorage.setItem(`px_${state.currentFileName}`, p);
+            }, 300);
+        });
+        function restoreProgress(fileName) {
+            const idx = localStorage.getItem(`idx_${fileName}`); const px = localStorage.getItem(`px_${fileName}`);
+            if (idx) {
+                const target = els.readerContent.querySelectorAll('p, h1, h2, h3')[parseInt(idx)];
+                if (target) { target.scrollIntoView({ behavior: 'auto', block: 'start' }); els.scrollContainer.scrollTop -= 60; return; }
+            }
+            if (px && parseInt(px) > 0) els.scrollContainer.scrollTop = parseInt(px);
+        }
+
+        // --- TTS 引擎 ---
+        function prepareTTSData() {
+            const nodes = els.readerContent.querySelectorAll('p, h1, h2, h3, h4, h5, h6');
+            state.tts.paragraphs = Array.from(nodes).filter(n => n.innerText.trim().length > 0);
+            state.tts.currentParaIndex = -1; els.ttsStatus.innerText = `Ready (${state.tts.paragraphs.length} 段)`;
+        }
+        function findVisibleTTSPara() {
+            const top = els.scrollContainer.scrollTop + 100; let closest = 0; let minDiff = Infinity;
+            state.tts.paragraphs.forEach((p, i) => { const diff = Math.abs(p.offsetTop - top); if (diff < minDiff) { minDiff = diff; closest = i; } }); return closest;
+        }
+        window.currentUtterance = null;
+        function speakNextChunk() {
+            if (!state.tts.speaking) return;
+            if (state.tts.paragraphs.length === 0) prepareTTSData();
+            if (state.tts.currentParaIndex === -1) state.tts.currentParaIndex = findVisibleTTSPara(); else state.tts.currentParaIndex++;
+            if (state.tts.currentParaIndex >= state.tts.paragraphs.length) return stopTTS();
+            
+            const para = state.tts.paragraphs[state.tts.currentParaIndex];
+            document.querySelectorAll('.speaking-highlight').forEach(el => el.classList.remove('speaking-highlight'));
+            para.classList.add('speaking-highlight'); para.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            state.tts.synth.cancel();
+            setTimeout(() => {
+                if (!state.tts.speaking) return;
+                window.currentUtterance = new SpeechSynthesisUtterance(para.innerText);
+                const select = document.getElementById('voice-select');
+                if (select.value) { const v = state.tts.synth.getVoices().find(v => v.voiceURI === select.value); if (v) window.currentUtterance.voice = v; }
+                window.currentUtterance.rate = state.settings.rate || 1;
+                
+                clearTimeout(state.tts.watchdog);
+                state.tts.watchdog = setTimeout(() => { if (state.tts.speaking) { state.tts.synth.cancel(); setTimeout(speakNextChunk, 100); } }, 3000 + (para.innerText.length * 50));
+                
+                window.currentUtterance.onstart = () => { clearTimeout(state.tts.watchdog); };
+                window.currentUtterance.onend = () => { if (state.tts.speaking) speakNextChunk(); };
+                window.currentUtterance.onerror = (e) => { state.tts.synth.cancel(); if (state.tts.speaking) setTimeout(speakNextChunk, 100); };
+                state.tts.synth.speak(window.currentUtterance);
+                els.ttsStatus.innerText = `朗讀: ${state.tts.currentParaIndex + 1}/${state.tts.paragraphs.length}`;
+            }, 50);
+        }
+        els.ttsBtn.onclick = () => { if (state.tts.speaking) stopTTS(); else startTTS(); };
+        function startTTS() { 
+            if (state.tts.synth.getVoices().length === 0) setupTTSVoices();
+            state.tts.speaking = true; 
+            els.ttsBtn.innerHTML = '<i class="fas fa-stop text-xl"></i>'; els.ttsBtn.classList.add('animate-pulse'); 
+            state.tts.synth.cancel(); speakNextChunk(); 
+        }
+        function stopTTS() { 
+            state.tts.synth.cancel(); state.tts.speaking = false; 
+            els.ttsBtn.innerHTML = '<i class="fas fa-play text-sm ml-0.5"></i>'; els.ttsBtn.classList.remove('animate-pulse'); 
+            document.querySelectorAll('.speaking-highlight').forEach(el => el.classList.remove('speaking-highlight')); 
+            els.ttsStatus.innerText = "已停止"; clearTimeout(state.tts.watchdog); window.currentUtterance = null; 
+        }
+
+        // --- Helpers ---
+        async function refreshBookList() {
+            const keys = await localforage.keys(); els.bookList.innerHTML = "";
+            const books = keys.filter(k => k !== 'NovaReaderDB_V4' && !k.startsWith('_'));
+            if (books.length === 0) { els.bookList.innerHTML = '<li class="text-center text-gray-400 text-xs py-2">無書籍</li>'; return; }
+            books.forEach(name => {
+                const li = document.createElement('li'); li.className = "cursor-pointer truncate py-2 px-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 flex justify-between";
+                li.innerHTML = `<span class="truncate flex-1">${name}</span><button class="ml-2 text-gray-300 hover:text-red-500"><i class="fas fa-trash"></i></button>`;
+                li.querySelector('span').onclick = async () => { showLoader(true, `載入: ${name}`); const blob = await localforage.getItem(name); await settingsDB.setItem('lastOpenBook', name); await loadBookData(blob, name); toggleSidebar(false); };
+                li.querySelector('button').onclick = async (e) => { e.stopPropagation(); if(confirm("刪除？")) { await localforage.removeItem(name); refreshBookList(); } };
+                els.bookList.appendChild(li);
+            });
+        }
+        document.getElementById('refresh-db-btn').onclick = refreshBookList;
+        document.getElementById('clear-db-btn').onclick = async () => { if(confirm("清空書庫？")) { await localforage.clear(); await settingsDB.clear(); location.reload(); } };
+        function showLoader(show, msg) { els.loader.classList.toggle('hidden', !show); if (msg) els.loaderMsg.innerText = msg; }
+        function resetReader() { els.readerContent.innerHTML = ""; els.readerContent.removeAttribute('style'); state.rendition = null; }
+        
+        function setupTTSVoices() {
+            const select = document.getElementById('voice-select'); select.innerHTML = ""; const all = state.tts.synth.getVoices();
+            const hq = ["Siri", "Enhanced", "Premium", "Google", "Microsoft"]; let voices = all.filter(v => hq.some(k => v.name.includes(k))); if (voices.length === 0) voices = all;
+            voices.sort((a,b) => a.lang.includes('zh') ? -1 : 1);
+            voices.forEach(v => { const o = document.createElement('option'); o.value = v.voiceURI; o.text = `${v.name} (${v.lang})`; select.appendChild(o); });
+            els.ttsBtn.disabled = false;
+        }
+        if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = setupTTSVoices;
+        setTimeout(setupTTSVoices, 1000);
+        document.getElementById('voice-select').onchange = () => { if(state.tts.speaking) { stopTTS(); setTimeout(startTTS, 300); } };
+
+        function applyFontSize() { els.readerContent.style.fontSize = `${state.fontSize}px`; if (state.rendition) state.rendition.themes.fontSize(`${state.fontSize}px`); localStorage.setItem('fontSize', state.fontSize); }
+        function applyTheme() { if (state.theme === 'dark') document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); }
+        document.getElementById('font-increase').onclick = () => { state.fontSize += 2; applyFontSize(); };
+        document.getElementById('font-decrease').onclick = () => { state.fontSize = Math.max(12, state.fontSize - 2); applyFontSize(); };
+        document.getElementById('theme-toggle').onclick = () => { state.theme = state.theme === 'dark' ? 'light' : 'dark'; localStorage.setItem('theme', state.theme); applyTheme(); };
+        document.getElementById('fullscreen-toggle').onclick = () => { if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{}); else document.exitFullscreen(); };
+
+        function generateHeadersTOC() { const h = els.readerContent.querySelectorAll('h1, h2, h3'); renderTOC(Array.from(h).map(el => ({ label: el.innerText, target: el, tag: el.tagName }))); }
+        function generateEpubTOC(toc, rend) { renderTOC(toc.map(t => ({ label: t.label, target: t.href, type: 'epub' })), rend); }
+        function renderTOC(items, rend) {
+            els.tocList.innerHTML = ""; if (items.length === 0) return els.tocList.innerHTML = '<li class="text-center py-4 text-gray-400">無目錄</li>';
+            items.forEach(item => {
+                const li = document.createElement('li'); li.className = "cursor-pointer truncate py-2 border-b border-gray-100 dark:border-gray-800 hover:text-brand-500 text-xs px-2";
+                if(item.tag === 'H1') li.classList.add('font-bold', 'bg-gray-50', 'dark:bg-gray-800'); if(item.tag === 'H2') li.classList.add('pl-4');
+                li.innerText = item.label; li.onclick = () => { if(item.type === 'epub') rend.display(item.target); else item.target.scrollIntoView({behavior:'smooth'}); toggleSidebar(false); };
+                els.tocList.appendChild(li);
+            });
+        }
+    </script>
+</body>
+</html>
