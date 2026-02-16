@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NovaReader v1.4.0 (Design)</title>
+    <title>NovaReader v1.4.1 (Vertical & Fixes)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -68,6 +68,31 @@
         .dark .glass-panel {
             background: rgba(30, 41, 59, 0.7);
             border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* 直排模式 CSS */
+        .vertical-mode {
+            writing-mode: vertical-rl;
+            text-orientation: upright; /* 讓英文數字也直立，若想轉90度可改 mixed */
+            width: 100%;
+            height: calc(100vh - 80px) !important; /* 固定高度以支援橫向卷動 */
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 2rem 1rem;
+        }
+        /* 直排時的段落間距 */
+        .vertical-mode p {
+            margin-left: 1.5em;
+            margin-right: 1.5em;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+        /* 直排時的高亮樣式調整 */
+        .vertical-mode .speaking-highlight {
+            border-left: none;
+            border-top: 4px solid #8b5cf6;
+            padding-top: 1em;
+            padding-left: 0;
         }
     </style>
 </head>
@@ -142,11 +167,16 @@
                 <button id="toggle-sidebar" class="w-10 h-10 flex items-center justify-center rounded-xl text-gray-500 hover:text-brand-600 hover:bg-brand-50 dark:hover:bg-brand-900/20 transition-all active:scale-95 group">
                     <i class="fas fa-bars text-lg group-hover:rotate-180 transition-transform duration-300"></i>
                 </button>
-                <h1 id="doc-title" class="font-bold text-gray-700 dark:text-gray-200 text-base md:text-lg truncate max-w-[200px] md:max-w-xl opacity-0 transition-opacity duration-500">
+                <h1 id="doc-title" class="font-bold text-gray-700 dark:text-gray-200 text-base md:text-lg truncate max-w-[150px] md:max-w-md opacity-0 transition-opacity duration-500">
                     NovaReader
                 </h1>
             </div>
             <div class="flex items-center gap-2">
+                <!-- 直排/橫排切換按鈕 (新增) -->
+                <button id="writing-mode-toggle" class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500 transition-colors" title="切換直/橫排">
+                    <i class="fas fa-text-height"></i>
+                </button>
+
                 <div class="hidden md:flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1 mr-2">
                     <button id="font-decrease" class="w-8 h-8 flex items-center justify-center rounded hover:bg-white dark:hover:bg-gray-700 text-gray-500 transition-shadow font-serif text-sm">A</button>
                     <button id="font-increase" class="w-8 h-8 flex items-center justify-center rounded hover:bg-white dark:hover:bg-gray-700 text-gray-500 transition-shadow font-serif text-lg">A</button>
@@ -158,9 +188,9 @@
 
         <!-- 滾動容器 -->
         <div id="scroll-container" class="flex-1 overflow-y-auto scroll-smooth relative bg-white dark:bg-dark-bg">
-            <div id="reader-container" class="max-w-4xl mx-auto min-h-screen px-4 md:px-12 py-8">
+            <div id="reader-container" class="max-w-4xl mx-auto min-h-screen px-4 md:px-12 py-8 transition-all duration-300">
                 
-                <!-- 預設歡迎畫面 (大改版) -->
+                <!-- 預設歡迎畫面 -->
                 <div id="welcome-screen" class="flex flex-col items-center justify-center min-h-[70vh] animate-fade-in-up">
                     
                     <!-- 背景裝飾 -->
@@ -184,26 +214,6 @@
                         <i class="fas fa-folder-open"></i>
                         <span>開啟您的書籍</span>
                     </button>
-
-                    <!-- 功能特點 -->
-                    <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-                        <div class="space-y-1">
-                            <div class="w-10 h-10 mx-auto rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center text-green-600 dark:text-green-400 mb-2"><i class="fas fa-save"></i></div>
-                            <h3 class="text-xs font-bold text-gray-700 dark:text-gray-300">自動存檔</h3>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="w-10 h-10 mx-auto rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 mb-2"><i class="fas fa-history"></i></div>
-                            <h3 class="text-xs font-bold text-gray-700 dark:text-gray-300">進度記憶</h3>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="w-10 h-10 mx-auto rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-purple-600 dark:text-purple-400 mb-2"><i class="fas fa-headphones"></i></div>
-                            <h3 class="text-xs font-bold text-gray-700 dark:text-gray-300">AI 朗讀</h3>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="w-10 h-10 mx-auto rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center text-orange-600 dark:text-orange-400 mb-2"><i class="fas fa-file-alt"></i></div>
-                            <h3 class="text-xs font-bold text-gray-700 dark:text-gray-300">多格式</h3>
-                        </div>
-                    </div>
 
                     <!-- 警告訊息 -->
                     <div id="storage-warning" class="mt-8 hidden animate-fade-in-up">
@@ -232,6 +242,7 @@
         const state = {
             fontSize: parseInt(localStorage.getItem('fontSize')) || 22,
             theme: localStorage.getItem('theme') || 'light',
+            writingMode: localStorage.getItem('writingMode') || 'horizontal', // 新增：直排模式狀態
             currentFileName: null,
             rendition: null,
             tts: { synth: window.speechSynthesis, speaking: false, currentParaIndex: -1, paragraphs: [], timer: null, watchdog: null }
@@ -240,6 +251,7 @@
         const els = {
             fileInput: document.getElementById('file-input'),
             readerContent: document.getElementById('reader-content'),
+            readerContainer: document.getElementById('reader-container'),
             welcomeScreen: document.getElementById('welcome-screen'),
             loader: document.getElementById('global-loader'),
             loaderMsg: document.getElementById('loader-msg'),
@@ -251,7 +263,8 @@
             ttsStatus: document.getElementById('tts-status'),
             ttsBtn: document.getElementById('tts-btn'),
             scrollContainer: document.getElementById('scroll-container'),
-            dbStatus: document.getElementById('db-status')
+            dbStatus: document.getElementById('db-status'),
+            writingModeToggle: document.getElementById('writing-mode-toggle')
         };
 
         // --- Toggle Sidebar ---
@@ -271,10 +284,50 @@
         document.getElementById('toggle-sidebar').onclick = () => toggleSidebar(true);
         document.getElementById('close-sidebar').onclick = () => toggleSidebar(false);
 
+        // --- 直/橫排切換邏輯 (新增) ---
+        function applyWritingMode() {
+            const isVertical = state.writingMode === 'vertical';
+            
+            if (isVertical) {
+                // 套用直排樣式
+                els.readerContent.classList.add('vertical-mode');
+                // 直排模式下，container 需要寬度適配
+                els.readerContainer.classList.remove('max-w-4xl', 'mx-auto'); 
+                els.readerContainer.classList.add('w-full', 'h-full');
+                els.writingModeToggle.innerHTML = '<i class="fas fa-arrows-alt-h rotate-90"></i>';
+                
+                // 直排時，將 scroll container 設為橫向捲動
+                els.scrollContainer.style.overflowX = 'auto';
+                els.scrollContainer.style.overflowY = 'hidden';
+            } else {
+                // 回復橫排樣式
+                els.readerContent.classList.remove('vertical-mode');
+                els.readerContainer.classList.add('max-w-4xl', 'mx-auto');
+                els.readerContainer.classList.remove('w-full', 'h-full');
+                els.writingModeToggle.innerHTML = '<i class="fas fa-text-height"></i>';
+                
+                // 橫排時，回復縱向捲動
+                els.scrollContainer.style.overflowX = 'hidden';
+                els.scrollContainer.style.overflowY = 'auto';
+                els.readerContent.removeAttribute('style'); // 清除可能殘留的樣式
+            }
+            
+            localStorage.setItem('writingMode', state.writingMode);
+            
+            // 切換模式後，嘗試恢復位置
+            if(state.currentFileName) setTimeout(() => restoreProgress(state.currentFileName), 100);
+        }
+
+        els.writingModeToggle.onclick = () => {
+            state.writingMode = state.writingMode === 'horizontal' ? 'vertical' : 'horizontal';
+            applyWritingMode();
+        };
+
         // --- 啟動邏輯 ---
         window.addEventListener('load', async () => {
             applyTheme();
             applyFontSize();
+            applyWritingMode(); // 載入直排設定
             
             if (window.location.protocol === 'file:') {
                 document.getElementById('storage-warning').classList.remove('hidden');
@@ -293,7 +346,7 @@
                     showLoader(true, `恢復中: ${lastBookName}`);
                     const fileData = await localforage.getItem(lastBookName);
                     if (fileData) await loadBookData(fileData, lastBookName);
-                    else await settingsDB.removeItem('lastOpenBook'); // 檔案遺失，停留在歡迎頁
+                    else await settingsDB.removeItem('lastOpenBook');
                 }
             } catch (e) {
                 console.error(e);
@@ -331,7 +384,6 @@
             els.docTitle.classList.remove('opacity-0');
             resetReader();
             
-            // 切換視圖
             els.welcomeScreen.classList.add('hidden');
             els.readerContent.classList.remove('hidden');
             
@@ -347,18 +399,20 @@
                 applyFontSize();
                 setupTTSVoices();
                 prepareTTSData();
+                applyWritingMode(); // 確保模式正確
                 
+                // 暴力重試位置恢復 (Fix Position Issue)
                 setTimeout(() => restoreProgress(fileName), 300);
                 setTimeout(() => restoreProgress(fileName), 1000);
+                setTimeout(() => restoreProgress(fileName), 3000); // 針對直排渲染慢
             } catch (e) {
                 alert("錯誤: " + e.message);
-                // 失敗時返回歡迎頁
                 els.welcomeScreen.classList.remove('hidden');
                 els.readerContent.classList.add('hidden');
             }
         }
 
-        // --- 渲染引擎 (同 v1.3.5) ---
+        // --- 渲染引擎 ---
         async function setupPdfWorker() {
             if (pdfjsLib.GlobalWorkerOptions.workerSrc) return;
             const workerUrl = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -395,30 +449,60 @@
             }).join(""); els.readerContent.innerHTML = html; generateHeadersTOC();
         }
 
-        // --- 位置記憶 ---
+        // --- 位置記憶 (支援直排) ---
         function getCurrentParaIndex() {
-            const top = els.scrollContainer.scrollTop; const paras = els.readerContent.querySelectorAll('p, h1, h2, h3');
+            // 直排模式使用 scrollLeft, 橫排使用 scrollTop
+            const isVertical = state.writingMode === 'vertical';
+            const offset = isVertical ? Math.abs(els.scrollContainer.scrollLeft) : els.scrollContainer.scrollTop;
+            
+            const paras = els.readerContent.querySelectorAll('p, h1, h2, h3');
             if (!paras.length) return 0;
-            for (let i = 0; i < paras.length; i++) { if (paras[i].offsetTop >= top) return i; } return 0;
+            
+            for (let i = 0; i < paras.length; i++) {
+                const el = paras[i];
+                // 直排比較 offsetLeft (反向), 橫排比較 offsetTop
+                const elPos = isVertical ? Math.abs(el.offsetLeft) : el.offsetTop;
+                
+                // 簡單判斷：元素的起始位置大於當前捲動位置
+                // 直排邏輯較複雜，這裡簡化為 "誰在視窗內"
+                const rect = el.getBoundingClientRect();
+                if (isVertical) {
+                    if (rect.right > 0 && rect.left < window.innerWidth) return i;
+                } else {
+                    if (rect.bottom > 0 && rect.top < window.innerHeight) return i;
+                }
+            }
+            return 0;
         }
+
         els.scrollContainer.addEventListener('scroll', () => {
             if(!state.currentFileName) return;
-            const h = els.scrollContainer.scrollHeight - els.scrollContainer.clientHeight;
-            const p = h > 0 ? els.scrollContainer.scrollTop : 0;
-            document.getElementById('progress-bar').style.width = `${(els.scrollContainer.scrollTop/h)*100}%`;
+            
             clearTimeout(window.saveScrollTimer);
             window.saveScrollTimer = setTimeout(() => {
-                localStorage.setItem(`idx_${state.currentFileName}`, getCurrentParaIndex());
-                localStorage.setItem(`px_${state.currentFileName}`, p);
-            }, 300);
+                const idx = getCurrentParaIndex();
+                // 存段落索引最穩
+                localStorage.setItem(`idx_${state.currentFileName}`, idx);
+                
+                // 備份絕對像素 (區分直/橫)
+                const scrollPos = state.writingMode === 'vertical' ? els.scrollContainer.scrollLeft : els.scrollContainer.scrollTop;
+                localStorage.setItem(`px_${state.currentFileName}`, scrollPos);
+            }, 500);
         });
+
         function restoreProgress(fileName) {
-            const idx = localStorage.getItem(`idx_${fileName}`); const px = localStorage.getItem(`px_${fileName}`);
+            const idx = localStorage.getItem(`idx_${fileName}`);
+            
             if (idx) {
                 const target = els.readerContent.querySelectorAll('p, h1, h2, h3')[parseInt(idx)];
-                if (target) { target.scrollIntoView({ behavior: 'auto', block: 'start' }); els.scrollContainer.scrollTop -= 60; return; }
+                if (target) {
+                    console.log(`Restoring to para ${idx}`);
+                    target.scrollIntoView({ behavior: 'auto', block: 'start', inline: 'start' });
+                    // 修正 header 遮擋
+                    if (state.writingMode !== 'vertical') els.scrollContainer.scrollTop -= 60;
+                    return;
+                }
             }
-            if (px && parseInt(px) > 0) els.scrollContainer.scrollTop = parseInt(px);
         }
 
         // --- TTS 引擎 ---
@@ -428,10 +512,12 @@
             state.tts.currentParaIndex = -1; els.ttsStatus.innerText = `Ready (${state.tts.paragraphs.length} 段)`;
         }
         function findVisibleTTSPara() {
-            const top = els.scrollContainer.scrollTop + 100; let closest = 0; let minDiff = Infinity;
-            state.tts.paragraphs.forEach((p, i) => { const diff = Math.abs(p.offsetTop - top); if (diff < minDiff) { minDiff = diff; closest = i; } }); return closest;
+            // 簡化：直接用目前的閱讀進度作為朗讀起點
+            return getCurrentParaIndex();
         }
+        
         window.currentUtterance = null;
+
         function speakNextChunk() {
             if (!state.tts.speaking) return;
             if (state.tts.paragraphs.length === 0) prepareTTSData();
@@ -440,7 +526,8 @@
             
             const para = state.tts.paragraphs[state.tts.currentParaIndex];
             document.querySelectorAll('.speaking-highlight').forEach(el => el.classList.remove('speaking-highlight'));
-            para.classList.add('speaking-highlight'); para.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            para.classList.add('speaking-highlight'); 
+            para.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
             
             state.tts.synth.cancel();
             setTimeout(() => {
@@ -448,10 +535,18 @@
                 window.currentUtterance = new SpeechSynthesisUtterance(para.innerText);
                 const select = document.getElementById('voice-select');
                 if (select.value) { const v = state.tts.synth.getVoices().find(v => v.voiceURI === select.value); if (v) window.currentUtterance.voice = v; }
+                
+                // Fallback: 如果沒有選語音，確保使用一個預設的
+                if (!window.currentUtterance.voice) {
+                    const defaults = state.tts.synth.getVoices().filter(v => v.lang.includes('zh'));
+                    if (defaults.length > 0) window.currentUtterance.voice = defaults[0];
+                }
+
                 window.currentUtterance.rate = state.settings.rate || 1;
+                window.currentUtterance.volume = 1; // 強制最大聲
                 
                 clearTimeout(state.tts.watchdog);
-                state.tts.watchdog = setTimeout(() => { if (state.tts.speaking) { state.tts.synth.cancel(); setTimeout(speakNextChunk, 100); } }, 3000 + (para.innerText.length * 50));
+                state.tts.watchdog = setTimeout(() => { if (state.tts.speaking) { state.tts.synth.cancel(); setTimeout(speakNextChunk, 100); } }, 5000);
                 
                 window.currentUtterance.onstart = () => { clearTimeout(state.tts.watchdog); };
                 window.currentUtterance.onend = () => { if (state.tts.speaking) speakNextChunk(); };
