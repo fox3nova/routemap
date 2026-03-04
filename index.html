@@ -39,56 +39,56 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v2.9.11 -->
-                <div class="relative pl-4 border-l-2 border-pink-500">
+                <!-- v2.9.13 -->
+                <div class="relative pl-4 border-l-2 border-green-500">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v2.9.11 (Current)
-                        <span class="bg-pink-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">Latest</span>
+                        v2.9.13 (Current)
+                        <span class="bg-green-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">Latest</span>
                     </h4>
                     <ul class="space-y-2 list-none">
                         <li>
+                            <p class="text-green-400 font-medium text-xs mb-0.5">[修復] 核心資料庫遺失問題 (Core Database Reference Fix)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">修復了因為程式碼壓縮導致 <code>airportCoords</code> 字典遺失而引發的 <code>ReferenceError</code> 報錯。現已將內建航點資料庫完整還原，確保繪製功能正常運作。<br><span class="italic text-[10px]">Restored the missing airportCoords dictionary that was causing ReferenceErrors during route drawing, fully recovering the manual routing functionality.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.12 -->
+                <div class="relative pl-4 border-l-2 border-cyan-400 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.12</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-cyan-400 font-medium text-xs mb-0.5">[修正] 隱蔽式資料庫掛載 (Stealth DB Integration)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">將 JSON 機場擴充包掛載功能，以「隱蔽式資料庫圖示」的形式無縫整合回輸入框左側。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.11 -->
+                <div class="relative pl-4 border-l-2 border-pink-500 opacity-80">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.11</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
                             <p class="text-pink-400 font-medium text-xs mb-0.5">[修復] 雙核心圖資備援機制 (Dual-CDN Map Fallback)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">修復 <code>Failed to fetch</code> 錯誤。導入智慧路由，當主節點被防火牆或跨域原則阻擋時，自動無縫切換至備用圖資伺服器，確保地圖100%載入。<br><span class="italic text-[10px]">Implemented a dual-CDN fallback mechanism for TopoJSON to resolve "Failed to fetch" errors caused by restrictive CORS/sandbox environments.</span></p>
+                            <p class="text-xs leading-relaxed text-slate-400">修復 <code>Failed to fetch</code> 錯誤。導入智慧路由，當主節點被阻擋時自動切換備用伺服器。</p>
                         </li>
                     </ul>
                 </div>
                 <!-- v2.9.10 -->
-                <div class="relative pl-4 border-l-2 border-purple-500 opacity-90">
+                <div class="relative pl-4 border-l-2 border-purple-500 opacity-70">
                     <h4 class="text-white font-bold text-base mb-1">v2.9.10</h4>
                     <ul class="space-y-2 list-none">
                         <li>
                             <p class="text-purple-400 font-medium text-xs mb-0.5">[重構] 戰術浮動資訊面板 (Tactical Floating Panel)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">廢除分割視窗，改用浮動於地圖上方的沉浸式面板。新增「靠左/靠右」停靠切換功能。<br><span class="italic text-[10px]">Refactored layout to a floating overlay panel. Added Left/Right docking toggle.</span></p>
+                            <p class="text-xs leading-relaxed text-slate-400">廢除分割視窗，改用浮動於地圖上方的沉浸式面板。新增「靠左/靠右」停靠切換功能。</p>
                         </li>
                     </ul>
                 </div>
                 <!-- v2.9.9 -->
-                <div class="relative pl-4 border-l-2 border-indigo-400 opacity-80">
+                <div class="relative pl-4 border-l-2 border-indigo-400 opacity-60">
                     <h4 class="text-white font-bold text-base mb-1">v2.9.9</h4>
                     <ul class="space-y-2 list-none">
                         <li>
                             <p class="text-indigo-400 font-medium text-xs mb-0.5">[修復] iPad 智慧排版 (Smart iPad HUD)</p>
                             <p class="text-xs leading-relaxed text-slate-400">重構斷點邏輯，修復 iPad 直立模式下會殘留高度空殼的問題。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.8 -->
-                <div class="relative pl-4 border-l-2 border-emerald-400 opacity-70">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.8</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-emerald-400 font-medium text-xs mb-0.5">[突破] 絕對收折協議 (Absolute Collapse Protocol)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">移除隱藏狀態下的提示佔位區塊，確保 UI 完美壓縮至底緣。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.7 -->
-                <div class="relative pl-4 border-l-2 border-teal-500 opacity-60">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.7</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-teal-400 font-medium text-xs mb-0.5">[優化] 動態重繪 (Dynamic Redraw Engine)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">導入 ResizeObserver，使地圖跟隨空間變化瞬間調整比例。</p>
                         </li>
                     </ul>
                 </div>
@@ -142,8 +142,8 @@
                 </div>
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
-            <button id="open-changelog" class="bg-pink-600 hover:bg-pink-500 text-white border border-pink-500 px-2 py-1 rounded-md text-[10px] font-mono transition shadow-lg shadow-pink-500/20 shrink-0 ml-2">
-                v2.9.11
+            <button id="open-changelog" class="bg-green-600 hover:bg-green-500 text-white border border-green-500 px-2 py-1 rounded-md text-[10px] font-mono transition shadow-lg shadow-green-500/20 shrink-0 ml-2">
+                v2.9.13
             </button>
         </div>
 
@@ -158,8 +158,17 @@
             </h2>
             
             <div class="flex flex-col gap-2.5 w-full">
-                <input type="text" id="route-input" placeholder="例: RCTP VHHH ZYR" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-yellow-300 placeholder-slate-500 uppercase transition shadow-inner">
-                
+                <!-- 隱蔽式資料庫掛載 UI -->
+                <div class="flex items-center gap-2 w-full">
+                    <label class="shrink-0 bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-400 hover:text-blue-400 p-2 rounded-lg cursor-pointer transition shadow-inner" title="掛載完整機場資料庫 (airline-route-data.json)">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                        </svg>
+                        <input type="file" id="db-upload" accept=".json" class="hidden">
+                    </label>
+                    <input type="text" id="route-input" placeholder="例: RCTP VHHH ZYR" class="flex-1 w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-yellow-300 placeholder-slate-500 uppercase transition shadow-inner">
+                </div>
+
                 <div class="grid grid-cols-3 gap-2 w-full">
                     <label class="bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(79,70,229,0.3)] cursor-pointer flex items-center justify-center whitespace-nowrap" title="支援 KML / GPX / GeoJSON / JSON / XML">
                         匯入航跡
@@ -253,7 +262,7 @@
             "Russia": "俄羅斯", "Rwanda": "盧安達", "Saint Kitts and Nevis": "聖克里斯多福", "Saint Lucia": "聖露西亞",
             "Saint Vincent and the Grenadines": "聖文森", "Samoa": "薩摩亞", "San Marino": "聖馬利諾", "Sao Tome and Principe": "聖多美",
             "Saudi Arabia": "沙烏地阿拉伯", "Senegal": "塞內加爾", "Serbia": "塞爾維亞", "Seychelles": "塞席爾", "Sierra Leone": "獅子山",
-            "Singapore": "新加坡", "Slovakia": "斯洛伐克", "Slovenia": "斯洛維尼亞", "Solomon Is.": "索羅門群島", "Somalia": "索馬利亞",
+            "Singapore": "新加坡", "Slovakia": "斯洛伐克", "Slovenia": "斯洛維尼亞", "Solomon Is.": "索羅門群島", "Somalia": "索馬 Somalia",
             "South Africa": "南非", "South Korea": "韓國", "South Sudan": "南蘇丹", "Spain": "西班牙", "Sri Lanka": "斯里蘭卡",
             "Sudan": "蘇丹", "Suriname": "蘇利南", "Sweden": "瑞典", "Switzerland": "瑞士", "Syria": "敘利亞", "Taiwan": "臺灣",
             "Tajikistan": "塔吉克", "Tanzania": "坦尚尼亞", "Thailand": "泰國", "Timor-Leste": "東帝汶", "Togo": "多哥", "Tonga": "東加",
@@ -358,6 +367,33 @@
             "Canada": "渥太華|4000萬|9.98M km²|$2.1T|CAD|~1.35|天主教/基督教|-10/65,-8/54,-2/64,6/67,13/73,18/80,21/84,19/84,15/87,8/79,1/77,-6/73|CYYZ|多倫多 Toronto (CZYZ)",
             "Australia": "坎培拉|2600萬|7.69M km²|$1.7T|AUD|~1.5|基督教|20/58,20/54,17/51,13/46,9/44,6/40,5/41,6/46,9/52,12/62,15/64,18/52|YSSY|墨爾本 Melbourne (YMMM)",
             "New Zealand": "威靈頓|510萬|268,021 km²|$247B|NZD|~1.6|基督教/無宗教|16/72,16/62,15/74,13/100,11/117,9/147,8/136,9/131,10/100,12/115,13/99,15/84|NZAA|奧克蘭 Auckland (NZZC)"
+        };
+
+        // [v2.9.13] Restored Core Database for Route Drawing
+        let airportCoords = {
+            "RCTP": [121.2328, 25.0777], "RJTT": [139.7796, 35.5522], "ZBAA": [116.5845, 40.0798], "RKSI": [126.4505, 37.4692],
+            "ZKPY": [125.6702, 39.2241], "ZMCK": [106.8184, 47.6521], "WSSS": [103.9940, 1.3502], "RPLL": [121.0194, 14.5086], 
+            "WIII": [106.6558, -6.1256], "VTBS": [100.7473, 13.6811], "WMKK": [101.7042, 2.7433], "VVNB": [105.8072, 21.2212], 
+            "VDPP": [104.8441, 11.5466], "VLVT": [102.5633, 17.9883], "VYYY": [96.1332, 16.9043], "WBSB": [114.9283, 4.9442],
+            "VIDP": [77.1000, 28.5665], "OPRN": [73.0992, 33.6167], "VGHS": [90.4005, 23.8433], "VCBI": [79.8833, 7.1805],
+            "VNKT": [85.3592, 27.6975], "VQPR": [89.4246, 27.4032], "VRMM": [73.5291, 4.1918], "UACC": [71.4667, 51.0222], 
+            "UTTT": [69.2812, 41.2579], "UTAA": [58.3610, 37.9800], "UCFM": [74.4776, 43.0613], "UTDD": [68.8250, 38.5433],
+            "OMDB": [55.3644, 25.2532], "OERK": [46.6988, 24.9576], "LLBG": [34.8855, 32.0113], "LTFM": [28.7424, 41.2622],
+            "OIIE": [51.1522, 35.4161], "ORBI": [44.2345, 33.2625], "OTHH": [51.6080, 25.2730], "OKBK": [47.9689, 29.2266],
+            "OOMS": [58.2817, 23.5933], "OJAI": [35.9836, 31.7226], "OLBA": [35.4884, 33.8213], "OSDI": [36.5144, 33.4116],
+            "OYSN": [44.2197, 15.4763], "OBBI": [50.6336, 26.2708], "OAQA": [69.2125, 34.5658], "UBBB": [49.9822, 40.4675], "UGTB": [44.9547, 41.6692], 
+            "UDYZ": [44.3959, 40.1473],
+            "EGLL": [-0.4614, 51.4700], "LFPG": [2.5500, 49.0097], "EDDF": [8.5705, 50.0333], "LIRF": [12.2389, 41.8003],
+            "LEMD": [-3.5679, 40.4719], "LSZH": [8.5491, 47.4647], "EHAM": [4.7638, 52.3080], "EBBR": [4.4844, 50.9013],
+            "LOWW": [16.5697, 48.1102], "LKPR": [14.2600, 50.1008], "LZIB": [17.2127, 48.1700], "LHBP": [19.2611, 47.4369],
+            "EPWA": [20.9671, 52.1657], "ELLX": [6.2116, 49.6265], "ESSA": [17.9186, 59.6519], "ENGM": [11.1004, 60.1939],
+            "EKCH": [12.6497, 55.6179], "EFHK": [24.9633, 60.3172], "BIKF": [-22.6056, 63.9850], "EETN": [24.8328, 59.4133],
+            "EVRA": [23.9711, 56.9236], "EYVI": [25.2878, 54.6341], "UUEE": [37.4146, 55.9726], "UKBB": [30.8947, 50.3450],
+            "UMMS": [28.0307, 53.8825], "LUKK": [28.9314, 46.9277], "LROP": [26.1025, 44.5721], "LBSF": [23.4061, 42.6952],
+            "LGAV": [23.9444, 37.9363], "LPPT": [-9.1359, 38.7741], "EIDW": [-6.2499, 53.4213], "LYBE": [20.3092, 44.8184],
+            "LQSA": [18.3314, 43.8247], "LDZA": [16.0688, 45.7431], "LJLJ": [14.4576, 46.2237], "LWSK": [21.6214, 41.9616],
+            "LATI": [19.7206, 41.4147], "LYPG": [19.2519, 42.3594], "LCLK": [33.6249, 34.8751], "LMML": [14.4775, 35.8575],
+            "KLAX": [-118.4085, 33.9416], "CYYZ": [-79.6306, 43.6772], "YSSY": [151.1772, -33.9461], "NZAA": [174.7916, -37.0080]
         };
 
         // ==========================================
@@ -538,6 +574,40 @@
             const scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height)));
             const translate = [width / 2 - scale * x, height / 2 - scale * y];
             svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
+        }
+
+        // ==========================================
+        // 4.5 EXTERNAL DATABASE LOADER (JSON) - Re-integrated v2.9.12
+        // ==========================================
+        const dbUpload = document.getElementById("db-upload");
+        if (dbUpload) {
+            dbUpload.addEventListener("change", function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        let addedCount = 0;
+                        for (const key in data) {
+                            const airport = data[key];
+                            if (airport.longitude && airport.latitude) {
+                                const lon = parseFloat(airport.longitude);
+                                const lat = parseFloat(airport.latitude);
+                                if (airport.iata && airport.iata !== "\\N") { airportCoords[airport.iata] = [lon, lat]; addedCount++; }
+                                if (airport.icao && airport.icao !== "\\N") { airportCoords[airport.icao] = [lon, lat]; addedCount++; }
+                            }
+                        }
+                        showRouteError(`資料庫掛載成功！已擴充 ${addedCount} 個座標。`, true);
+                    } catch (err) {
+                        showRouteError("解析 JSON 失敗，請確認檔案格式正確。");
+                    }
+                };
+                reader.readAsText(file);
+                // Reset input to allow reloading same file if needed
+                dbUpload.value = "";
+            });
         }
 
         // ==========================================
