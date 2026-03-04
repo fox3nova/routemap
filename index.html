@@ -6,9 +6,9 @@
     <title>Global Aviation & Intelligence Map</title>
     <!-- Tailwind CSS for UI -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- D3.js and TopoJSON for Mapping -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://unpkg.com/topojson-client@3"></script>
+    <!-- D3.js and TopoJSON for Mapping (Switched to highly reliable cdnjs) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
     <style>
         /* Custom Styles for Map Elements */
         body { margin: 0; overflow: hidden; background-color: #0f172a; }
@@ -22,6 +22,11 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* [v2.9.24] 針對觸控裝置隱藏 Tooltip，避免點擊後殘留畫面的干擾 */
+        @media (hover: none) {
+            #tooltip { display: none !important; }
+        }
     </style>
 </head>
 <body class="text-slate-200 font-sans antialiased h-[100dvh] w-screen overflow-hidden bg-slate-900 relative">
@@ -39,56 +44,56 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v2.9.21 -->
-                <div class="relative pl-4 border-l-2 border-fuchsia-400">
+                <!-- v2.9.24 -->
+                <div class="relative pl-4 border-l-2 border-indigo-400">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v2.9.21 (Current)
-                        <span class="bg-fuchsia-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Latest</span>
+                        v2.9.24 (Current)
+                        <span class="bg-indigo-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Latest</span>
                     </h4>
                     <ul class="space-y-2 list-none">
                         <li>
+                            <p class="text-indigo-400 font-medium text-xs mb-0.5">[優化] 觸控裝置懸停干擾排除 (Touch Hover Interference Fix)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">針對 iPad 等觸控裝置，徹底封鎖滑鼠懸停時的浮動提示框 (Tooltip)，並在點擊地圖時強制隱藏，避免提示框殘留在畫面上遮擋戰術視野。<br><span class="italic text-[10px]">Disabled the floating tooltip on touch devices via CSS media queries and added an auto-hide trigger on click to prevent visual obstruction during map transitions.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.23 -->
+                <div class="relative pl-4 border-l-2 border-emerald-400 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.23</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-red-400 font-medium text-xs mb-0.5">[修復] 系統底層異常與防抖 (Core Script Error Fix)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">修復因 ResizeObserver 造成的 <code>[GLOBAL] Script error</code> 崩潰問題。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.21 -->
+                <div class="relative pl-4 border-l-2 border-fuchsia-400 opacity-80">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.21</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
                             <p class="text-fuchsia-400 font-medium text-xs mb-0.5">[優化] 深度智慧搜尋引擎 (Deep Search Engine)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">大幅強化搜尋能力。現在除了國名與精確的 ICAO，您輸入「城市名 (如 Kabul)」或是「飛航情報區代碼 (如 OAKX)」，引擎也能自動穿透資料庫，將畫面無縫導航至對應的國家或機場座標。<br><span class="italic text-[10px]">Upgraded the search resolver to perform deep content matching (checking capitals and FIR aliases), allowing users to find locations using terms like 'Kabul' or 'OAKX' seamlessly.</span></p>
+                            <p class="text-xs leading-relaxed text-slate-400">大幅強化搜尋能力。現在除了國名與精確的 ICAO，您輸入「城市名」或是「飛航情報區代碼」，引擎也能自動穿透資料庫跳轉。</p>
                         </li>
                     </ul>
                 </div>
                 <!-- v2.9.20 -->
-                <div class="relative pl-4 border-l-2 border-blue-500 opacity-90">
+                <div class="relative pl-4 border-l-2 border-blue-500 opacity-70">
                     <h4 class="text-white font-bold text-base mb-1">v2.9.20</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-blue-400 font-medium text-xs mb-0.5">[進化] 多重意圖搜尋與智慧跳轉 (Smart Navigation Engine)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">在導航列中整合了「實體搜尋」按鈕與 Enter 鍵智慧判定。輸入國名會自動對焦；輸入 ICAO/IATA 會打出藍色信標特寫。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.19 -->
+                <div class="relative pl-4 border-l-2 border-orange-400 opacity-60">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.19</h4>
                     <ul class="space-y-2 list-none">
                         <li>
                             <p class="text-orange-400 font-medium text-xs mb-0.5">[擴充] 中東與北非通訊協定寫入 (MENA Comm Update)</p>
                             <p class="text-xs leading-relaxed text-slate-400">新增沙烏地阿拉伯、約旦、敘利亞、埃及及巴林之飛航情報區無線電通訊頻率與邊界回報規範。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.17 -->
-                <div class="relative pl-4 border-l-2 border-sky-400 opacity-80">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.17</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-sky-400 font-medium text-xs mb-0.5">[擴充] 核心航路無線電頻率寫入 (Radio Comm Integration)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">將亞洲與中東重點區域特管區通訊頻率寫入情報庫中。優化 UI 介面，使無線電欄位支援多行文字自適應展示。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.16 -->
-                <div class="relative pl-4 border-l-2 border-amber-400 opacity-70">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.16</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-amber-400 font-medium text-xs mb-0.5">[重構] 航空情報層級躍升 (Intel Hierarchy Update)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">將「無線電 (Radio)」欄位拉升至標題區與 ICAO、ACC 共同組成「核心飛航通訊區塊」。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.14 -->
-                <div class="relative pl-4 border-l-2 border-yellow-400 opacity-60">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.14</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-yellow-400 font-medium text-xs mb-0.5">[修復] Safari / iOS 安全邊距與遮擋問題 (DVH Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">高度綁定升級為動態 <code>100dvh</code>，拉高地圖控制按鈕底部安全邊距。</p>
                         </li>
                     </ul>
                 </div>
@@ -141,8 +146,8 @@
                 </div>
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
-            <button id="open-changelog" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white border border-fuchsia-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-fuchsia-500/20 shrink-0 ml-2">
-                v2.9.21
+            <button id="open-changelog" class="bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-indigo-500/20 shrink-0 ml-2">
+                v2.9.24
             </button>
         </div>
 
@@ -163,7 +168,6 @@
                         <input type="file" id="db-upload" accept=".json" class="hidden">
                     </label>
                     <input type="text" id="route-input" placeholder="代碼/國名 或 航線 (例: RCTP 或 臺灣)" class="flex-1 w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-yellow-300 placeholder-slate-500 transition shadow-inner">
-                    <!-- 新增：獨立搜尋按鈕 -->
                     <button id="search-btn" class="shrink-0 bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-400 hover:text-blue-400 p-2 rounded-lg transition shadow-inner" title="智慧搜尋與定位">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </button>
@@ -254,7 +258,7 @@
             "Eq. Guinea": "赤道幾內亞", "Eritrea": "厄利垂亞", "Estonia": "愛沙尼亞", "Eswatini": "史瓦帝尼", "Ethiopia": "衣索比亞",
             "Fiji": "斐濟", "Finland": "芬蘭", "France": "法國", "Gabon": "加彭", "Gambia": "甘比亞", "Georgia": "喬治亞",
             "Germany": "德國", "Ghana": "迦納", "Greece": "希臘", "Grenada": "格瑞那達", "Guatemala": "瓜地馬拉", "Guinea": "幾內亞",
-            "Guinea-Bissau": "幾幾內亞比索", "Guyana": "蓋亞那", "Haiti": "海地", "Honduras": "宏都拉斯", "Hungary": "匈牙利", "Iceland": "冰島",
+            "Guinea-Bissau": "幾內亞比索", "Guyana": "蓋亞那", "Haiti": "海地", "Honduras": "宏都拉斯", "Hungary": "匈牙利", "Iceland": "冰島",
             "India": "印度", "Indonesia": "印尼", "Iran": "伊朗", "Iraq": "伊拉克", "Ireland": "愛爾蘭", "Israel": "以色列",
             "Italy": "義大利", "Jamaica": "牙買加", "Japan": "日本", "Jordan": "約旦", "Kazakhstan": "哈薩克", "Kenya": "肯亞",
             "Kiribati": "吉里巴斯", "Kuwait": "科威特", "Kyrgyzstan": "吉爾吉斯", "Laos": "寮國", "Latvia": "拉脫維亞", "Lebanon": "黎巴嫩",
@@ -379,31 +383,12 @@
             "Egypt": "開羅|1.1億|1.01M km²|$398B|EGP|~48|伊斯蘭教|14/5,15/4,18/3,22/1,26/1,28/0,29/0,29/0,27/0,24/1,20/3,15/5|HECA|開羅 Cairo (HECC)|CAIRO: 124.7 (15m Before)"
         };
 
-        // [v2.9.13] Restored Core Database for Route Drawing
-        let airportCoords = {
-            "RCTP": [121.2328, 25.0777], "RJTT": [139.7796, 35.5522], "ZBAA": [116.5845, 40.0798], "RKSI": [126.4505, 37.4692],
-            "ZKPY": [125.6702, 39.2241], "ZMCK": [106.8184, 47.6521], "WSSS": [103.9940, 1.3502], "RPLL": [121.0194, 14.5086], 
-            "WIII": [106.6558, -6.1256], "VTBS": [100.7473, 13.6811], "WMKK": [101.7042, 2.7433], "VVNB": [105.8072, 21.2212], 
-            "VDPP": [104.8441, 11.5466], "VLVT": [102.5633, 17.9883], "VYYY": [96.1332, 16.9043], "WBSB": [114.9283, 4.9442],
-            "VIDP": [77.1000, 28.5665], "OPRN": [73.0992, 33.6167], "VGHS": [90.4005, 23.8433], "VCBI": [79.8833, 7.1805],
-            "VNKT": [85.3592, 27.6975], "VQPR": [89.4246, 27.4032], "VRMM": [73.5291, 4.1918], "UACC": [71.4667, 51.0222], 
-            "UTTT": [69.2812, 41.2579], "UTAA": [58.3610, 37.9800], "UCFM": [74.4776, 43.0613], "UTDD": [68.8250, 38.5433],
-            "OMDB": [55.3644, 25.2532], "OERK": [46.6988, 24.9576], "LLBG": [34.8855, 32.0113], "LTFM": [28.7424, 41.2622],
-            "OIIE": [51.1522, 35.4161], "ORBI": [44.2345, 33.2625], "OTHH": [51.6080, 25.2730], "OKBK": [47.9689, 29.2266],
-            "OOMS": [58.2817, 23.5933], "OJAI": [35.9836, 31.7226], "OLBA": [35.4884, 33.8213], "OSDI": [36.5144, 33.4116],
-            "OYSN": [44.2197, 15.4763], "OBBI": [50.6336, 26.2708], "OAQA": [69.2125, 34.5658], "UBBB": [49.9822, 40.4675], "UGTB": [44.9547, 41.6692], 
-            "UDYZ": [44.3959, 40.1473], "HECA": [31.4056, 30.1219],
-            "EGLL": [-0.4614, 51.4700], "LFPG": [2.5500, 49.0097], "EDDF": [8.5705, 50.0333], "LIRF": [12.2389, 41.8003],
-            "LEMD": [-3.5679, 40.4719], "LSZH": [8.5491, 47.4647], "EHAM": [4.7638, 52.3080], "EBBR": [4.4844, 50.9013],
-            "LOWW": [16.5697, 48.1102], "LKPR": [14.2600, 50.1008], "LZIB": [17.2127, 48.1700], "LHBP": [19.2611, 47.4369],
-            "EPWA": [20.9671, 52.1657], "ELLX": [6.2116, 49.6265], "ESSA": [17.9186, 59.6519], "ENGM": [11.1004, 60.1939],
-            "EKCH": [12.6497, 55.6179], "EFHK": [24.9633, 60.3172], "BIKF": [-22.6056, 63.9850], "EETN": [24.8328, 59.4133],
-            "EVRA": [23.9711, 56.9236], "EYVI": [25.2878, 54.6341], "UUEE": [37.4146, 55.9726], "UKBB": [30.8947, 50.3450],
-            "UMMS": [28.0307, 53.8825], "LUKK": [28.9314, 46.9277], "LROP": [26.1025, 44.5721], "LBSF": [23.4061, 42.6952],
-            "LGAV": [23.9444, 37.9363], "LPPT": [-9.1359, 38.7741], "EIDW": [-6.2499, 53.4213], "LYBE": [20.3092, 44.8184],
-            "LQSA": [18.3314, 43.8247], "LDZA": [16.0688, 45.7431], "LJLJ": [14.4576, 46.2237], "LWSK": [21.6214, 41.9616],
-            "LATI": [19.7206, 41.4147], "LYPG": [19.2519, 42.3594], "LCLK": [33.6249, 34.8751], "LMML": [14.4775, 35.8575],
-            "KLAX": [-118.4085, 33.9416], "CYYZ": [-79.6306, 43.6772], "YSSY": [151.1772, -33.9461], "NZAA": [174.7916, -37.0080]
+        // 建立 FIR 映射字典供繪圖與搜尋共用
+        const firAliasMap = {
+            "OAKX": "OAQA", // Kabul FIR
+            "VECF": "VIDP", // Kolkata FIR -> Delhi fallback
+            "OPLR": "OPRN", // Lahore FIR -> Islamabad fallback
+            "HECC": "HECA"  // Cairo FIR
         };
 
         // ==========================================
@@ -448,17 +433,34 @@
             }
         });
 
+        // [v2.9.23] Native Fetch with Triple-CDN Fallback (Replaced d3.json wrapper to prevent unhandled CORS blocks)
         const loadMapData = async () => {
-            try {
-                return await d3.json("https://unpkg.com/world-atlas@2.0.2/countries-50m.json");
-            } catch (err1) {
-                console.warn("Primary CDN failed, switching to backup jsdelivr...", err1);
-                return await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json");
+            const urls = [
+                "https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/world-110m.json", // Fallback to 110m if 50m fails on cdnjs
+                "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json",
+                "https://unpkg.com/world-atlas@2.0.2/countries-50m.json",
+                "https://fastly.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json"
+            ];
+            
+            for (let url of urls) {
+                try {
+                    const response = await fetch(url);
+                    if (response.ok) {
+                        return await response.json();
+                    }
+                } catch (e) {
+                    console.warn(`[CDN Engine] Failed to fetch from ${url}, switching to next node...`);
+                }
             }
+            throw new Error("All Map CDNs failed due to strict network blocks.");
         };
 
         loadMapData().then(world => {
-            const countries = topojson.feature(world, world.objects.countries).features;
+            // Check if data is 110m or 50m structure
+            const countriesData = world.objects.countries || world.objects.countries_110m || world.objects.countries_50m;
+            if (!countriesData) throw new Error("Invalid TopoJSON structure.");
+            
+            const countries = topojson.feature(world, countriesData).features;
             
             g.selectAll("path")
                 .data(countries)
@@ -467,7 +469,10 @@
                 .attr("d", path)
                 .attr("id", d => "country-" + d.id)
                 .on("mouseover", function(event, d) {
-                    const enName = d.properties.name;
+                    // Fallback to name if available
+                    const enName = d.properties ? d.properties.name : "Unknown";
+                    if(enName === "Unknown") return;
+                    
                     const zhName = countryDict[enName] || enName;
                     tooltip.style("display", "block").text(`${zhName} (${enName})`);
                 })
@@ -480,15 +485,20 @@
                 })
                 .on("click", function(event, d) {
                     event.stopPropagation();
+                    tooltip.style("display", "none"); // [v2.9.24] 點擊時強制清除提示框，確保畫面乾淨
+                    const enName = d.properties ? d.properties.name : null;
+                    if(!enName) return;
+                    
                     d3.selectAll(".country").classed("active", false);
                     d3.select(this).classed("active", true);
-                    populateDataPanel(d.properties.name);
+                    populateDataPanel(enName);
                     zoomToFeature(d);
                 });
         }).catch(err => {
             console.error("Map Load Error:", err);
-            document.getElementById("route-msg").innerHTML = "<span class='text-red-400 font-bold'>地圖圖資載入失敗 (CDN阻擋)。請檢查網路環境。</span>";
-            document.getElementById("route-msg").classList.remove("hidden");
+            const routeMsg = document.getElementById("route-msg");
+            routeMsg.innerHTML = "<span class='text-red-400 font-bold'>地圖圖資載入失敗 (CDN阻擋)。請檢查網路環境或關閉廣告阻擋器。</span>";
+            routeMsg.classList.remove("hidden");
         });
 
         // ==========================================
@@ -630,7 +640,7 @@
         const routeInput = document.getElementById("route-input");
         const drawBtn = document.getElementById("draw-route-btn");
         const clearBtn = document.getElementById("clear-route-btn");
-        const searchBtn = document.getElementById("search-btn"); // [v2.9.20] Search Button
+        const searchBtn = document.getElementById("search-btn"); 
         const confirmClearModal = document.getElementById("confirm-clear-modal");
         const cancelClearBtn = document.getElementById("cancel-clear-btn");
         const confirmClearBtn = document.getElementById("confirm-clear-btn");
@@ -638,7 +648,6 @@
         drawBtn.addEventListener("click", () => {
             const raw = routeInput.value.toUpperCase().trim();
             const codes = raw.split(/[\s,-]+/);
-            // 繪圖時清除舊有搜尋信標與航跡
             routeLayer.selectAll("*").remove(); 
             
             const routeMsg = document.getElementById("route-msg");
@@ -649,8 +658,9 @@
             let validPointsCount = 0;
 
             codes.forEach(code => {
-                if (airportCoords[code]) {
-                    validCoords.push(airportCoords[code]);
+                const searchCode = firAliasMap[code] || code; // 套用 FIR 映射
+                if (airportCoords[searchCode]) {
+                    validCoords.push(airportCoords[searchCode]);
                     validPointsCount++;
                 } else if ((code.length === 4 || code.length === 3) && /^[A-Z]+$/.test(code)) {
                     invalidCodes.push(code);
@@ -664,17 +674,13 @@
             renderRouteLine(validCoords);
         });
 
-        // [v2.9.20] 獨立的搜尋與定位邏輯
         searchBtn.addEventListener("click", performSearch);
 
-        // [v2.9.20] Enter鍵智慧分流：單詞觸發搜尋，多詞觸發繪圖
         routeInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
                 e.preventDefault();
                 const val = routeInput.value.trim();
-                const upperVal = val.toUpperCase();
                 
-                // [v2.9.21] 增強版：如果是單一詞彙（無空格），一律先嘗試搜尋
                 if (!val.includes(" ")) {
                     performSearch();
                 } else {
@@ -688,17 +694,9 @@
             if (!raw) return showRouteError("請輸入國家名稱、城市或機場代碼");
             const upperRaw = raw.toUpperCase();
 
-            // [v2.9.21] 建立 FIR 代碼到主要機場座標的映射 (Alias Mapping)
-            const firAliasMap = {
-                "OAKX": "OAQA", // Kabul FIR -> Kabul Airport
-                "VECF": "VIDP", // Kolkata FIR -> Mapped to Delhi coords as fallback if VECF not in DB
-                "OPLR": "OPRN", // Lahore FIR -> Islamabad (closest major)
-                "HECC": "HECA"  // Cairo FIR -> Cairo Airport
-            };
-
             const searchCode = firAliasMap[upperRaw] || upperRaw;
 
-            // 1. 搜尋機場/航點 (ICAO/IATA) - 先找精確座標
+            // 1. 搜尋機場/航點 (ICAO/IATA)
             if (airportCoords[searchCode]) {
                 const coords = airportCoords[searchCode];
                 const [x, y] = projection(coords);
@@ -707,30 +705,27 @@
                 const translate = [width / 2 - targetScale * x, height / 2 - targetScale * y];
                 svg.transition().duration(1000).call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(targetScale));
                 
-                // 打出搜尋信標 (Search Ping)
                 routeLayer.selectAll(".search-ping").remove();
                 routeLayer.append("circle")
                     .attr("class", "airport-point search-ping")
                     .attr("cx", x)
                     .attr("cy", y)
                     .attr("r", 4 / targetScale)
-                    .style("fill", "#0ea5e9"); // 獨特的天藍色信標
+                    .style("fill", "#0ea5e9"); 
                 
                 showRouteError(`已精確定位至: ${upperRaw}`, true);
-                clearCountrySelection(); // 收折情報面板，把畫面留給特寫鏡頭
+                clearCountrySelection(); 
                 return;
             }
 
-            // 2. [v2.9.21] 深度搜尋國家 (包含國名、中文、以及 rawDB 內的內容如首都)
+            // 2. 深度搜尋國家 
             let matchedEnName = null;
             for (const [en, zh] of Object.entries(countryDict)) {
-                // 比對英文名與中文名
                 if (en.toUpperCase() === upperRaw || zh === raw || zh.includes(raw)) {
                     matchedEnName = en;
                     break;
                 }
                 
-                // 比對資料庫內部字串 (例如首都 Kabul, 開羅, 等等)
                 const dbEntry = rawDB[en];
                 if (dbEntry && dbEntry.toUpperCase().includes(upperRaw)) {
                     matchedEnName = en;
@@ -739,7 +734,7 @@
             }
 
             if (matchedEnName) {
-                const paths = g.selectAll("path").filter(d => d.properties.name === matchedEnName);
+                const paths = g.selectAll("path").filter(d => d.properties && d.properties.name === matchedEnName);
                 if (!paths.empty()) {
                     const node = paths.node();
                     const d = d3.select(node).datum();
@@ -932,23 +927,26 @@
             document.getElementById("route-msg").classList.add("hidden");
         });
 
+        // [v2.9.23] RequestAnimationFrame wrappers for map drawing reliability
         const mapResizeObserver = new ResizeObserver(() => {
-            if (typeof wrapper === 'undefined' || typeof projection === 'undefined' || typeof path === 'undefined') return;
-            const newWidth = wrapper.clientWidth || window.innerWidth || 800;
-            const newHeight = wrapper.clientHeight || window.innerHeight || 600;
-            if (!newWidth || !newHeight) return;
+            window.requestAnimationFrame(() => {
+                if (typeof wrapper === 'undefined' || typeof projection === 'undefined' || typeof path === 'undefined') return;
+                const newWidth = wrapper.clientWidth || window.innerWidth || 800;
+                const newHeight = wrapper.clientHeight || window.innerHeight || 600;
+                if (!newWidth || !newHeight) return;
 
-            projection
-                .scale((newWidth) / (2 * Math.PI))
-                .translate([newWidth / 2, newHeight / 1.5]);
+                projection
+                    .scale((newWidth) / (2 * Math.PI))
+                    .translate([newWidth / 2, newHeight / 1.5]);
 
-            if (typeof g !== 'undefined' && g) g.selectAll("path").attr("d", path);
-            if (typeof routeLayer !== 'undefined' && routeLayer) {
-                routeLayer.selectAll("path.route-line").attr("d", path);
-                routeLayer.selectAll("circle.airport-point")
-                    .attr("cx", d => projection(d) ? projection(d)[0] : 0)
-                    .attr("cy", d => projection(d) ? projection(d)[1] : 0);
-            }
+                if (typeof g !== 'undefined' && g) g.selectAll("path").attr("d", path);
+                if (typeof routeLayer !== 'undefined' && routeLayer) {
+                    routeLayer.selectAll("path.route-line").attr("d", path);
+                    routeLayer.selectAll("circle.airport-point")
+                        .attr("cx", d => projection(d) ? projection(d)[0] : 0)
+                        .attr("cy", d => projection(d) ? projection(d)[1] : 0);
+                }
+            });
         });
         
         mapResizeObserver.observe(wrapper);
