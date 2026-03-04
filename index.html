@@ -12,8 +12,8 @@
     <style>
         /* Custom Styles for Map Elements */
         body { margin: 0; overflow: hidden; background-color: #0f172a; }
-        .country { fill: #1e293b; stroke: #334155; stroke-width: 0.5px; transition: fill 0.2s; cursor: pointer; }
-        .country:hover { fill: #3b82f6; stroke: #93c5fd; stroke-width: 1px; }
+        .country { fill: #1e293b; stroke: #334155; stroke-width: 0.5px; transition: fill 0.2s, stroke-width 0.2s; cursor: pointer; }
+        /* 移除 hover 高亮，僅保留 active 點擊高亮 */
         .country.active { fill: #2563eb; stroke: #bfdbfe; stroke-width: 1.5px; }
         .route-line { fill: none; stroke: #fde047; stroke-width: 2.5px; opacity: 0.9; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 2px rgba(253,224,71,0.5)); }
         .airport-point { fill: #ef4444; stroke: #fff; stroke-width: 1.5px; }
@@ -40,36 +40,26 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v2.9.5 -->
-                <div class="relative pl-4 border-l-2 border-yellow-500">
+                <!-- v2.9.7 -->
+                <div class="relative pl-4 border-l-2 border-emerald-400">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v2.9.5 (Current)
-                        <span class="bg-yellow-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">Latest</span>
+                        v2.9.7 (Current)
+                        <span class="bg-emerald-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">Latest</span>
                     </h4>
                     <ul class="space-y-3 list-none">
                         <li>
-                            <p class="text-yellow-400 font-medium text-xs mb-0.5">[修正] 雙語更新日誌還原 (Bilingual Changelog Restoration)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">補回在先前程式碼壓縮過程中意外遺失的英文版更新日誌，維持系統一貫的國際化專業標準。<br><span class="italic text-[10px]">Restored missing English translations in the changelog that were accidentally truncated during code compression, maintaining the system's professional international standard.</span></p>
+                            <p class="text-emerald-400 font-medium text-xs mb-0.5">[進化] 真實動態收折與 ResizeObserver (True Collapse & Dynamic Redraw)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">解除了面板固定佔用 50% 高度的限制。現在點選「Ｘ」或海域取消選取後，面板會極致壓縮至底部，將螢幕最大化還給地圖。並導入 ResizeObserver，使地圖能完美跟隨空間變化瞬間調整比例與重繪。<br><span class="italic text-[10px]">Removed fixed height constraints allowing the panel to truly collapse. Introduced ResizeObserver for perfect dynamic D3 re-projection whenever layout dimensions shift.</span></p>
                         </li>
                     </ul>
                 </div>
-                <!-- v2.9.4 -->
-                <div class="relative pl-4 border-l-2 border-orange-500 opacity-80">
-                    <h4 class="text-white font-bold text-base mb-2">v2.9.4</h4>
+                <!-- v2.9.6 -->
+                <div class="relative pl-4 border-l-2 border-emerald-600 opacity-80">
+                    <h4 class="text-white font-bold text-base mb-2">v2.9.6</h4>
                     <ul class="space-y-3 list-none">
                         <li>
-                            <p class="text-orange-400 font-medium text-xs mb-0.5">[修正] 地圖消失與重繪崩潰修復 (Zero-Scale Rendering Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">解決了在載入瞬間因 Flexbox 排版未完成導致寬高為 0，進而使地圖縮放比例歸零消失的致命錯誤。並完善了 Resize 事件的比例重算機制。<br><span class="italic text-[10px]">Fixed a critical zero-scale rendering issue caused by incomplete Flexbox layout on load, and improved the resize event calculation mechanism.</span></p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.3 -->
-                <div class="relative pl-4 border-l-2 border-blue-500 opacity-60">
-                    <h4 class="text-white font-bold text-base mb-2">v2.9.3</h4>
-                    <ul class="space-y-3 list-none">
-                        <li>
-                            <p class="text-blue-400 font-medium text-xs mb-0.5">[修正] 結構截斷與面板破版修復 (Data & Layout Fixes)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">修復核心資料庫意外截斷導致地圖無法互動的問題。同時將按鈕區塊重構為等比例網格 (Grid)，徹底解決面板在窄螢幕或 iPad 上超出邊界的問題。<br><span class="italic text-[10px]">Fixed core database truncation issues and refactored button layouts into a uniform grid to prevent overflow on narrow screens or iPads.</span></p>
+                            <p class="text-emerald-500 font-medium text-xs mb-0.5">[優化] 點擊互動與自動收折機制 (Click-to-Highlight & Auto-Collapse)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">取消懸停高亮，改為「僅點擊時亮起」。新增點擊海域取消選取並提供關閉按鈕。</p>
                         </li>
                     </ul>
                 </div>
@@ -95,7 +85,7 @@
     </div>
 
     <!-- Map Container -->
-    <div id="map-wrapper" class="relative flex-1 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-700 shadow-inner overflow-hidden min-h-[50vh] md:min-h-full">
+    <div id="map-wrapper" class="relative flex-1 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-700 shadow-inner overflow-hidden min-h-[40vh] md:min-h-full">
         <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
             <button id="zoom-in" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-lg shadow-lg backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition">+</button>
             <button id="zoom-out" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-lg shadow-lg backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition">-</button>
@@ -104,8 +94,9 @@
         <div id="tooltip" class="absolute hidden bg-slate-800/90 text-white text-sm px-3 py-1.5 rounded pointer-events-none z-20 backdrop-blur border border-slate-600 shadow-xl whitespace-nowrap"></div>
     </div>
 
-    <!-- Side/Bottom Panel -->
-    <div class="w-full md:w-[320px] md:shrink-0 h-[50%] md:h-full bg-slate-800 flex flex-col shadow-2xl z-10 overflow-hidden border-t md:border-t-0 border-slate-700">
+    <!-- Side/Bottom Panel (Modified for Dynamic Collapsing) -->
+    <!-- Removed fixed h-[50%], added max-h-[60vh] to allow shrinking to content size -->
+    <div class="w-full md:w-[320px] md:shrink-0 flex flex-col shadow-2xl z-10 overflow-hidden border-t md:border-t-0 border-slate-700 bg-slate-800 max-h-[65vh] md:max-h-full md:h-full transition-all duration-300">
         <!-- Header -->
         <div class="p-3 md:p-4 border-b border-slate-700 bg-slate-800/50 shrink-0 flex justify-between items-start">
             <div>
@@ -115,8 +106,8 @@
                 </h1>
                 <p class="text-[10px] md:text-xs text-slate-400 mt-1 font-mono">Fact-Check Protocol: ACTIVE (Global Cov.)</p>
             </div> 
-            <button id="open-changelog" class="bg-yellow-600 hover:bg-yellow-500 text-white border border-yellow-500 px-2 py-1 rounded text-[10px] font-mono transition shadow shrink-0 ml-2">
-                v2.9.5
+            <button id="open-changelog" class="bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-500 px-2 py-1 rounded text-[10px] font-mono transition shadow shrink-0 ml-2">
+                v2.9.7
             </button>
         </div>
 
@@ -146,18 +137,28 @@
             <p id="route-msg" class="text-[10px] text-red-400 mt-1.5 hidden truncate"></p>
         </div>
 
-        <!-- Country Info Container -->
-        <div class="flex-1 overflow-y-auto p-3 md:p-4 bg-slate-900/30 relative">
-            <div id="default-info" class="absolute inset-0 flex items-center justify-center text-slate-500 text-xs md:text-sm">
-                點擊地圖上的國家以檢視情報資訊
+        <!-- Country Info Container (Wraps the scrollable area) -->
+        <div class="overflow-y-auto bg-slate-900/30 flex-1 flex flex-col relative">
+            <!-- 預設提示區塊 (收折時僅顯示此細長條) -->
+            <div id="default-info" class="flex-1 flex items-center justify-center p-4 text-slate-500 text-xs md:text-sm py-5">
+                <span class="flex items-center gap-1.5 opacity-70">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg>
+                    點擊地圖國家以展開情報
+                </span>
             </div>
             
-            <div id="country-data" class="hidden flex-col gap-3 pb-4">
-                <div class="border-b border-slate-700 pb-3">
-                    <h2 id="info-name" class="text-xl md:text-2xl font-bold text-white tracking-wide">國家名稱</h2>
-                    <p id="info-icao-acc" class="text-[11px] md:text-xs text-yellow-400 font-mono mt-1 tracking-wider bg-slate-800/80 p-1.5 rounded inline-block border border-yellow-700/50">
-                        ICAO: ---- | ACC: ----
-                    </p>
+            <div id="country-data" class="hidden flex-col gap-3 p-3 md:p-4 pb-6">
+                <div class="border-b border-slate-700 pb-3 flex justify-between items-start">
+                    <div>
+                        <h2 id="info-name" class="text-xl md:text-2xl font-bold text-white tracking-wide">國家名稱</h2>
+                        <p id="info-icao-acc" class="text-[11px] md:text-xs text-yellow-400 font-mono mt-1 tracking-wider bg-slate-800/80 p-1.5 rounded inline-block border border-yellow-700/50">
+                            ICAO: ---- | ACC: ----
+                        </p>
+                    </div>
+                    <!-- 新增手動關閉(收折)資訊面板按鈕 -->
+                    <button id="close-info-btn" class="text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-700 transition focus:outline-none" title="關閉並收折面板">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
                 </div>
 
                 <!-- Info Grid -->
@@ -361,7 +362,6 @@
         // ==========================================
         const wrapper = document.getElementById("map-wrapper");
         
-        // [FIX v2.9.4] Fallback dimensions to prevent zero-scale render issues
         const width = wrapper.clientWidth || window.innerWidth || 800;
         const height = wrapper.clientHeight || window.innerHeight || 600;
 
@@ -374,11 +374,12 @@
         const g = svg.append("g");
         const routeLayer = svg.append("g");
 
-        const projection = d3.geoMercator()
+        // 將 projection 設定為 let 以便在 Resize 時重新賦值更新
+        let projection = d3.geoMercator()
             .scale((width) / (2 * Math.PI))
             .translate([width / 2, height / 1.5]);
 
-        const path = d3.geoPath().projection(projection);
+        let path = d3.geoPath().projection(projection);
 
         const zoom = d3.zoom()
             .scaleExtent([1, 15])
@@ -393,7 +394,12 @@
         svg.call(zoom);
         const tooltip = d3.select("#tooltip");
 
-        // Use jsdelivr instead of unpkg for better reliability
+        svg.on("click", function(event) {
+            if (event.target === svg.node()) {
+                clearCountrySelection();
+            }
+        });
+
         d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json").then(world => {
             const countries = topojson.feature(world, world.objects.countries).features;
             
@@ -416,6 +422,7 @@
                     tooltip.style("display", "none");
                 })
                 .on("click", function(event, d) {
+                    event.stopPropagation();
                     d3.selectAll(".country").classed("active", false);
                     d3.select(this).classed("active", true);
                     populateDataPanel(d.properties.name);
@@ -487,6 +494,14 @@
             }
         }
 
+        function clearCountrySelection() {
+            d3.selectAll(".country").classed("active", false);
+            document.getElementById("country-data").classList.replace("flex", "hidden");
+            document.getElementById("default-info").classList.remove("hidden");
+        }
+
+        document.getElementById("close-info-btn").addEventListener("click", clearCountrySelection);
+
         function zoomToFeature(d) {
             const bounds = path.bounds(d);
             const dx = bounds[1][0] - bounds[0][0];
@@ -496,44 +511,6 @@
             const scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height)));
             const translate = [width / 2 - scale * x, height / 2 - scale * y];
             svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
-        }
-
-        // ==========================================
-        // 4.5 EXTERNAL DATABASE LOADER (JSON)
-        // ==========================================
-        const dbUpload = document.getElementById("db-upload");
-        const dbStatus = document.getElementById("db-status");
-        const routeMsg = document.getElementById("route-msg");
-
-        if (dbUpload) {
-            dbUpload.addEventListener("change", function(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const data = JSON.parse(e.target.result);
-                        let addedCount = 0;
-                        for (const key in data) {
-                            const airport = data[key];
-                            if (airport.longitude && airport.latitude) {
-                                const lon = parseFloat(airport.longitude);
-                                const lat = parseFloat(airport.latitude);
-                                if (airport.iata && airport.iata !== "\\N") { airportCoords[airport.iata] = [lon, lat]; addedCount++; }
-                                if (airport.icao && airport.icao !== "\\N") { airportCoords[airport.icao] = [lon, lat]; addedCount++; }
-                            }
-                        }
-                        dbStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_5px_#4ade80]"></span> 掛載成功 (${addedCount} 筆)`;
-                        dbStatus.classList.replace("text-slate-500", "text-green-400");
-                        showRouteError(`機場資料庫讀取成功！已擴充 ${addedCount} 個座標。`, true);
-                    } catch (err) {
-                        dbStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> 格式錯誤`;
-                        showRouteError("解析 JSON 失敗，請確認檔案格式正確。");
-                    }
-                };
-                reader.readAsText(file);
-            });
         }
 
         // ==========================================
@@ -550,6 +527,8 @@
             const raw = routeInput.value.toUpperCase().trim();
             const codes = raw.split(/[\s,-]+/);
             routeLayer.selectAll("*").remove();
+            
+            const routeMsg = document.getElementById("route-msg");
             routeMsg.classList.add("hidden");
 
             const validCoords = [];
@@ -585,10 +564,8 @@
                 let parsedCoords = [];
                 
                 try {
-                    // 1. JSON & GeoJSON 深度搜尋邏輯
                     if (ext === 'json' || ext === 'geojson') {
                         const data = JSON.parse(text);
-                        
                         if (data.type === 'FeatureCollection' || data.type === 'Feature') {
                             const features = data.features ? data.features : [data];
                             features.forEach(f => {
@@ -597,10 +574,8 @@
                                 }
                             });
                         } 
-                        
                         if (parsedCoords.length === 0) {
                             let bestPath = [];
-                            
                             function searchForCoords(current) {
                                 if (Array.isArray(current)) {
                                     let coords = [];
@@ -613,9 +588,7 @@
                                             }
                                         }
                                     }
-                                    if (coords.length > bestPath.length) {
-                                        bestPath = coords;
-                                    }
+                                    if (coords.length > bestPath.length) bestPath = coords;
                                     for (let item of current) {
                                         if (typeof item === 'object') searchForCoords(item);
                                     }
@@ -625,12 +598,10 @@
                                     }
                                 }
                             }
-                            
                             searchForCoords(data);
                             parsedCoords = bestPath;
                         }
                     } 
-                    // 2. XML 家族
                     else if (ext === 'kml' || ext === 'gpx' || ext === 'xml') {
                         const parser = new DOMParser();
                         const xmlDoc = parser.parseFromString(text, "text/xml");
@@ -708,7 +679,7 @@
         confirmClearBtn.addEventListener("click", () => {
             routeLayer.selectAll("*").remove();
             routeInput.value = "";
-            routeMsg.classList.add("hidden");
+            document.getElementById("route-msg").classList.add("hidden");
             confirmClearModal.classList.add("hidden");
         });
 
@@ -716,7 +687,6 @@
             const lineString = { type: "LineString", coordinates: coordsArray };
             routeLayer.append("path").datum(lineString).attr("d", path).attr("class", "route-line");
 
-            // [FIX v2.9.4] Fallback to prevent NaN calculations
             const currentZoom = (svg.node() && d3.zoomTransform(svg.node())) ? d3.zoomTransform(svg.node()).k : 1;
             const pointsToDraw = isImportedTrack ? [coordsArray[0], coordsArray[coordsArray.length - 1]] : coordsArray;
 
@@ -738,6 +708,7 @@
         }
 
         function showRouteError(msg, isSuccess = false) { 
+            const routeMsg = document.getElementById("route-msg");
             routeMsg.innerText = msg; 
             routeMsg.classList.remove("hidden");
             if(isSuccess) {
@@ -751,20 +722,19 @@
         d3.select("#zoom-out").on("click", () => svg.transition().call(zoom.scaleBy, 0.5));
         d3.select("#reset-map").on("click", () => {
             svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
-            d3.selectAll(".country").classed("active", false);
-            document.getElementById("country-data").classList.replace("flex", "hidden");
-            document.getElementById("default-info").classList.remove("hidden");
+            clearCountrySelection();
             routeLayer.selectAll("*").remove();
-            routeMsg.classList.add("hidden");
+            document.getElementById("route-msg").classList.add("hidden");
         });
 
-        // [FIX v2.9.4] Re-calculate scale on window resize to prevent zero-scale rendering
-        window.onresize = function() {
+        // [v2.9.7] 導入 ResizeObserver 動態重繪地圖，解決版面收折時的變形問題
+        const mapResizeObserver = new ResizeObserver(() => {
             if (typeof wrapper === 'undefined' || typeof projection === 'undefined' || typeof path === 'undefined') return;
             const newWidth = wrapper.clientWidth || window.innerWidth || 800;
             const newHeight = wrapper.clientHeight || window.innerHeight || 600;
             if (!newWidth || !newHeight) return;
 
+            // 即時更新 D3 投影比例與中心點
             projection
                 .scale((newWidth) / (2 * Math.PI))
                 .translate([newWidth / 2, newHeight / 1.5]);
@@ -776,7 +746,10 @@
                     .attr("cx", d => projection(d) ? projection(d)[0] : 0)
                     .attr("cy", d => projection(d) ? projection(d)[1] : 0);
             }
-        };
+        });
+        
+        // 監聽 map-wrapper 的變化
+        mapResizeObserver.observe(wrapper);
 
         // ==========================================
         // 6. UI MODAL CONTROLS (Changelog & Confirm)
