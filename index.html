@@ -24,7 +24,6 @@
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<!-- Changed h-screen to h-[100dvh] to fix Safari bottom bar overlay issue -->
 <body class="text-slate-200 font-sans antialiased h-[100dvh] w-screen overflow-hidden bg-slate-900 relative">
 
     <!-- Changelog Modal -->
@@ -40,21 +39,31 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v2.9.14 -->
-                <div class="relative pl-4 border-l-2 border-yellow-400">
+                <!-- v2.9.16 -->
+                <div class="relative pl-4 border-l-2 border-amber-400">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v2.9.14 (Current)
-                        <span class="bg-yellow-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Latest</span>
+                        v2.9.16 (Current)
+                        <span class="bg-amber-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Latest</span>
                     </h4>
                     <ul class="space-y-2 list-none">
                         <li>
+                            <p class="text-amber-400 font-medium text-xs mb-0.5">[重構] 航空情報層級躍升 (Intel Hierarchy Update)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">修正資訊層級邏輯，將「無線電 (Radio)」欄位從一般國情區塊中抽出，拉升至標題區與 ICAO、ACC 共同組成「核心飛航通訊區塊」，提升戰術判讀效率。<br><span class="italic text-[10px]">Restructured the information hierarchy by promoting the Radio field to the primary aeronautical communication block alongside ICAO and ACC.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.15 -->
+                <div class="relative pl-4 border-l-2 border-rose-400 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.15</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
                             <p class="text-yellow-400 font-medium text-xs mb-0.5">[修復] Safari / iOS 安全邊距與遮擋問題 (Safe Area / DVH Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">將全域高度綁定從靜態的 <code>100vh</code> 升級為動態的 <code>100dvh</code>，並拉高地圖控制按鈕的底部安全邊距，徹底解決在 iPad Safari 中底部 UI 切斷或遮擋「重置按鈕」的問題。<br><span class="italic text-[10px]">Upgraded viewport height to 100dvh and increased bottom safe-area padding for map controls to prevent overlap with Safari's dynamic navigation bar on iOS/iPadOS.</span></p>
+                            <p class="text-xs leading-relaxed text-slate-400">將全域高度綁定從靜態的 <code>100vh</code> 升級為動態的 <code>100dvh</code>，並拉高地圖控制按鈕的底部安全邊距。</p>
                         </li>
                     </ul>
                 </div>
                 <!-- v2.9.13 -->
-                <div class="relative pl-4 border-l-2 border-green-500 opacity-90">
+                <div class="relative pl-4 border-l-2 border-green-500 opacity-80">
                     <h4 class="text-white font-bold text-base mb-1">v2.9.13</h4>
                     <ul class="space-y-2 list-none">
                         <li>
@@ -64,7 +73,7 @@
                     </ul>
                 </div>
                 <!-- v2.9.12 -->
-                <div class="relative pl-4 border-l-2 border-cyan-400 opacity-80">
+                <div class="relative pl-4 border-l-2 border-cyan-400 opacity-70">
                     <h4 class="text-white font-bold text-base mb-1">v2.9.12</h4>
                     <ul class="space-y-2 list-none">
                         <li>
@@ -74,22 +83,12 @@
                     </ul>
                 </div>
                 <!-- v2.9.11 -->
-                <div class="relative pl-4 border-l-2 border-pink-500 opacity-70">
+                <div class="relative pl-4 border-l-2 border-pink-500 opacity-60">
                     <h4 class="text-white font-bold text-base mb-1">v2.9.11</h4>
                     <ul class="space-y-2 list-none">
                         <li>
                             <p class="text-pink-400 font-medium text-xs mb-0.5">[修復] 雙核心圖資備援機制 (Dual-CDN Map Fallback)</p>
                             <p class="text-xs leading-relaxed text-slate-400">修復 <code>Failed to fetch</code> 錯誤。自動切換備用伺服器。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.10 -->
-                <div class="relative pl-4 border-l-2 border-purple-500 opacity-60">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.10</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-purple-400 font-medium text-xs mb-0.5">[重構] 戰術浮動資訊面板 (Tactical Floating Panel)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">改用浮動於地圖上方的沉浸式面板。新增「靠左/靠右」停靠切換功能。</p>
                         </li>
                     </ul>
                 </div>
@@ -116,7 +115,7 @@
 
     <!-- Map Container: Absolute Full Screen -->
     <div id="map-wrapper" class="absolute inset-0 z-0 overflow-hidden w-full h-full">
-        <!-- Moved map controls higher up (bottom-16 / md:bottom-20) to avoid Safari toolbars and iOS home indicator -->
+        <!-- Moved map controls higher up to avoid Safari toolbars and iOS home indicator -->
         <div class="absolute bottom-16 left-4 md:bottom-20 md:left-6 z-10 flex flex-col gap-2">
             <button id="zoom-in" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition border border-slate-600">+</button>
             <button id="zoom-out" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition border border-slate-600">-</button>
@@ -126,7 +125,6 @@
     </div>
 
     <!-- Floating Panel: Default right-4, toggleable to left-4 -->
-    <!-- Changed max-h calc to use 100dvh for proper bounding inside Safari -->
     <div id="floating-panel" class="absolute top-4 right-4 w-[calc(100vw-2rem)] sm:w-[360px] flex flex-col shadow-[0_15px_50px_rgba(0,0,0,0.6)] z-20 overflow-hidden border border-slate-600 bg-slate-800/85 backdrop-blur-xl rounded-2xl max-h-[calc(100dvh-2rem)] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
         
         <!-- Header -->
@@ -144,8 +142,8 @@
                 </div>
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
-            <button id="open-changelog" class="bg-yellow-500 hover:bg-yellow-400 text-slate-900 border border-yellow-400 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-yellow-500/20 shrink-0 ml-2">
-                v2.9.14
+            <button id="open-changelog" class="bg-amber-500 hover:bg-amber-400 text-slate-900 border border-amber-400 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-amber-500/20 shrink-0 ml-2">
+                v2.9.16
             </button>
         </div>
 
@@ -189,14 +187,23 @@
         <div id="info-section" class="hidden overflow-y-auto flex-col relative w-full flex-1">
             <div id="country-data" class="flex flex-col gap-3 p-4 pb-6 w-full">
                 <div class="border-b border-slate-600/60 pb-3 flex justify-between items-start">
-                    <div>
+                    <div class="flex flex-col gap-2">
                         <h2 id="info-name" class="text-xl font-bold text-white tracking-wide">國家名稱</h2>
-                        <p id="info-icao-acc" class="text-xs text-yellow-400 font-mono mt-1.5 tracking-wider bg-slate-900/80 px-2 py-1 rounded inline-block border border-yellow-700/50 shadow-inner">
-                            ICAO: ---- | ACC: ----
-                        </p>
+                        
+                        <!-- 核心飛航通訊區塊 (Aeronautical Comm Block) -->
+                        <div class="flex flex-col gap-1.5">
+                            <p id="info-icao-acc" class="text-xs text-yellow-400 font-mono tracking-wider bg-slate-900/80 px-2 py-1 rounded inline-block border border-yellow-700/50 shadow-inner w-fit">
+                                ICAO: ---- | ACC: ----
+                            </p>
+                            <!-- 躍升後的無線電欄位 -->
+                            <div class="flex items-center gap-1.5 text-xs font-mono bg-indigo-900/40 text-indigo-300 px-2 py-1 rounded border border-indigo-500/30 w-fit shadow-inner">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.636 5.636a9 9 0 000 12.728m2.828-9.9a5 5 0 000 7.072m1.414-1.414a2 2 0 112.828-2.828 2 2 0 01-2.828 2.828z" /></svg>
+                                Radio: <span id="info-radio" class="text-white truncate max-w-[200px]">----</span>
+                            </div>
+                        </div>
                     </div>
                     <!-- Close button -->
-                    <button id="close-info-btn" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-700 transition focus:outline-none bg-slate-800 border border-slate-700 shadow-sm" title="關閉並收折面板">
+                    <button id="close-info-btn" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-700 transition focus:outline-none bg-slate-800 border border-slate-700 shadow-sm shrink-0" title="關閉並收折面板">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
@@ -216,6 +223,7 @@
                         <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm overflow-hidden"><span class="text-slate-400 text-[10px] mb-0.5">匯率 (Exchange)</span><span id="info-exchange" class="font-medium text-slate-100 font-mono text-green-400 text-[11px] truncate"></span></div>
                     </div>
                     
+                    <!-- 宗教欄位還原為單一寬度 -->
                     <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm"><span class="text-slate-400 text-[10px] mb-0.5">宗教 (Religion)</span><span id="info-religion" class="font-medium text-slate-100"></span></div>
                     
                     <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm mt-1">
@@ -368,7 +376,35 @@
             "United States of America": "華盛頓特區|3.34億|9.8M km²|$27T|USD|1.0|基督教為主|2/71,3/65,8/86,13/77,19/100,24/96,26/94,25/84,21/95,15/82,9/76,4/85|KLAX|紐約 New York (KZNY)",
             "Canada": "渥太華|4000萬|9.98M km²|$2.1T|CAD|~1.35|天主教/基督教|-10/65,-8/54,-2/64,6/67,13/73,18/80,21/84,19/84,15/87,8/79,1/77,-6/73|CYYZ|多倫多 Toronto (CZYZ)",
             "Australia": "坎培拉|2600萬|7.69M km²|$1.7T|AUD|~1.5|基督教|20/58,20/54,17/51,13/46,9/44,6/40,5/41,6/46,9/52,12/62,15/64,18/52|YSSY|墨爾本 Melbourne (YMMM)",
-            "New Zealand": "威靈頓|510萬|268,021 km²|$247B|NZD|~1.6|基督教/無宗教|16/72,16/62,15/74,13/100,11/117,9/147,8/136,9/131,10/100,12/115,13/99,15/84|NZAA|奧克蘭 Auckland (NZZC)"
+            "New Zealand": "威靈頓|510萬|268,021 km²|$247B|NZD|~1.6|基督教/無宗教|16/72,16/62,15/74,13/100,11/117,9/147,8/136,9/131,10/100,12/115,13/99,15/84|NZAA|奧克蘭 Auckland (NZZC)",
+            "Egypt": "開羅|1.1億|1.01M km²|$398B|EGP|~48|伊斯蘭教|14/5,15/4,18/3,22/1,26/1,28/0,29/0,29/0,27/0,24/1,20/3,15/5|HECA|開羅 Cairo (HECC)"
+        };
+
+        // [v2.9.13] Restored Core Database for Route Drawing
+        let airportCoords = {
+            "RCTP": [121.2328, 25.0777], "RJTT": [139.7796, 35.5522], "ZBAA": [116.5845, 40.0798], "RKSI": [126.4505, 37.4692],
+            "ZKPY": [125.6702, 39.2241], "ZMCK": [106.8184, 47.6521], "WSSS": [103.9940, 1.3502], "RPLL": [121.0194, 14.5086], 
+            "WIII": [106.6558, -6.1256], "VTBS": [100.7473, 13.6811], "WMKK": [101.7042, 2.7433], "VVNB": [105.8072, 21.2212], 
+            "VDPP": [104.8441, 11.5466], "VLVT": [102.5633, 17.9883], "VYYY": [96.1332, 16.9043], "WBSB": [114.9283, 4.9442],
+            "VIDP": [77.1000, 28.5665], "OPRN": [73.0992, 33.6167], "VGHS": [90.4005, 23.8433], "VCBI": [79.8833, 7.1805],
+            "VNKT": [85.3592, 27.6975], "VQPR": [89.4246, 27.4032], "VRMM": [73.5291, 4.1918], "UACC": [71.4667, 51.0222], 
+            "UTTT": [69.2812, 41.2579], "UTAA": [58.3610, 37.9800], "UCFM": [74.4776, 43.0613], "UTDD": [68.8250, 38.5433],
+            "OMDB": [55.3644, 25.2532], "OERK": [46.6988, 24.9576], "LLBG": [34.8855, 32.0113], "LTFM": [28.7424, 41.2622],
+            "OIIE": [51.1522, 35.4161], "ORBI": [44.2345, 33.2625], "OTHH": [51.6080, 25.2730], "OKBK": [47.9689, 29.2266],
+            "OOMS": [58.2817, 23.5933], "OJAI": [35.9836, 31.7226], "OLBA": [35.4884, 33.8213], "OSDI": [36.5144, 33.4116],
+            "OYSN": [44.2197, 15.4763], "OBBI": [50.6336, 26.2708], "OAQA": [69.2125, 34.5658], "UBBB": [49.9822, 40.4675], "UGTB": [44.9547, 41.6692], 
+            "UDYZ": [44.3959, 40.1473], "HECA": [31.4056, 30.1219],
+            "EGLL": [-0.4614, 51.4700], "LFPG": [2.5500, 49.0097], "EDDF": [8.5705, 50.0333], "LIRF": [12.2389, 41.8003],
+            "LEMD": [-3.5679, 40.4719], "LSZH": [8.5491, 47.4647], "EHAM": [4.7638, 52.3080], "EBBR": [4.4844, 50.9013],
+            "LOWW": [16.5697, 48.1102], "LKPR": [14.2600, 50.1008], "LZIB": [17.2127, 48.1700], "LHBP": [19.2611, 47.4369],
+            "EPWA": [20.9671, 52.1657], "ELLX": [6.2116, 49.6265], "ESSA": [17.9186, 59.6519], "ENGM": [11.1004, 60.1939],
+            "EKCH": [12.6497, 55.6179], "EFHK": [24.9633, 60.3172], "BIKF": [-22.6056, 63.9850], "EETN": [24.8328, 59.4133],
+            "EVRA": [23.9711, 56.9236], "EYVI": [25.2878, 54.6341], "UUEE": [37.4146, 55.9726], "UKBB": [30.8947, 50.3450],
+            "UMMS": [28.0307, 53.8825], "LUKK": [28.9314, 46.9277], "LROP": [26.1025, 44.5721], "LBSF": [23.4061, 42.6952],
+            "LGAV": [23.9444, 37.9363], "LPPT": [-9.1359, 38.7741], "EIDW": [-6.2499, 53.4213], "LYBE": [20.3092, 44.8184],
+            "LQSA": [18.3314, 43.8247], "LDZA": [16.0688, 45.7431], "LJLJ": [14.4576, 46.2237], "LWSK": [21.6214, 41.9616],
+            "LATI": [19.7206, 41.4147], "LYPG": [19.2519, 42.3594], "LCLK": [33.6249, 34.8751], "LMML": [14.4775, 35.8575],
+            "KLAX": [-118.4085, 33.9416], "CYYZ": [-79.6306, 43.6772], "YSSY": [151.1772, -33.9461], "NZAA": [174.7916, -37.0080]
         };
 
         // ==========================================
@@ -475,22 +511,30 @@
             document.getElementById("info-name").innerText = `${zhName}`;
 
             const rawStr = rawDB[enName];
-            const fields = ["capital", "population", "area", "gdp", "currency", "exchange", "religion"];
+            // [v2.9.15] Dynamic Field Mapping for flexible data extraction
+            const fieldMap = [
+                {id: "capital", idx: 0}, {id: "population", idx: 1}, {id: "area", idx: 2},
+                {id: "gdp", idx: 3}, {id: "currency", idx: 4}, {id: "exchange", idx: 5},
+                {id: "religion", idx: 6}, {id: "radio", idx: 10} // Radio reserved at index 10
+            ];
             
             if (rawStr) {
                 const parts = rawStr.split('|');
                 document.getElementById("info-icao-acc").innerHTML = `ICAO: <span class="text-white">${parts[8]}</span> &nbsp;|&nbsp; ACC: <span class="text-white">${parts[9]}</span>`;
                 
-                fields.forEach((field, idx) => {
-                    const element = document.getElementById(`info-${field}`);
-                    element.innerText = parts[idx];
-                    element.className = element.className.replace("text-slate-500", "text-slate-100");
+                fieldMap.forEach(f => {
+                    const element = document.getElementById(`info-${f.id}`);
+                    if (element) {
+                        // Use extracted data or default to empty for reserved slots
+                        element.innerText = parts[f.idx] || "----";
+                        element.className = element.className.replace("text-slate-500", "text-slate-100");
+                    }
                 });
                 document.getElementById('info-exchange').classList.add("text-green-400");
 
                 const climateContainer = document.getElementById('info-climate');
                 climateContainer.innerHTML = '';
-                const climateStr = parts[7];
+                const climateStr = parts[7]; // Climate is exactly at index 7
                 
                 if (climateStr && climateStr.includes('/')) {
                     const monthsData = climateStr.split(',');
@@ -513,11 +557,13 @@
             } else {
                 document.getElementById("info-icao-acc").innerHTML = `ICAO: <span class="text-slate-400">未登錄</span> &nbsp;|&nbsp; ACC: <span class="text-slate-400">未登錄</span>`;
                 
-                fields.forEach(field => {
-                    const element = document.getElementById(`info-${field}`);
-                    element.innerText = "[區域情報收集中 / Intel Pending]";
-                    element.className = element.className.replace("text-slate-100", "text-slate-500");
-                    element.classList.remove("text-green-400");
+                fieldMap.forEach(f => {
+                    const element = document.getElementById(`info-${f.id}`);
+                    if (element) {
+                        element.innerText = "[區域情報收集中 / Intel Pending]";
+                        element.className = element.className.replace("text-slate-100", "text-slate-500");
+                        if (f.id === 'exchange') element.classList.remove("text-green-400");
+                    }
                 });
 
                 const climateContainer = document.getElementById('info-climate');
