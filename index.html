@@ -39,56 +39,56 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v2.9.16 -->
-                <div class="relative pl-4 border-l-2 border-amber-400">
+                <!-- v2.9.21 -->
+                <div class="relative pl-4 border-l-2 border-fuchsia-400">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v2.9.16 (Current)
-                        <span class="bg-amber-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Latest</span>
+                        v2.9.21 (Current)
+                        <span class="bg-fuchsia-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Latest</span>
                     </h4>
                     <ul class="space-y-2 list-none">
                         <li>
+                            <p class="text-fuchsia-400 font-medium text-xs mb-0.5">[優化] 深度智慧搜尋引擎 (Deep Search Engine)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">大幅強化搜尋能力。現在除了國名與精確的 ICAO，您輸入「城市名 (如 Kabul)」或是「飛航情報區代碼 (如 OAKX)」，引擎也能自動穿透資料庫，將畫面無縫導航至對應的國家或機場座標。<br><span class="italic text-[10px]">Upgraded the search resolver to perform deep content matching (checking capitals and FIR aliases), allowing users to find locations using terms like 'Kabul' or 'OAKX' seamlessly.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.20 -->
+                <div class="relative pl-4 border-l-2 border-blue-500 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.20</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-orange-400 font-medium text-xs mb-0.5">[擴充] 中東與北非通訊協定寫入 (MENA Comm Update)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">新增沙烏地阿拉伯、約旦、敘利亞、埃及及巴林之飛航情報區無線電通訊頻率與邊界回報規範。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.17 -->
+                <div class="relative pl-4 border-l-2 border-sky-400 opacity-80">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.17</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-sky-400 font-medium text-xs mb-0.5">[擴充] 核心航路無線電頻率寫入 (Radio Comm Integration)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">將亞洲與中東重點區域特管區通訊頻率寫入情報庫中。優化 UI 介面，使無線電欄位支援多行文字自適應展示。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.16 -->
+                <div class="relative pl-4 border-l-2 border-amber-400 opacity-70">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.16</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
                             <p class="text-amber-400 font-medium text-xs mb-0.5">[重構] 航空情報層級躍升 (Intel Hierarchy Update)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">修正資訊層級邏輯，將「無線電 (Radio)」欄位從一般國情區塊中抽出，拉升至標題區與 ICAO、ACC 共同組成「核心飛航通訊區塊」，提升戰術判讀效率。<br><span class="italic text-[10px]">Restructured the information hierarchy by promoting the Radio field to the primary aeronautical communication block alongside ICAO and ACC.</span></p>
+                            <p class="text-xs leading-relaxed text-slate-400">將「無線電 (Radio)」欄位拉升至標題區與 ICAO、ACC 共同組成「核心飛航通訊區塊」。</p>
                         </li>
                     </ul>
                 </div>
-                <!-- v2.9.15 -->
-                <div class="relative pl-4 border-l-2 border-rose-400 opacity-90">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.15</h4>
+                <!-- v2.9.14 -->
+                <div class="relative pl-4 border-l-2 border-yellow-400 opacity-60">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.14</h4>
                     <ul class="space-y-2 list-none">
                         <li>
-                            <p class="text-yellow-400 font-medium text-xs mb-0.5">[修復] Safari / iOS 安全邊距與遮擋問題 (Safe Area / DVH Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">將全域高度綁定從靜態的 <code>100vh</code> 升級為動態的 <code>100dvh</code>，並拉高地圖控制按鈕的底部安全邊距。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.13 -->
-                <div class="relative pl-4 border-l-2 border-green-500 opacity-80">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.13</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-green-400 font-medium text-xs mb-0.5">[修復] 核心資料庫遺失問題 (Core Database Reference Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">還原內建航點資料庫，確保繪製功能正常運作。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.12 -->
-                <div class="relative pl-4 border-l-2 border-cyan-400 opacity-70">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.12</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-cyan-400 font-medium text-xs mb-0.5">[修正] 隱蔽式資料庫掛載 (Stealth DB Integration)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">將 JSON 機場擴充包掛載功能，無縫整合回輸入框左側。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.11 -->
-                <div class="relative pl-4 border-l-2 border-pink-500 opacity-60">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.11</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-pink-400 font-medium text-xs mb-0.5">[修復] 雙核心圖資備援機制 (Dual-CDN Map Fallback)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">修復 <code>Failed to fetch</code> 錯誤。自動切換備用伺服器。</p>
+                            <p class="text-yellow-400 font-medium text-xs mb-0.5">[修復] Safari / iOS 安全邊距與遮擋問題 (DVH Fix)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">高度綁定升級為動態 <code>100dvh</code>，拉高地圖控制按鈕底部安全邊距。</p>
                         </li>
                     </ul>
                 </div>
@@ -124,7 +124,7 @@
         <div id="tooltip" class="absolute hidden bg-slate-800/90 text-white text-sm px-3 py-1.5 rounded pointer-events-none z-20 backdrop-blur border border-slate-600 shadow-xl whitespace-nowrap"></div>
     </div>
 
-    <!-- Floating Panel: Default right-4, toggleable to left-4 -->
+    <!-- Floating Panel -->
     <div id="floating-panel" class="absolute top-4 right-4 w-[calc(100vw-2rem)] sm:w-[360px] flex flex-col shadow-[0_15px_50px_rgba(0,0,0,0.6)] z-20 overflow-hidden border border-slate-600 bg-slate-800/85 backdrop-blur-xl rounded-2xl max-h-[calc(100dvh-2rem)] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
         
         <!-- Header -->
@@ -135,38 +135,38 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                         TACTICAL HUD
                     </h1>
-                    <!-- Dock toggle button -->
                     <button id="toggle-side-btn" class="text-slate-400 hover:text-white p-1 bg-slate-800 rounded border border-slate-600 hover:bg-slate-700 transition focus:outline-none ml-1 shadow-inner" title="切換靠左/靠右停靠">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
                     </button>
                 </div>
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
-            <button id="open-changelog" class="bg-amber-500 hover:bg-amber-400 text-slate-900 border border-amber-400 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-amber-500/20 shrink-0 ml-2">
-                v2.9.16
+            <button id="open-changelog" class="bg-fuchsia-600 hover:bg-fuchsia-500 text-white border border-fuchsia-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-fuchsia-500/20 shrink-0 ml-2">
+                v2.9.21
             </button>
         </div>
 
-        <!-- Route Planner (Always visible part) -->
+        <!-- Route Planner & Search -->
         <div class="p-4 border-b border-slate-700 shrink-0 bg-slate-800/40">
             <h2 class="text-xs font-semibold text-slate-300 mb-2.5 uppercase tracking-wider flex items-center justify-between">
                 <span class="flex items-center gap-1.5">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    航線與軌跡引擎
-                    <span id="default-hint" class="text-[10px] text-slate-500 normal-case ml-1 tracking-normal transition-opacity">(點擊地圖展開情報)</span>
+                    航線與搜尋導航
                 </span>
             </h2>
             
             <div class="flex flex-col gap-2.5 w-full">
-                <!-- 隱蔽式資料庫掛載 UI -->
+                <!-- 搜尋與掛載列 -->
                 <div class="flex items-center gap-2 w-full">
                     <label class="shrink-0 bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-400 hover:text-blue-400 p-2 rounded-lg cursor-pointer transition shadow-inner" title="掛載完整機場資料庫 (airline-route-data.json)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" /></svg>
                         <input type="file" id="db-upload" accept=".json" class="hidden">
                     </label>
-                    <input type="text" id="route-input" placeholder="例: RCTP VHHH ZYR" class="flex-1 w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-yellow-300 placeholder-slate-500 uppercase transition shadow-inner">
+                    <input type="text" id="route-input" placeholder="代碼/國名 或 航線 (例: RCTP 或 臺灣)" class="flex-1 w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-yellow-300 placeholder-slate-500 transition shadow-inner">
+                    <!-- 新增：獨立搜尋按鈕 -->
+                    <button id="search-btn" class="shrink-0 bg-slate-800 border border-slate-600 hover:bg-slate-700 text-slate-400 hover:text-blue-400 p-2 rounded-lg transition shadow-inner" title="智慧搜尋與定位">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                    </button>
                 </div>
 
                 <div class="grid grid-cols-3 gap-2 w-full">
@@ -175,40 +175,39 @@
                         <input type="file" id="track-upload" accept=".kml,.gpx,.geojson,.json,.xml" class="hidden">
                     </label>
 
-                    <button id="draw-route-btn" class="bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(37,99,235,0.3)] whitespace-nowrap">繪製</button>
+                    <button id="draw-route-btn" class="bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(37,99,235,0.3)] whitespace-nowrap">繪製航線</button>
                     
-                    <button id="clear-route-btn" class="bg-red-600 hover:bg-red-500 text-white py-2 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(220,38,38,0.3)] whitespace-nowrap" title="清除航線">清除</button>
+                    <button id="clear-route-btn" class="bg-red-600 hover:bg-red-500 text-white py-2 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(220,38,38,0.3)] whitespace-nowrap" title="清除航線與紅點">清除</button>
                 </div>
             </div>
             <p id="route-msg" class="text-[10px] text-red-400 mt-2 hidden truncate bg-slate-900/50 p-1.5 rounded"></p>
         </div>
 
-        <!-- Info Section (Hidden by default, flex when country clicked) -->
+        <!-- Info Section -->
         <div id="info-section" class="hidden overflow-y-auto flex-col relative w-full flex-1">
             <div id="country-data" class="flex flex-col gap-3 p-4 pb-6 w-full">
                 <div class="border-b border-slate-600/60 pb-3 flex justify-between items-start">
-                    <div class="flex flex-col gap-2">
+                    <div class="flex flex-col gap-2 w-full pr-2">
                         <h2 id="info-name" class="text-xl font-bold text-white tracking-wide">國家名稱</h2>
                         
-                        <!-- 核心飛航通訊區塊 (Aeronautical Comm Block) -->
-                        <div class="flex flex-col gap-1.5">
+                        <div class="flex flex-col gap-1.5 w-full">
                             <p id="info-icao-acc" class="text-xs text-yellow-400 font-mono tracking-wider bg-slate-900/80 px-2 py-1 rounded inline-block border border-yellow-700/50 shadow-inner w-fit">
                                 ICAO: ---- | ACC: ----
                             </p>
-                            <!-- 躍升後的無線電欄位 -->
-                            <div class="flex items-center gap-1.5 text-xs font-mono bg-indigo-900/40 text-indigo-300 px-2 py-1 rounded border border-indigo-500/30 w-fit shadow-inner">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.636 5.636a9 9 0 000 12.728m2.828-9.9a5 5 0 000 7.072m1.414-1.414a2 2 0 112.828-2.828 2 2 0 01-2.828 2.828z" /></svg>
-                                Radio: <span id="info-radio" class="text-white truncate max-w-[200px]">----</span>
+                            <div class="flex items-start gap-1.5 text-[11px] font-mono bg-indigo-900/40 text-indigo-300 px-2 py-1.5 rounded border border-indigo-500/30 w-full shadow-inner mt-0.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M5.636 5.636a9 9 0 000 12.728m2.828-9.9a5 5 0 000 7.072m1.414-1.414a2 2 0 112.828-2.828 2 2 0 01-2.828 2.828z" /></svg>
+                                <div class="flex flex-col w-full">
+                                    <span class="text-slate-400 text-[9px] uppercase tracking-wider mb-0.5">Radio / Comm</span>
+                                    <span id="info-radio" class="text-white leading-snug whitespace-pre-wrap break-words">----</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Close button -->
-                    <button id="close-info-btn" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-700 transition focus:outline-none bg-slate-800 border border-slate-700 shadow-sm shrink-0" title="關閉並收折面板">
+                    <button id="close-info-btn" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-700 transition focus:outline-none bg-slate-800 border border-slate-700 shadow-sm shrink-0 mt-1" title="關閉並收折面板">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
 
-                <!-- Info Grid -->
                 <div class="grid grid-cols-1 gap-y-2 gap-x-3 text-sm mt-1">
                     <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm"><span class="text-slate-400 text-[10px] mb-0.5">首都 (Capital)</span><span id="info-capital" class="font-medium text-slate-100"></span></div>
                     <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm"><span class="text-slate-400 text-[10px] mb-0.5">人口 (Population)</span><span id="info-population" class="font-medium text-slate-100"></span></div>
@@ -223,7 +222,6 @@
                         <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm overflow-hidden"><span class="text-slate-400 text-[10px] mb-0.5">匯率 (Exchange)</span><span id="info-exchange" class="font-medium text-slate-100 font-mono text-green-400 text-[11px] truncate"></span></div>
                     </div>
                     
-                    <!-- 宗教欄位還原為單一寬度 -->
                     <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm"><span class="text-slate-400 text-[10px] mb-0.5">宗教 (Religion)</span><span id="info-religion" class="font-medium text-slate-100"></span></div>
                     
                     <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm mt-1">
@@ -256,7 +254,7 @@
             "Eq. Guinea": "赤道幾內亞", "Eritrea": "厄利垂亞", "Estonia": "愛沙尼亞", "Eswatini": "史瓦帝尼", "Ethiopia": "衣索比亞",
             "Fiji": "斐濟", "Finland": "芬蘭", "France": "法國", "Gabon": "加彭", "Gambia": "甘比亞", "Georgia": "喬治亞",
             "Germany": "德國", "Ghana": "迦納", "Greece": "希臘", "Grenada": "格瑞那達", "Guatemala": "瓜地馬拉", "Guinea": "幾內亞",
-            "Guinea-Bissau": "幾內亞比索", "Guyana": "蓋亞那", "Haiti": "海地", "Honduras": "宏都拉斯", "Hungary": "匈牙利", "Iceland": "冰島",
+            "Guinea-Bissau": "幾幾內亞比索", "Guyana": "蓋亞那", "Haiti": "海地", "Honduras": "宏都拉斯", "Hungary": "匈牙利", "Iceland": "冰島",
             "India": "印度", "Indonesia": "印尼", "Iran": "伊朗", "Iraq": "伊拉克", "Ireland": "愛爾蘭", "Israel": "以色列",
             "Italy": "義大利", "Jamaica": "牙買加", "Japan": "日本", "Jordan": "約旦", "Kazakhstan": "哈薩克", "Kenya": "肯亞",
             "Kiribati": "吉里巴斯", "Kuwait": "科威特", "Kyrgyzstan": "吉爾吉斯", "Laos": "寮國", "Latvia": "拉脫維亞", "Lebanon": "黎巴嫩",
@@ -272,7 +270,7 @@
             "Russia": "俄羅斯", "Rwanda": "盧安達", "Saint Kitts and Nevis": "聖克里斯多福", "Saint Lucia": "聖露西亞",
             "Saint Vincent and the Grenadines": "聖文森", "Samoa": "薩摩亞", "San Marino": "聖馬利諾", "Sao Tome and Principe": "聖多美",
             "Saudi Arabia": "沙烏地阿拉伯", "Senegal": "塞內加爾", "Serbia": "塞爾維亞", "Seychelles": "塞席爾", "Sierra Leone": "獅子山",
-            "Singapore": "新加坡", "Slovakia": "斯洛伐克", "Slovenia": "斯洛維尼亞", "Solomon Is.": "索羅門群島", "Somalia": "索馬 Somalia",
+            "Singapore": "新加坡", "Slovakia": "斯洛伐克", "Slovenia": "斯洛維尼亞", "Solomon Is.": "索羅門群島", "Somalia": "索馬利亞",
             "South Africa": "南非", "South Korea": "韓國", "South Sudan": "南蘇丹", "Spain": "西班牙", "Sri Lanka": "斯里蘭卡",
             "Sudan": "蘇丹", "Suriname": "蘇利南", "Sweden": "瑞典", "Switzerland": "瑞士", "Syria": "敘利亞", "Taiwan": "臺灣",
             "Tajikistan": "塔吉克", "Tanzania": "坦尚尼亞", "Thailand": "泰國", "Timor-Leste": "東帝汶", "Togo": "多哥", "Tonga": "東加",
@@ -280,7 +278,8 @@
             "Uganda": "烏干達", "Ukraine": "烏克蘭", "United Arab Emirates": "阿聯酋", "United Kingdom": "英國",
             "United States of America": "美國", "Uruguay": "烏拉圭", "Uzbekistan": "烏茲別克", "Vanuatu": "萬那杜", "Vatican City": "梵蒂岡",
             "Venezuela": "委內瑞拉", "Vietnam": "越南", "Yemen": "葉門", "Zambia": "尚比亞", "Zimbabwe": "辛巴威",
-            "W. Sahara": "西撒哈拉", "Falkland Is.": "福克蘭群島", "Greenland": "格陵蘭", "Puerto Rico": "波多黎各", "New Caledonia": "新喀里多尼亞"
+            "W. Sahara": "西撒哈拉", "Falkland Is.": "福克蘭群島", "Greenland": "格陵蘭", "Puerto Rico": "波多黎各", "New Caledonia": "新喀里多尼亞",
+            "Egypt": "埃及"
         };
 
         // ==========================================
@@ -301,35 +300,35 @@
             "Vietnam": "河內|9900萬|331,212 km²|$433B|VND|~25000|佛教/無宗教|16/18,17/26,20/43,24/90,27/188,28/239,29/288,28/318,27/265,24/130,21/43,18/20|VVNB|河內 Hanoi (VVVV)",
             "Cambodia": "金邊|1600萬|181,035 km²|$29B|KHR|~4000|佛教|26/25,27/11,29/33,30/78,29/118,28/155,28/169,28/160,28/225,27/254,27/130,26/43|VDPP|金邊 Phnom Penh (VDPF)",
             "Laos": "永珍|740萬|236,800 km²|$15B|LAK|~21000|佛教|21/7,23/13,26/33,28/84,28/245,28/279,28/272,28/334,28/297,26/78,23/11,21/3|VLVT|永珍 Vientiane (VLVT)",
-            "Myanmar": "奈比多|5400萬|676,578 km²|$64B|MMK|~2100|佛教|21/3,23/1,27/5,30/28,30/160,28/240,28/260,27/270,28/190,27/110,24/35,21/6|VYYY|仰光 Yangon (VYYF)",
+            "Myanmar": "奈比多|5400萬|676,578 km²|$64B|MMK|~2100|佛教|21/3,23/1,27/5,30/28,30/160,28/240,28/260,27/270,28/190,27/110,24/35,21/6|VYYY|仰光 Yangon (VYYF)|VYYF: 126.75 (10m Before)",
             "Brunei": "斯里巴加灣|45萬|5,765 km²|$14B|BND|~1.35|伊斯蘭教|27/292,27/158,27/118,28/189,28/236,28/210,28/225,28/226,27/264,27/312,27/322,27/333|WBSB|汶萊 Brunei (WBSB)",
-            "India": "新德里|14.2億|3.28M km²|$3.7T|INR|~83|印度教/伊斯蘭教|14/19,17/20,23/15,29/21,33/25,33/74,31/195,30/192,29/116,25/12,20/4,15/9|VIDP|德里 Delhi (VIDF)",
-            "Pakistan": "伊斯蘭馬巴德|2.35億|881,913 km²|$376B|PKR|~278|伊斯蘭教|10/63,12/79,16/79,22/58,27/33,31/46,30/256,29/314,26/87,21/29,15/15,11/33|OPRN|喀拉蚩 Karachi (OPKR)",
-            "Bangladesh": "達卡|1.69億|148,460 km²|$460B|BDT|~109|伊斯蘭教|19/7,22/28,26/65,28/156,28/339,28/340,28/373,28/316,28/300,27/163,23/34,19/14|VGHS|達卡 Dhaka (VGFR)",
+            "India": "新德里|14.2億|3.28M km²|$3.7T|INR|~83|印度教/伊斯蘭教|14/19,17/20,23/15,29/21,33/25,33/74,31/195,30/192,29/116,25/12,20/4,15/9|VIDP|德里 Delhi (VIDF)|KOLKATA VECF: 125.9 / 132.25",
+            "Pakistan": "伊斯蘭馬巴德|2.35億|881,913 km²|$376B|PKR|~278|伊斯蘭教|10/63,12/79,16/79,22/58,27/33,31/46,30/256,29/314,26/87,21/29,15/15,11/33|OPRN|喀拉蚩 Karachi (OPKR)|OPLR: 124.1 / 127.5 (15m Before)\nOPKR: 125.9 (15m Before)",
+            "Bangladesh": "達卡|1.69億|148,460 km²|$460B|BDT|~109|伊斯蘭教|19/7,22/28,26/65,28/156,28/339,28/340,28/373,28/316,28/300,27/163,23/34,19/14|VGHS|達卡 Dhaka (VGFR)|VGFR: 125.7 (10m Before)",
             "Sri Lanka": "可倫坡|2200萬|65,610 km²|$74B|LKR|~300|佛教為主|27/58,27/67,28/118,28/238,28/373,28/220,28/128,28/105,28/252,27/354,27/315,27/146|VCBI|可倫坡 Colombo (VCCF)",
             "Nepal": "加德滿都|3000萬|147,181 km²|$40B|NPR|~133|印度教|10/14,12/17,16/31,19/54,22/114,24/256,24/379,24/334,23/183,19/59,15/8,11/14|VNKT|加德滿都 Kathmandu (VNSM)",
             "Bhutan": "廷布|78萬|38,394 km²|$2.8B|BTN|~83|佛教|5/15,7/41,10/23,13/58,16/122,18/246,19/373,19/345,17/155,13/38,9/8,6/3|VQPR|帕羅 Paro (VQPR)",
             "Maldives": "馬利|52萬|300 km²|$6.9B|MVR|~15.4|伊斯蘭教|28/114,28/38,28/73,29/132,29/215,28/172,28/147,28/187,28/242,28/222,28/201,28/231|VRMM|馬利 Male (VRMF)",
             "Kazakhstan": "阿斯塔納|2000萬|2.72M km²|$259B|KZT|~450|伊斯蘭教|-14/16,-14/15,-7/18,5/21,13/35,18/37,20/50,19/29,12/22,4/27,-5/28,-11/22|UACC|阿斯塔納 Astana (UACF)",
             "Uzbekistan": "塔什干|3600萬|448,978 km²|$90B|UZS|~12500|伊斯蘭教|2/54,3/46,9/72,15/63,21/32,26/7,28/4,26/2,21/4,14/34,8/45,3/53|UTTT|塔什干 Tashkent (UTTR)",
-            "Turkmenistan": "阿什哈巴德|650萬|491,210 km²|$81B|TMT|~3.5|伊斯蘭教|3/20,5/24,10/41,16/32,23/21,28/6,31/3,29/2,23/3,16/10,10/19,5/20|UTAA|阿什哈巴德 Ashgabat (UTAK)",
+            "Turkmenistan": "阿什哈巴德|650萬|491,210 km²|$81B|TMT|~3.5|伊斯蘭教|3/20,5/24,10/41,16/32,23/21,28/6,31/3,29/2,23/3,16/10,10/19,5/20|UTAA|阿什哈巴德 Ashgabat (UTAK)|UTAA: 135.2\nUTAV: 134.5 (108NM)\nUTAK: 135.8 (108NM)",
             "Kyrgyzstan": "比斯凱克|700萬|199,951 km²|$13B|KGS|~89|伊斯蘭教|-2/26,0/33,6/43,12/61,17/59,22/23,24/16,23/12,18/16,11/34,4/36,-1/31|UCFM|比斯凱克 Bishkek (UAFM)",
             "Tajikistan": "杜尚貝|1000萬|143,100 km²|$11B|TJS|~10.9|伊斯蘭教|2/65,4/72,9/107,15/104,19/66,24/9,26/3,25/1,20/3,14/30,9/47,4/69|UTDD|杜尚貝 Dushanbe (UTAK)",
             "United Arab Emirates": "阿布達比|940萬|83,600 km²|$509B|AED|~3.67|伊斯蘭教|18/7,20/21,23/14,27/6,31/1,33/0,35/0,35/0,32/0,28/0,24/1,20/5|OMDB|阿聯酋 Emirates (OMAE)",
-            "Saudi Arabia": "利雅德|3600萬|2.14M km²|$1.0T|SAR|~3.75|伊斯蘭教|14/12,17/9,21/12,26/23,31/4,34/0,35/0,35/0,32/0,27/0,20/1,15/11|OERK|吉達 Jeddah (OEJD)",
+            "Saudi Arabia": "利雅德|3600萬|2.14M km²|$1.0T|SAR|~3.75|伊斯蘭教|14/12,17/9,21/12,26/23,31/4,34/0,35/0,35/0,32/0,27/0,20/1,15/11|OERK|吉達 Jeddah (OEJD)|JEDDAH: 119.45 (5m Before)",
             "Israel": "耶路撒冷|970萬|22,145 km²|$522B|ILS|~3.7|猶太教|9/133,9/118,12/92,15/31,19/3,22/0,24/0,24/0,22/0,19/15,14/60,10/105|LLBG|特拉維夫 Tel Aviv (LLLL)",
             "Turkey": "安卡拉|8500萬|783,562 km²|$905B|TRY|~32|伊斯蘭教|0/42,1/36,5/39,11/46,15/51,19/35,23/14,23/12,18/18,12/29,6/32,2/43|LTFM|安卡拉 Ankara (LTAA)",
-            "Iran": "德黑蘭|8800萬|1.64M km²|$388B|IRR|~42000|伊斯蘭教|3/34,5/32,10/39,16/33,21/15,27/3,29/1,29/1,25/1,19/11,11/24,5/33|OIIE|德黑蘭 Tehran (OIIX)",
+            "Iran": "德黑蘭|8800萬|1.64M km²|$388B|IRR|~42000|伊斯蘭教|3/34,5/32,10/39,16/33,21/15,27/3,29/1,29/1,25/1,19/11,11/24,5/33|OIIE|德黑蘭 Tehran (OIIX)|OIIX (Air Def): 127.8 / 135.1 (10m Before)",
             "Iraq": "巴格達|4300萬|438,317 km²|$264B|IQD|~1300|伊斯蘭教|10/27,12/28,16/27,22/17,28/3,32/0,34/0,34/0,30/0,25/3,17/21,11/25|ORBI|巴格達 Baghdad (ORBB)",
             "Qatar": "多哈|290萬|11,586 km²|$237B|QAR|~3.64|伊斯蘭教|17/13,18/17,21/16,26/8,31/3,33/0,34/0,34/0,32/0,28/1,23/3,19/12|OTHH|多哈 Doha (OTBD)",
             "Kuwait": "科威特市|430萬|17,818 km²|$175B|KWD|~0.3|伊斯蘭教|13/30,15/10,20/18,25/11,31/0,35/0,37/0,37/0,33/0,27/1,20/18,14/25|OKBK|科威特 Kuwait (OKAC)",
             "Oman": "馬斯喀特|450萬|309,500 km²|$114B|OMR|~0.38|伊斯蘭教|21/12,22/16,25/10,30/5,34/0,35/0,34/0,32/0,31/0,29/0,25/3,22/11|OOMS|馬斯喀特 Muscat (OOMM)",
-            "Jordan": "安曼|1100萬|89,342 km²|$47B|JOD|~0.71|伊斯蘭教|8/63,9/62,12/34,16/11,20/3,23/0,25/0,25/0,23/0,20/5,14/22,9/49|OJAI|安曼 Amman (OJAC)",
+            "Jordan": "安曼|1100萬|89,342 km²|$47B|JOD|~0.71|伊斯蘭教|8/63,9/62,12/34,16/11,20/3,23/0,25/0,25/0,23/0,20/5,14/22,9/49|OJAI|安曼 Amman (OJAC)|AMMAN: (5m Before)",
             "Lebanon": "貝魯特|550萬|10,452 km²|$20B|LBP|~89500|伊斯蘭教/基督教|14/190,14/133,16/110,18/46,21/15,24/1,26/0,27/0,26/5,23/60,19/114,15/163|OLBA|貝魯特 Beirut (OLBB)",
-            "Syria": "大馬士革|2200萬|185,180 km²|$21B|SYP|~13000|伊斯蘭教|6/27,7/22,11/13,15/14,19/3,23/0,25/0,25/0,23/0,18/6,12/21,7/25|OSDI|大馬士革 Damascus (OSTT)",
+            "Syria": "大馬士革|2200萬|185,180 km²|$21B|SYP|~13000|伊斯蘭教|6/27,7/22,11/13,15/14,19/3,23/0,25/0,25/0,23/0,18/6,12/21,7/25|OSDI|大馬士革 Damascus (OSTT)|DAMASCUS: (5m Before)",
             "Yemen": "沙那|3400萬|527,968 km²|$21B|YER|~250|伊斯蘭教|13/5,15/4,17/10,19/33,20/45,21/13,22/68,21/87,19/22,16/5,14/2,13/4|OYSN|沙那 Sana'a (OYSC)",
-            "Bahrain": "麥納麥|150萬|780 km²|$44B|BHD|~0.37|伊斯蘭教|17/14,18/16,21/13,26/10,30/1,33/0,34/0,34/0,32/0,28/0,23/3,19/10|OBBI|巴林 Bahrain (OBBB)",
-            "Afghanistan": "喀布爾|4000萬|652,860 km²|$14B|AFN|~70|伊斯蘭教|-2/30,0/35,6/63,12/71,17/23,22/4,24/5,23/3,19/1,12/3,6/18,0/21|OAQA|喀布爾 Kabul (OAKB)",
+            "Bahrain": "麥納麥|150萬|780 km²|$44B|BHD|~0.37|伊斯蘭教|17/14,18/16,21/13,26/10,30/1,33/0,34/0,34/0,32/0,28/0,23/3,19/10|OBBI|巴林 Bahrain (OBBB)|BAHRAIN: 127.525 (5m Before)",
+            "Afghanistan": "喀布爾|4000萬|652,860 km²|$14B|AFN|~70|伊斯蘭教|-2/30,0/35,6/63,12/71,17/23,22/4,24/5,23/3,19/1,12/3,6/18,0/21|OAQA|喀布爾 Kabul (OAKB)|OAKX: 128.5 (10m Before)\nKABUL: 125.2 (CALL SIGN / FL W/E / ATS Route / POSITION)",
             "Azerbaijan": "巴庫|1000萬|86,600 km²|$78B|AZN|~1.7|伊斯蘭教|4/21,4/20,6/20,11/18,17/18,22/8,25/2,25/6,21/15,15/25,10/30,6/26|UBBB|巴庫 Baku (UBBA)",
             "Georgia": "提比里斯|370萬|69,700 km²|$30B|GEL|~2.7|東正教|2/18,3/25,7/30,12/50,17/77,21/75,24/46,24/47,19/35,13/41,7/30,3/22|UGTB|提比里斯 Tbilisi (UGGG)",
             "Armenia": "葉里溫|270萬|29,743 km²|$24B|AMD|~400|東正教|-3/21,-1/23,5/30,12/37,17/44,22/21,26/9,26/9,21/8,14/27,6/23,-1/19|UDYZ|葉里溫 Yerevan (UDDD)",
@@ -377,7 +376,7 @@
             "Canada": "渥太華|4000萬|9.98M km²|$2.1T|CAD|~1.35|天主教/基督教|-10/65,-8/54,-2/64,6/67,13/73,18/80,21/84,19/84,15/87,8/79,1/77,-6/73|CYYZ|多倫多 Toronto (CZYZ)",
             "Australia": "坎培拉|2600萬|7.69M km²|$1.7T|AUD|~1.5|基督教|20/58,20/54,17/51,13/46,9/44,6/40,5/41,6/46,9/52,12/62,15/64,18/52|YSSY|墨爾本 Melbourne (YMMM)",
             "New Zealand": "威靈頓|510萬|268,021 km²|$247B|NZD|~1.6|基督教/無宗教|16/72,16/62,15/74,13/100,11/117,9/147,8/136,9/131,10/100,12/115,13/99,15/84|NZAA|奧克蘭 Auckland (NZZC)",
-            "Egypt": "開羅|1.1億|1.01M km²|$398B|EGP|~48|伊斯蘭教|14/5,15/4,18/3,22/1,26/1,28/0,29/0,29/0,27/0,24/1,20/3,15/5|HECA|開羅 Cairo (HECC)"
+            "Egypt": "開羅|1.1億|1.01M km²|$398B|EGP|~48|伊斯蘭教|14/5,15/4,18/3,22/1,26/1,28/0,29/0,29/0,27/0,24/1,20/3,15/5|HECA|開羅 Cairo (HECC)|CAIRO: 124.7 (15m Before)"
         };
 
         // [v2.9.13] Restored Core Database for Route Drawing
@@ -449,14 +448,11 @@
             }
         });
 
-        // [v2.9.11] Dual-CDN Map Loader Fallback
         const loadMapData = async () => {
             try {
-                // Primary CDN: unpkg
                 return await d3.json("https://unpkg.com/world-atlas@2.0.2/countries-50m.json");
             } catch (err1) {
                 console.warn("Primary CDN failed, switching to backup jsdelivr...", err1);
-                // Fallback CDN: jsdelivr
                 return await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json");
             }
         };
@@ -511,11 +507,10 @@
             document.getElementById("info-name").innerText = `${zhName}`;
 
             const rawStr = rawDB[enName];
-            // [v2.9.15] Dynamic Field Mapping for flexible data extraction
             const fieldMap = [
                 {id: "capital", idx: 0}, {id: "population", idx: 1}, {id: "area", idx: 2},
                 {id: "gdp", idx: 3}, {id: "currency", idx: 4}, {id: "exchange", idx: 5},
-                {id: "religion", idx: 6}, {id: "radio", idx: 10} // Radio reserved at index 10
+                {id: "religion", idx: 6}, {id: "radio", idx: 10} 
             ];
             
             if (rawStr) {
@@ -525,7 +520,6 @@
                 fieldMap.forEach(f => {
                     const element = document.getElementById(`info-${f.id}`);
                     if (element) {
-                        // Use extracted data or default to empty for reserved slots
                         element.innerText = parts[f.idx] || "----";
                         element.className = element.className.replace("text-slate-500", "text-slate-100");
                     }
@@ -534,7 +528,7 @@
 
                 const climateContainer = document.getElementById('info-climate');
                 climateContainer.innerHTML = '';
-                const climateStr = parts[7]; // Climate is exactly at index 7
+                const climateStr = parts[7]; 
                 
                 if (climateStr && climateStr.includes('/')) {
                     const monthsData = climateStr.split(',');
@@ -598,7 +592,7 @@
         }
 
         // ==========================================
-        // 4.5 EXTERNAL DATABASE LOADER (JSON) - Re-integrated v2.9.12
+        // 4.5 EXTERNAL DATABASE LOADER (JSON)
         // ==========================================
         const dbUpload = document.getElementById("db-upload");
         if (dbUpload) {
@@ -626,7 +620,6 @@
                     }
                 };
                 reader.readAsText(file);
-                // Reset input to allow reloading same file if needed
                 dbUpload.value = "";
             });
         }
@@ -637,6 +630,7 @@
         const routeInput = document.getElementById("route-input");
         const drawBtn = document.getElementById("draw-route-btn");
         const clearBtn = document.getElementById("clear-route-btn");
+        const searchBtn = document.getElementById("search-btn"); // [v2.9.20] Search Button
         const confirmClearModal = document.getElementById("confirm-clear-modal");
         const cancelClearBtn = document.getElementById("cancel-clear-btn");
         const confirmClearBtn = document.getElementById("confirm-clear-btn");
@@ -644,7 +638,8 @@
         drawBtn.addEventListener("click", () => {
             const raw = routeInput.value.toUpperCase().trim();
             const codes = raw.split(/[\s,-]+/);
-            routeLayer.selectAll("*").remove();
+            // 繪圖時清除舊有搜尋信標與航跡
+            routeLayer.selectAll("*").remove(); 
             
             const routeMsg = document.getElementById("route-msg");
             routeMsg.classList.add("hidden");
@@ -668,6 +663,98 @@
 
             renderRouteLine(validCoords);
         });
+
+        // [v2.9.20] 獨立的搜尋與定位邏輯
+        searchBtn.addEventListener("click", performSearch);
+
+        // [v2.9.20] Enter鍵智慧分流：單詞觸發搜尋，多詞觸發繪圖
+        routeInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const val = routeInput.value.trim();
+                const upperVal = val.toUpperCase();
+                
+                // [v2.9.21] 增強版：如果是單一詞彙（無空格），一律先嘗試搜尋
+                if (!val.includes(" ")) {
+                    performSearch();
+                } else {
+                    drawBtn.click();
+                }
+            }
+        });
+
+        function performSearch() {
+            const raw = routeInput.value.trim();
+            if (!raw) return showRouteError("請輸入國家名稱、城市或機場代碼");
+            const upperRaw = raw.toUpperCase();
+
+            // [v2.9.21] 建立 FIR 代碼到主要機場座標的映射 (Alias Mapping)
+            const firAliasMap = {
+                "OAKX": "OAQA", // Kabul FIR -> Kabul Airport
+                "VECF": "VIDP", // Kolkata FIR -> Mapped to Delhi coords as fallback if VECF not in DB
+                "OPLR": "OPRN", // Lahore FIR -> Islamabad (closest major)
+                "HECC": "HECA"  // Cairo FIR -> Cairo Airport
+            };
+
+            const searchCode = firAliasMap[upperRaw] || upperRaw;
+
+            // 1. 搜尋機場/航點 (ICAO/IATA) - 先找精確座標
+            if (airportCoords[searchCode]) {
+                const coords = airportCoords[searchCode];
+                const [x, y] = projection(coords);
+                const targetScale = 8;
+                
+                const translate = [width / 2 - targetScale * x, height / 2 - targetScale * y];
+                svg.transition().duration(1000).call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(targetScale));
+                
+                // 打出搜尋信標 (Search Ping)
+                routeLayer.selectAll(".search-ping").remove();
+                routeLayer.append("circle")
+                    .attr("class", "airport-point search-ping")
+                    .attr("cx", x)
+                    .attr("cy", y)
+                    .attr("r", 4 / targetScale)
+                    .style("fill", "#0ea5e9"); // 獨特的天藍色信標
+                
+                showRouteError(`已精確定位至: ${upperRaw}`, true);
+                clearCountrySelection(); // 收折情報面板，把畫面留給特寫鏡頭
+                return;
+            }
+
+            // 2. [v2.9.21] 深度搜尋國家 (包含國名、中文、以及 rawDB 內的內容如首都)
+            let matchedEnName = null;
+            for (const [en, zh] of Object.entries(countryDict)) {
+                // 比對英文名與中文名
+                if (en.toUpperCase() === upperRaw || zh === raw || zh.includes(raw)) {
+                    matchedEnName = en;
+                    break;
+                }
+                
+                // 比對資料庫內部字串 (例如首都 Kabul, 開羅, 等等)
+                const dbEntry = rawDB[en];
+                if (dbEntry && dbEntry.toUpperCase().includes(upperRaw)) {
+                    matchedEnName = en;
+                    break;
+                }
+            }
+
+            if (matchedEnName) {
+                const paths = g.selectAll("path").filter(d => d.properties.name === matchedEnName);
+                if (!paths.empty()) {
+                    const node = paths.node();
+                    const d = d3.select(node).datum();
+                    
+                    d3.selectAll(".country").classed("active", false);
+                    d3.select(node).classed("active", true);
+                    populateDataPanel(matchedEnName);
+                    zoomToFeature(d);
+                    showRouteError(`已關聯並定位至國家: ${countryDict[matchedEnName]}`, true);
+                    return;
+                }
+            }
+
+            showRouteError(`找不到相符的目標: ${raw}`);
+        }
 
         const trackUpload = document.getElementById("track-upload");
         trackUpload.addEventListener("change", function(event) {
@@ -808,7 +895,7 @@
             const currentZoom = (svg.node() && d3.zoomTransform(svg.node())) ? d3.zoomTransform(svg.node()).k : 1;
             const pointsToDraw = isImportedTrack ? [coordsArray[0], coordsArray[coordsArray.length - 1]] : coordsArray;
 
-            routeLayer.selectAll(".airport-point").data(pointsToDraw).enter().append("circle")
+            routeLayer.selectAll(".airport-point:not(.search-ping)").data(pointsToDraw).enter().append("circle")
                 .attr("class", "airport-point")
                 .attr("cx", d => typeof projection !== 'undefined' && projection(d) ? projection(d)[0] : 0)
                 .attr("cy", d => typeof projection !== 'undefined' && projection(d) ? projection(d)[1] : 0)
