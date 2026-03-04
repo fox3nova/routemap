@@ -25,7 +25,7 @@
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<body class="text-slate-200 font-sans antialiased h-screen w-screen flex flex-col md:flex-row">
+<body class="text-slate-200 font-sans antialiased h-screen w-screen flex flex-col md:flex-row overflow-hidden">
 
     <!-- Changelog Modal -->
     <div id="changelog-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -40,30 +40,36 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v2.9.0 -->
-                <div class="relative pl-4 border-l-2 border-teal-500">
+                <!-- v2.9.5 -->
+                <div class="relative pl-4 border-l-2 border-yellow-500">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v2.9.0 (Current)
-                        <span class="bg-teal-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">Latest</span>
+                        v2.9.5 (Current)
+                        <span class="bg-yellow-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">Latest</span>
                     </h4>
                     <ul class="space-y-3 list-none">
                         <li>
-                            <p class="text-teal-400 font-medium text-xs mb-0.5">[優化] 航線視覺清晰化 & UI 精簡 (Visual & UI Refinement)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">移除動態虛線，改用實體高亮軌跡線以利綜觀全局；並移除多餘的外部資料庫掛載介面，維持戰術面板極簡化。<br><span class="italic text-[10px]">Replaced animated dashed routes with solid highlighted lines for better overview clarity. Removed redundant JSON DB loader UI.</span></p>
+                            <p class="text-yellow-400 font-medium text-xs mb-0.5">[修正] 雙語更新日誌還原 (Bilingual Changelog Restoration)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">補回在先前程式碼壓縮過程中意外遺失的英文版更新日誌，維持系統一貫的國際化專業標準。<br><span class="italic text-[10px]">Restored missing English translations in the changelog that were accidentally truncated during code compression, maintaining the system's professional international standard.</span></p>
                         </li>
                     </ul>
                 </div>
-                <!-- v2.8.0 -->
-                <div class="relative pl-4 border-l-2 border-indigo-500 opacity-80">
-                    <h4 class="text-white font-bold text-base mb-2">v2.8.0</h4>
-                </div>
-                <!-- v2.7.0 -->
-                <div class="relative pl-4 border-l-2 border-cyan-500 opacity-80">
-                    <h4 class="text-white font-bold text-base mb-2">v2.7.0</h4>
+                <!-- v2.9.4 -->
+                <div class="relative pl-4 border-l-2 border-orange-500 opacity-80">
+                    <h4 class="text-white font-bold text-base mb-2">v2.9.4</h4>
                     <ul class="space-y-3 list-none">
                         <li>
-                            <p class="text-cyan-400 font-medium text-xs mb-0.5">[擴充] SimBrief XML 原生支援 (XML Trajectory Support)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">原生支援 <strong>.xml</strong> 格式的飛行計畫檔解析。</p>
+                            <p class="text-orange-400 font-medium text-xs mb-0.5">[修正] 地圖消失與重繪崩潰修復 (Zero-Scale Rendering Fix)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">解決了在載入瞬間因 Flexbox 排版未完成導致寬高為 0，進而使地圖縮放比例歸零消失的致命錯誤。並完善了 Resize 事件的比例重算機制。<br><span class="italic text-[10px]">Fixed a critical zero-scale rendering issue caused by incomplete Flexbox layout on load, and improved the resize event calculation mechanism.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.3 -->
+                <div class="relative pl-4 border-l-2 border-blue-500 opacity-60">
+                    <h4 class="text-white font-bold text-base mb-2">v2.9.3</h4>
+                    <ul class="space-y-3 list-none">
+                        <li>
+                            <p class="text-blue-400 font-medium text-xs mb-0.5">[修正] 結構截斷與面板破版修復 (Data & Layout Fixes)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">修復核心資料庫意外截斷導致地圖無法互動的問題。同時將按鈕區塊重構為等比例網格 (Grid)，徹底解決面板在窄螢幕或 iPad 上超出邊界的問題。<br><span class="italic text-[10px]">Fixed core database truncation issues and refactored button layouts into a uniform grid to prevent overflow on narrow screens or iPads.</span></p>
                         </li>
                     </ul>
                 </div>
@@ -71,8 +77,25 @@
         </div>
     </div>
 
+    <!-- Confirm Clear Modal -->
+    <div id="confirm-clear-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-600 rounded-lg shadow-2xl w-full max-w-sm overflow-hidden flex flex-col">
+            <div class="p-5 text-center">
+                <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                </div>
+                <h3 class="text-lg font-bold text-white mb-2">確認清除航線</h3>
+                <p class="text-sm text-slate-400">您確定要清除地圖上的所有航跡與航點嗎？此動作將無法復原。</p>
+            </div>
+            <div class="bg-slate-900 px-4 py-3 flex justify-end gap-3 border-t border-slate-700">
+                <button id="cancel-clear-btn" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-medium rounded transition focus:outline-none">取消</button>
+                <button id="confirm-clear-btn" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white text-sm font-medium rounded transition shadow-lg shadow-red-500/30 focus:outline-none">確定清除</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Map Container -->
-    <div id="map-wrapper" class="relative flex-1 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-700 shadow-inner overflow-hidden">
+    <div id="map-wrapper" class="relative flex-1 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-700 shadow-inner overflow-hidden min-h-[50vh] md:min-h-full">
         <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
             <button id="zoom-in" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-lg shadow-lg backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition">+</button>
             <button id="zoom-out" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-lg shadow-lg backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition">-</button>
@@ -82,23 +105,23 @@
     </div>
 
     <!-- Side/Bottom Panel -->
-    <div class="w-full md:w-80 lg:w-[320px] h-[40%] md:h-full bg-slate-800 flex flex-col shadow-2xl z-10">
+    <div class="w-full md:w-[320px] md:shrink-0 h-[50%] md:h-full bg-slate-800 flex flex-col shadow-2xl z-10 overflow-hidden border-t md:border-t-0 border-slate-700">
         <!-- Header -->
-        <div class="p-3 md:p-4 border-b border-slate-700 bg-slate-800/50 flex-shrink-0 flex justify-between items-start">
+        <div class="p-3 md:p-4 border-b border-slate-700 bg-slate-800/50 shrink-0 flex justify-between items-start">
             <div>
                 <h1 class="text-lg md:text-xl font-bold tracking-wider text-blue-400 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                     TACTICAL GEO-INT
                 </h1>
                 <p class="text-[10px] md:text-xs text-slate-400 mt-1 font-mono">Fact-Check Protocol: ACTIVE (Global Cov.)</p>
-            </div>
-            <button id="open-changelog" class="bg-teal-600 hover:bg-teal-500 text-white border border-teal-500 px-2 py-1 rounded text-[10px] font-mono transition shadow">
-                v2.9.0
+            </div> 
+            <button id="open-changelog" class="bg-yellow-600 hover:bg-yellow-500 text-white border border-yellow-500 px-2 py-1 rounded text-[10px] font-mono transition shadow shrink-0 ml-2">
+                v2.9.5
             </button>
         </div>
 
         <!-- Route Planner -->
-        <div class="p-3 md:p-4 border-b border-slate-700 flex-shrink-0">
+        <div class="p-3 md:p-4 border-b border-slate-700 shrink-0 bg-slate-800">
             <h2 class="text-xs md:text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider flex items-center justify-between">
                 <span class="flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
@@ -106,17 +129,21 @@
                 </span>
             </h2>
             
-            <div class="flex gap-2">
-                <input type="text" id="route-input" placeholder="例: RCTP VHHH ZYR" class="flex-1 bg-slate-900 border border-slate-600 rounded px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm focus:outline-none focus:border-blue-500 font-mono text-yellow-300 placeholder-slate-500 uppercase">
+            <div class="flex flex-col gap-2 w-full">
+                <input type="text" id="route-input" placeholder="例: RCTP VHHH ZYR" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm focus:outline-none focus:border-blue-500 font-mono text-yellow-300 placeholder-slate-500 uppercase">
                 
-                <label class="bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-1.5 md:px-3 md:py-2 rounded text-xs md:text-sm font-medium transition shadow-lg shadow-indigo-500/30 cursor-pointer flex items-center justify-center whitespace-nowrap" title="支援 KML / GPX / GeoJSON / JSON / XML">
-                    匯入航跡
-                    <input type="file" id="track-upload" accept=".kml,.gpx,.geojson,.json,.xml" class="hidden">
-                </label>
+                <div class="grid grid-cols-3 gap-2 w-full">
+                    <label class="bg-indigo-600 hover:bg-indigo-500 text-white px-1 py-1.5 md:py-2 rounded text-xs font-medium transition shadow-lg shadow-indigo-500/30 cursor-pointer flex items-center justify-center whitespace-nowrap text-center" title="支援 KML / GPX / GeoJSON / JSON / XML">
+                        匯入航跡
+                        <input type="file" id="track-upload" accept=".kml,.gpx,.geojson,.json,.xml" class="hidden">
+                    </label>
 
-                <button id="draw-route-btn" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 md:px-4 md:py-2 rounded text-xs md:text-sm font-medium transition shadow-lg shadow-blue-500/30">繪製</button>
+                    <button id="draw-route-btn" class="bg-blue-600 hover:bg-blue-500 text-white px-1 py-1.5 md:py-2 rounded text-xs font-medium transition shadow-lg shadow-blue-500/30 whitespace-nowrap text-center">繪製</button>
+                    
+                    <button id="clear-route-btn" class="bg-red-600 hover:bg-red-500 text-white px-1 py-1.5 md:py-2 rounded text-xs font-medium transition shadow-lg shadow-red-500/30 whitespace-nowrap text-center" title="清除航線">清除</button>
+                </div>
             </div>
-            <p id="route-msg" class="text-[10px] text-red-400 mt-1.5 hidden"></p>
+            <p id="route-msg" class="text-[10px] text-red-400 mt-1.5 hidden truncate"></p>
         </div>
 
         <!-- Country Info Container -->
@@ -125,7 +152,7 @@
                 點擊地圖上的國家以檢視情報資訊
             </div>
             
-            <div id="country-data" class="hidden flex-col gap-3">
+            <div id="country-data" class="hidden flex-col gap-3 pb-4">
                 <div class="border-b border-slate-700 pb-3">
                     <h2 id="info-name" class="text-xl md:text-2xl font-bold text-white tracking-wide">國家名稱</h2>
                     <p id="info-icao-acc" class="text-[11px] md:text-xs text-yellow-400 font-mono mt-1 tracking-wider bg-slate-800/80 p-1.5 rounded inline-block border border-yellow-700/50">
@@ -139,23 +166,23 @@
                     <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">人口 (Population)</span><span id="info-population" class="font-medium text-slate-100"></span></div>
                     
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">面積 (Area)</span><span id="info-area" class="font-medium text-slate-100"></span></div>
-                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">GDP</span><span id="info-gdp" class="font-medium text-slate-100"></span></div>
+                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 overflow-hidden"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">面積 (Area)</span><span id="info-area" class="font-medium text-slate-100 truncate"></span></div>
+                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 overflow-hidden"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">GDP</span><span id="info-gdp" class="font-medium text-slate-100 truncate"></span></div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">貨幣 (Currency)</span><span id="info-currency" class="font-medium text-slate-100"></span></div>
-                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">匯率 (Exchange)</span><span id="info-exchange" class="font-medium text-slate-100 font-mono text-green-400 text-[10px] md:text-xs"></span></div>
+                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 overflow-hidden"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">貨幣 (Currency)</span><span id="info-currency" class="font-medium text-slate-100 truncate"></span></div>
+                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 overflow-hidden"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">匯率 (Exchange)</span><span id="info-exchange" class="font-medium text-slate-100 font-mono text-green-400 text-[10px] md:text-xs truncate"></span></div>
                     </div>
                     
                     <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">宗教 (Religion)</span><span id="info-religion" class="font-medium text-slate-100"></span></div>
                     
                     <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 col-span-1">
                         <span class="text-slate-400 text-[10px] md:text-xs mb-1.5 flex items-center gap-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" /></svg>
-                            各月平均氣溫(°C)與降雨量(mm)
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" /></svg>
+                            各月氣溫(°C) / 降雨(mm)
                         </span>
-                        <div id="info-climate" class="grid grid-cols-6 gap-1 text-[9px] md:text-[10px] text-center"></div>
+                        <div id="info-climate" class="grid grid-cols-4 gap-1 text-[9px] md:text-[10px] text-center"></div>
                     </div>
                 </div>
             </div>
@@ -208,99 +235,99 @@
         };
 
         // ==========================================
-        // 2. MASSIVE AVIATION DATABASE COMPRESSION (EURASIA FOCUSED)
+        // 2. MASSIVE AVIATION DATABASE
         // ==========================================
         const rawDB = {
-            "Taiwan": "臺北|2340萬|36,197 km²|$800B|TWD|~31.5|佛教/道教/基督教|16/83,17/170,19/180,22/177,26/234,28/325,30/245,30/322,28/300,25/119,22/73,18/73|RCTP|臺北 (RCAA)",
-            "Japan": "東京|1.23億|377,975 km²|$4.2T|JPY|~150|神道教/佛教|5/52,6/56,9/117,14/124,18/137,21/167,25/153,26/168,23/209,18/197,12/92,7/51|RJTT|福岡 (RJJJ)",
-            "China": "北京|14億|9.59M km²|$17.7T|CNY|~7.2|無神論為主|-3/2,-1/5,5/11,14/21,20/34,24/78,26/119,25/74,20/46,13/21,4/7,-1/2|ZBAA|北京/上海等",
-            "South Korea": "首爾|5100萬|100,210 km²|$1.7T|KRW|~1350|基督教/佛教|-2/20,0/28,5/47,12/76,17/105,22/133,25/394,26/364,21/169,14/51,7/52,0/22|RKSI|仁川 (RKRR)",
-            "North Korea": "平壤|2600萬|120,540 km²|$18B|KPW|~900|無神論為主|-6/12,-3/14,3/25,10/44,16/71,21/90,24/275,24/212,19/100,12/39,4/34,-3/16|ZKPY|平壤 (ZKKP)",
-            "Mongolia": "烏蘭巴托|340萬|1.56M km²|$19B|MNT|~3300|佛教|-21/2,-16/3,-7/4,1/8,9/13,15/50,17/65,15/50,8/21,-1/8,-11/3,-19/2|ZMCK|烏蘭巴托 (ZMUB)",
-            "Singapore": "新加坡|590萬|734 km²|$466B|SGD|~1.35|佛教/伊斯蘭教|26/236,27/161,27/170,27/154,27/171,27/130,27/154,27/148,27/156,27/154,26/258,26/318|WSSS|新加坡 (WSJC)",
-            "Philippines": "馬尼拉|1.13億|300k km²|$404B|PHP|~56|天主教|26/17,26/13,28/19,29/32,29/119,28/265,28/319,28/342,28/338,28/190,27/137,26/66|RPLL|馬尼拉 (RPHI)",
-            "Indonesia": "雅加達|2.77億|1.9M km²|$1.3T|IDR|~15500|伊斯蘭教為主|26/299,26/299,27/210,27/147,27/133,27/96,27/60,27/42,27/66,27/110,27/142,26/190|WIII|雅加達 (WIIF)",
-            "Thailand": "曼谷|7100萬|513,120 km²|$512B|THB|~36|佛教為主|27/13,28/11,29/31,30/71,29/189,29/151,28/158,28/187,28/319,28/230,27/57,26/9|VTBS|曼谷 (VTBB)",
-            "Malaysia": "吉隆坡|3400萬|330,803 km²|$434B|MYR|~4.7|伊斯蘭教為主|27/169,28/165,28/240,28/259,28/204,28/125,28/127,28/149,28/196,28/254,27/287,27/227|WMKK|吉隆坡 (WMFC)",
-            "Vietnam": "河內|9900萬|331,212 km²|$433B|VND|~25000|佛教/無宗教|16/18,17/26,20/43,24/90,27/188,28/239,29/288,28/318,27/265,24/130,21/43,18/20|VVNB|河內/胡志明",
-            "Cambodia": "金邊|1600萬|181,035 km²|$29B|KHR|~4000|佛教|26/25,27/11,29/33,30/78,29/118,28/155,28/169,28/160,28/225,27/254,27/130,26/43|VDPP|金邊 (VDPF)",
-            "Laos": "永珍|740萬|236,800 km²|$15B|LAK|~21000|佛教|21/7,23/13,26/33,28/84,28/245,28/279,28/272,28/334,28/297,26/78,23/11,21/3|VLVT|永珍 (VLVT)",
-            "Myanmar": "奈比多|5400萬|676,578 km²|$64B|MMK|~2100|佛教|21/3,23/1,27/5,30/28,30/160,28/240,28/260,27/270,28/190,27/110,24/35,21/6|VYYY|仰光 (VYYF)",
-            "Brunei": "斯里巴加灣|45萬|5,765 km²|$14B|BND|~1.35|伊斯蘭教|27/292,27/158,27/118,28/189,28/236,28/210,28/225,28/226,27/264,27/312,27/322,27/333|WBSB|汶萊 (WBSB)",
-            "India": "新德里|14.2億|3.28M km²|$3.7T|INR|~83|印度教/伊斯蘭教|14/19,17/20,23/15,29/21,33/25,33/74,31/195,30/192,29/116,25/12,20/4,15/9|VIDP|德里 (VIDF)",
-            "Pakistan": "伊斯蘭馬巴德|2.35億|881,913 km²|$376B|PKR|~278|伊斯蘭教|10/63,12/79,16/79,22/58,27/33,31/46,30/256,29/314,26/87,21/29,15/15,11/33|OPRN|喀拉蚩 (OPKR)",
-            "Bangladesh": "達卡|1.69億|148,460 km²|$460B|BDT|~109|伊斯蘭教|19/7,22/28,26/65,28/156,28/339,28/340,28/373,28/316,28/300,27/163,23/34,19/14|VGHS|達卡 (VGFR)",
-            "Sri Lanka": "可倫坡|2200萬|65,610 km²|$74B|LKR|~300|佛教為主|27/58,27/67,28/118,28/238,28/373,28/220,28/128,28/105,28/252,27/354,27/315,27/146|VCBI|可倫坡 (VCCF)",
-            "Nepal": "加德滿都|3000萬|147,181 km²|$40B|NPR|~133|印度教|10/14,12/17,16/31,19/54,22/114,24/256,24/379,24/334,23/183,19/59,15/8,11/14|VNKT|加德滿都 (VNSM)",
-            "Bhutan": "廷布|78萬|38,394 km²|$2.8B|BTN|~83|佛教|5/15,7/41,10/23,13/58,16/122,18/246,19/373,19/345,17/155,13/38,9/8,6/3|VQPR|帕羅",
-            "Maldives": "馬利|52萬|300 km²|$6.9B|MVR|~15.4|伊斯蘭教|28/114,28/38,28/73,29/132,29/215,28/172,28/147,28/187,28/242,28/222,28/201,28/231|VRMM|馬利 (VRMF)",
-            "Kazakhstan": "阿斯塔納|2000萬|2.72M km²|$259B|KZT|~450|伊斯蘭教|-14/16,-14/15,-7/18,5/21,13/35,18/37,20/50,19/29,12/22,4/27,-5/28,-11/22|UACC|阿斯塔納 (UACF)",
-            "Uzbekistan": "塔什干|3600萬|448,978 km²|$90B|UZS|~12500|伊斯蘭教|2/54,3/46,9/72,15/63,21/32,26/7,28/4,26/2,21/4,14/34,8/45,3/53|UTTT|塔什干 (UTTR)",
-            "Turkmenistan": "阿什哈巴德|650萬|491,210 km²|$81B|TMT|~3.5|伊斯蘭教|3/20,5/24,10/41,16/32,23/21,28/6,31/3,29/2,23/3,16/10,10/19,5/20|UTAA|阿什哈巴德 (UTAK)",
-            "Kyrgyzstan": "比斯凱克|700萬|199,951 km²|$13B|KGS|~89|伊斯蘭教|-2/26,0/33,6/43,12/61,17/59,22/23,24/16,23/12,18/16,11/34,4/36,-1/31|UCFM|比斯凱克 (UAFM)",
-            "Tajikistan": "杜尚貝|1000萬|143,100 km²|$11B|TJS|~10.9|伊斯蘭教|2/65,4/72,9/107,15/104,19/66,24/9,26/3,25/1,20/3,14/30,9/47,4/69|UTDD|杜尚貝 (UTAK)",
-            "United Arab Emirates": "阿布達比|940萬|83,600 km²|$509B|AED|~3.67|伊斯蘭教|18/7,20/21,23/14,27/6,31/1,33/0,35/0,35/0,32/0,28/0,24/1,20/5|OMDB|阿聯酋 (OMAE)",
-            "Saudi Arabia": "利雅德|3600萬|2.14M km²|$1.0T|SAR|~3.75|伊斯蘭教|14/12,17/9,21/12,26/23,31/4,34/0,35/0,35/0,32/0,27/0,20/1,15/11|OERK|吉達 (OEJD)",
-            "Israel": "耶路撒冷|970萬|22,145 km²|$522B|ILS|~3.7|猶太教|9/133,9/118,12/92,15/31,19/3,22/0,24/0,24/0,22/0,19/15,14/60,10/105|LLBG|特拉維夫 (LLLL)",
-            "Turkey": "安卡拉|8500萬|783,562 km²|$905B|TRY|~32|伊斯蘭教|0/42,1/36,5/39,11/46,15/51,19/35,23/14,23/12,18/18,12/29,6/32,2/43|LTFM|安卡拉 (LTAA)",
-            "Iran": "德黑蘭|8800萬|1.64M km²|$388B|IRR|~42000|伊斯蘭教|3/34,5/32,10/39,16/33,21/15,27/3,29/1,29/1,25/1,19/11,11/24,5/33|OIIE|德黑蘭 (OIIX)",
-            "Iraq": "巴格達|4300萬|438,317 km²|$264B|IQD|~1300|伊斯蘭教|10/27,12/28,16/27,22/17,28/3,32/0,34/0,34/0,30/0,25/3,17/21,11/25|ORBI|巴格達 (ORBB)",
-            "Qatar": "多哈|290萬|11,586 km²|$237B|QAR|~3.64|伊斯蘭教|17/13,18/17,21/16,26/8,31/3,33/0,34/0,34/0,32/0,28/1,23/3,19/12|OTHH|多哈 (OTBD)",
-            "Kuwait": "科威特市|430萬|17,818 km²|$175B|KWD|~0.3|伊斯蘭教|13/30,15/10,20/18,25/11,31/0,35/0,37/0,37/0,33/0,27/1,20/18,14/25|OKBK|科威特 (OKAC)",
-            "Oman": "馬斯喀特|450萬|309,500 km²|$114B|OMR|~0.38|伊斯蘭教|21/12,22/16,25/10,30/5,34/0,35/0,34/0,32/0,31/0,29/0,25/3,22/11|OOMS|馬斯喀特 (OOMM)",
-            "Jordan": "安曼|1100萬|89,342 km²|$47B|JOD|~0.71|伊斯蘭教|8/63,9/62,12/34,16/11,20/3,23/0,25/0,25/0,23/0,20/5,14/22,9/49|OJAI|安曼 (OJAC)",
-            "Lebanon": "貝魯特|550萬|10,452 km²|$20B|LBP|~89500|伊斯蘭教/基督教|14/190,14/133,16/110,18/46,21/15,24/1,26/0,27/0,26/5,23/60,19/114,15/163|OLBA|貝魯特 (OLBB)",
-            "Syria": "大馬士革|2200萬|185,180 km²|$21B|SYP|~13000|伊斯蘭教|6/27,7/22,11/13,15/14,19/3,23/0,25/0,25/0,23/0,18/6,12/21,7/25|OSDI|大馬士革 (OSTT)",
-            "Yemen": "沙那|3400萬|527,968 km²|$21B|YER|~250|伊斯蘭教|13/5,15/4,17/10,19/33,20/45,21/13,22/68,21/87,19/22,16/5,14/2,13/4|OYSN|沙那 (OYSC)",
-            "Bahrain": "麥納麥|150萬|780 km²|$44B|BHD|~0.37|伊斯蘭教|17/14,18/16,21/13,26/10,30/1,33/0,34/0,34/0,32/0,28/0,23/3,19/10|OBBI|巴林 (OBBB)",
-            "Afghanistan": "喀布爾|4000萬|652,860 km²|$14B|AFN|~70|伊斯蘭教|-2/30,0/35,6/63,12/71,17/23,22/4,24/5,23/3,19/1,12/3,6/18,0/21|OAQA|喀布爾 (OAKB)",
-            "Azerbaijan": "巴庫|1000萬|86,600 km²|$78B|AZN|~1.7|伊斯蘭教|4/21,4/20,6/20,11/18,17/18,22/8,25/2,25/6,21/15,15/25,10/30,6/26|UBBB|巴庫 (UBBA)",
-            "Georgia": "提比里斯|370萬|69,700 km²|$30B|GEL|~2.7|東正教|2/18,3/25,7/30,12/50,17/77,21/75,24/46,24/47,19/35,13/41,7/30,3/22|UGTB|提比里斯 (UGGG)",
-            "Armenia": "葉里溫|270萬|29,743 km²|$24B|AMD|~400|東正教|-3/21,-1/23,5/30,12/37,17/44,22/21,26/9,26/9,21/8,14/27,6/23,-1/19|UDYZ|葉里溫 (UDDD)",
-            "United Kingdom": "倫敦|6700萬|242,495 km²|$3.3T|GBP|~0.79|基督教|5/55,5/40,7/41,9/43,12/50,15/45,17/45,17/49,15/49,11/71,7/63,5/53|EGLL|倫敦 (EGTT)",
-            "France": "巴黎|6800萬|643,801 km²|$2.7T|EUR|~0.92|天主教為主|5/51,6/41,8/47,11/51,14/63,17/49,20/61,19/43,16/52,12/61,8/50,5/58|LFPG|巴黎 (LFFF)",
-            "Germany": "柏林|8300萬|357,022 km²|$4.4T|EUR|~0.92|基督教/天主教|0/42,1/33,4/40,9/37,13/53,16/68,18/55,18/58,14/45,9/37,4/43,1/39|EDDF|朗根 (EDGG)",
-            "Italy": "羅馬|5800萬|301,340 km²|$2.1T|EUR|~0.92|天主教為主|8/80,8/73,11/65,13/65,17/46,21/21,24/16,24/30,21/68,17/93,12/111,9/96|LIRF|羅馬 (LIRR)",
-            "Spain": "馬德里|4800萬|505,990 km²|$1.5T|EUR|~0.92|天主教為主|6/33,7/35,10/25,12/45,16/50,21/21,25/11,24/11,20/25,14/53,9/43,6/50|LEMD|馬德里 (LECM)",
-            "Switzerland": "伯恩|870萬|41,285 km²|$807B|CHF|~0.9|天主教/基督教|-1/60,0/55,4/72,8/85,12/121,16/117,18/107,17/115,14/87,9/87,3/76,0/73|LSZH|瑞士 (LSAS)",
-            "Netherlands": "阿姆斯特丹|1750萬|41,543 km²|$991B|EUR|~0.92|無宗教/天主教|3/69,3/53,5/61,8/41,12/55,14/66,17/76,17/85,14/82,11/89,7/87,4/83|EHAM|阿姆斯特丹 (EHAA)",
-            "Belgium": "布魯塞爾|1160萬|30,528 km²|$578B|EUR|~0.92|天主教為主|3/76,3/63,6/70,9/51,13/65,15/71,18/73,18/79,15/68,11/74,6/76,4/81|EBBR|布魯塞爾 (EBBU)",
-            "Austria": "維也納|890萬|83,871 km²|$471B|EUR|~0.92|天主教為主|0/38,1/42,5/51,10/45,14/69,18/70,20/68,19/57,15/53,10/40,5/44,1/43|LOWW|維也納 (LOVV)",
-            "Czechia": "布拉格|1050萬|78,866 km²|$330B|CZK|~23|無宗教/天主教|-1/23,0/22,3/27,8/38,13/77,16/72,18/66,17/69,13/39,8/24,3/31,0/25|LKPR|布拉格 (LKAA)",
-            "Slovakia": "布拉提斯拉瓦|540萬|49,000 km²|$132B|EUR|~0.92|天主教|-1/39,0/37,4/38,10/43,14/58,18/60,20/61,19/58,15/50,10/37,5/45,0/45|LZIB|布拉提斯拉瓦 (LZBB)",
-            "Hungary": "布達佩斯|960萬|93,030 km²|$178B|HUF|~360|天主教為主|-1/38,1/31,5/29,11/38,16/61,19/60,21/45,21/49,16/40,11/34,5/40,0/40|LHBP|布達佩斯 (LHCC)",
-            "Poland": "華沙|3800萬|312,696 km²|$688B|PLN|~4.0|天主教|-1/21,-1/25,2/28,8/34,14/55,17/64,19/73,18/60,13/46,8/32,3/34,-1/34|EPWA|華沙 (EPWW)",
-            "Luxembourg": "盧森堡市|66萬|2,586 km²|$85B|EUR|~0.92|天主教|1/76,1/62,4/69,8/58,12/78,15/79,17/71,17/75,13/70,9/74,4/77,1/82|ELLX|盧森堡",
-            "Sweden": "斯德哥爾摩|1040萬|450,295 km²|$585B|SEK|~10.5|基督教為主|-2/39,-2/27,0/26,4/30,10/30,14/45,17/72,16/66,11/55,6/50,2/53,-1/46|ESSA|瑞典 (ESAA)",
-            "Norway": "奧斯陸|540萬|385,207 km²|$482B|NOK|~10.5|基督教為主|-4/49,-4/36,-1/47,4/41,10/53,15/65,16/81,15/89,10/90,5/84,0/73,-3/55|ENGM|奧斯陸 (ENOR)",
-            "Denmark": "哥本哈根|580萬|42,933 km²|$395B|DKK|~6.8|基督教為主|1/46,1/30,3/39,6/39,11/42,15/52,17/68,17/63,13/60,9/56,5/53,2/50|EKCH|哥本哈根 (EKDK)",
-            "Finland": "赫爾辛基|550萬|338,424 km²|$280B|EUR|~0.92|基督教為主|-4/52,-5/36,-1/38,4/32,10/37,15/57,17/63,16/80,11/64,6/74,1/70,-2/57|EFHK|赫爾辛基 (EFIN)",
-            "Iceland": "雷克雅維克|38萬|103,000 km²|$30B|ISK|~138|基督教|0/75,0/71,0/81,3/58,6/43,9/50,11/51,10/61,7/66,4/85,1/72,-1/78|BIKF|雷克雅維克 (BICC)",
-            "Estonia": "塔林|130萬|45,227 km²|$41B|EUR|~0.92|無宗教|-3/56,-4/36,-1/37,4/34,10/41,14/58,17/67,16/86,11/66,6/73,1/69,-2/63|EETN|塔林 (EETT)",
-            "Latvia": "里加|180萬|64,589 km²|$43B|EUR|~0.92|基督教|-3/33,-3/24,0/32,6/39,11/42,15/59,17/74,17/73,12/71,7/60,2/50,-1/42|EVRA|里加 (EVRR)",
-            "Lithuania": "維爾紐斯|280萬|65,300 km²|$77B|EUR|~0.92|天主教|-4/46,-4/37,-1/42,6/46,12/62,15/77,17/78,16/71,11/65,6/53,1/46,-2/49|EYVI|維爾紐斯 (EYVL)",
-            "Russia": "莫斯科|1.43億|17.09M km²|$2.2T|RUB|~90|東正教為主|-6/46,-6/36,-1/32,6/38,13/52,17/80,19/85,17/82,11/68,5/59,-1/58,-4/56|UUEE|莫斯科 (UUWV)",
-            "Ukraine": "基輔|3800萬|603,628 km²|$160B|UAH|~38|東正教|-3/36,-2/39,2/39,9/41,15/52,18/73,20/68,19/53,14/50,8/35,2/51,-2/47|UKBB|基輔 (UKBV)",
-            "Belarus": "明斯克|920萬|207,600 km²|$71B|BYN|~3.2|東正教|-4/45,-4/38,0/44,6/42,12/65,15/89,17/89,16/68,11/60,6/52,0/48,-3/49|UMMS|明斯克 (UMMV)",
-            "Moldova": "基希訥烏|250萬|33,846 km²|$16B|MDL|~17|東正教|-2/36,-1/31,3/34,9/39,15/46,19/65,21/62,21/56,15/62,10/39,4/38,0/37|LUKK|基希訥烏 (LUUU)",
-            "Romania": "布加勒斯特|1900萬|238,397 km²|$300B|RON|~4.6|東正教|-1/37,1/33,5/38,11/46,16/61,20/73,22/64,22/58,17/63,11/43,5/48,0/43|LROP|布加勒斯特 (LRBB)",
-            "Bulgaria": "索菲亞|640萬|110,994 km²|$100B|BGN|~1.8|東正教|-1/40,1/35,5/40,10/50,14/73,18/73,20/53,20/51,16/40,11/46,5/48,0/43|LBSF|索菲亞 (LBSR)",
-            "Greece": "雅典|1060萬|131,957 km²|$219B|EUR|~0.92|東正教|11/56,12/47,14/40,19/21,24/16,29/6,32/5,32/6,28/14,23/52,17/58,13/69|LGAV|雅典 (LGGG)",
-            "Portugal": "里斯本|1030萬|92,090 km²|$252B|EUR|~0.92|天主教為主|12/99,12/84,14/53,16/68,18/53,22/16,24/4,24/6,23/32,19/100,15/127,12/121|LPPT|里斯本 (LPPC)",
-            "Ireland": "都柏林|510萬|70,273 km²|$529B|EUR|~0.92|天主教為主|5/62,5/48,6/52,8/54,11/59,14/66,15/56,15/73,13/59,10/79,7/72,5/73|EIDW|香農 (EISN)",
-            "Serbia": "貝爾格勒|660萬|88,361 km²|$73B|RSD|~108|東正教|1/46,3/40,7/46,12/56,17/58,20/86,23/64,23/58,18/55,13/48,7/54,3/51|LYBE|貝爾格勒 (LYBA)",
-            "Bosnia and Herzegovina": "塞拉耶佛|320萬|51,129 km²|$28B|BAM|~1.8|伊斯蘭教/東正教|0/68,1/64,5/70,9/77,14/72,17/90,19/72,19/66,15/70,10/77,5/86,1/81|LQSA|塞拉耶佛 (LQSB)",
-            "Croatia": "札格瑞布|380萬|56,594 km²|$80B|EUR|~0.92|天主教|1/43,3/38,7/52,11/59,16/72,19/95,21/77,20/87,16/81,11/71,6/62,2/54|LDZA|札格瑞布 (LDZO)",
-            "Slovenia": "盧比安納|210萬|20,271 km²|$68B|EUR|~0.92|天主教|-1/63,0/59,4/78,9/101,14/104,18/131,20/114,19/118,15/131,10/121,5/110,0/83|LJLJ|盧比安納 (LJLA)",
-            "North Macedonia": "史高比耶|180萬|25,713 km²|$14B|MKD|~56|東正教|1/30,3/29,7/35,12/40,17/62,21/46,24/34,23/31,18/42,13/44,7/56,2/42|LWSK|史高比耶 (LWSS)",
-            "Albania": "地拉那|270萬|28,748 km²|$22B|ALL|~95|伊斯蘭教|6/119,7/104,10/93,13/85,17/77,22/51,25/32,25/40,21/78,16/105,12/161,8/142|LATI|地拉那 (LAAA)",
-            "Montenegro": "波德里查|61萬|13,812 km²|$7B|EUR|~0.92|東正教|5/192,6/166,9/159,13/145,18/89,23/63,26/38,26/59,21/119,16/164,11/238,6/217|LYPG|波德里查 (LYPO)",
-            "Cyprus": "尼古西亞|120萬|9,251 km²|$32B|EUR|~0.92|東正教/伊斯蘭教|10/54,10/41,13/34,16/19,21/23,25/7,28/1,28/2,25/11,21/27,16/42,12/66|LCLK|尼古西亞 (LCCC)",
-            "Malta": "瓦萊塔|53萬|316 km²|$20B|EUR|~0.92|天主教|12/90,12/60,13/39,15/26,19/10,23/4,26/0,27/15,24/60,21/79,17/90,14/110|LMML|馬耳他 (LMMM)",
-            "United States of America": "華盛頓特區|3.34億|9.8M km²|$27T|USD|1.0|基督教為主|2/71,3/65,8/86,13/77,19/100,24/96,26/94,25/84,21/95,15/82,9/76,4/85|KLAX|紐約 (KZNY)",
-            "Canada": "渥太華|4000萬|9.98M km²|$2.1T|CAD|~1.35|天主教/基督教|-10/65,-8/54,-2/64,6/67,13/73,18/80,21/84,19/84,15/87,8/79,1/77,-6/73|CYYZ|多倫多 (CZYZ)",
-            "Australia": "坎培拉|2600萬|7.69M km²|$1.7T|AUD|~1.5|基督教|20/58,20/54,17/51,13/46,9/44,6/40,5/41,6/46,9/52,12/62,15/64,18/52|YSSY|墨爾本 (YMMM)",
-            "New Zealand": "威靈頓|510萬|268,021 km²|$247B|NZD|~1.6|基督教/無宗教|16/72,16/62,15/74,13/100,11/117,9/147,8/136,9/131,10/100,12/115,13/99,15/84|NZAA|奧克蘭 (NZZC)"
+            "Taiwan": "臺北|2340萬|36,197 km²|$800B|TWD|~31.5|佛教/道教/基督教|16/83,17/170,19/180,22/177,26/234,28/325,30/245,30/322,28/300,25/119,22/73,18/73|RCTP|臺北 Taipei (RCAA)",
+            "Japan": "東京|1.23億|377,975 km²|$4.2T|JPY|~150|神道教/佛教|5/52,6/56,9/117,14/124,18/137,21/167,25/153,26/168,23/209,18/197,12/92,7/51|RJTT|福岡 Fukuoka (RJJJ)",
+            "China": "北京|14億|9.59M km²|$17.7T|CNY|~7.2|無神論為主|-3/2,-1/5,5/11,14/21,20/34,24/78,26/119,25/74,20/46,13/21,4/7,-1/2|ZBAA|北京 Beijing (ZBPE)",
+            "South Korea": "首爾|5100萬|100,210 km²|$1.7T|KRW|~1350|基督教/佛教|-2/20,0/28,5/47,12/76,17/105,22/133,25/394,26/364,21/169,14/51,7/52,0/22|RKSI|仁川 Incheon (RKRR)",
+            "North Korea": "平壤|2600萬|120,540 km²|$18B|KPW|~900|無神論為主|-6/12,-3/14,3/25,10/44,16/71,21/90,24/275,24/212,19/100,12/39,4/34,-3/16|ZKPY|平壤 Pyongyang (ZKKP)",
+            "Mongolia": "烏蘭巴托|340萬|1.56M km²|$19B|MNT|~3300|佛教|-21/2,-16/3,-7/4,1/8,9/13,15/50,17/65,15/50,8/21,-1/8,-11/3,-19/2|ZMCK|烏蘭巴托 Ulaanbaatar (ZMUB)",
+            "Singapore": "新加坡|590萬|734 km²|$466B|SGD|~1.35|佛教/伊斯蘭教|26/236,27/161,27/170,27/154,27/171,27/130,27/154,27/148,27/156,27/154,26/258,26/318|WSSS|新加坡 Singapore (WSJC)",
+            "Philippines": "馬尼拉|1.13億|300k km²|$404B|PHP|~56|天主教|26/17,26/13,28/19,29/32,29/119,28/265,28/319,28/342,28/338,28/190,27/137,26/66|RPLL|馬尼拉 Manila (RPHI)",
+            "Indonesia": "雅加達|2.77億|1.9M km²|$1.3T|IDR|~15500|伊斯蘭教為主|26/299,26/299,27/210,27/147,27/133,27/96,27/60,27/42,27/66,27/110,27/142,26/190|WIII|雅加達 Jakarta (WIIF)",
+            "Thailand": "曼谷|7100萬|513,120 km²|$512B|THB|~36|佛教為主|27/13,28/11,29/31,30/71,29/189,29/151,28/158,28/187,28/319,28/230,27/57,26/9|VTBS|曼谷 Bangkok (VTBB)",
+            "Malaysia": "吉隆坡|3400萬|330,803 km²|$434B|MYR|~4.7|伊斯蘭教為主|27/169,28/165,28/240,28/259,28/204,28/125,28/127,28/149,28/196,28/254,27/287,27/227|WMKK|吉隆坡 Kuala Lumpur (WMFC)",
+            "Vietnam": "河內|9900萬|331,212 km²|$433B|VND|~25000|佛教/無宗教|16/18,17/26,20/43,24/90,27/188,28/239,29/288,28/318,27/265,24/130,21/43,18/20|VVNB|河內 Hanoi (VVVV)",
+            "Cambodia": "金邊|1600萬|181,035 km²|$29B|KHR|~4000|佛教|26/25,27/11,29/33,30/78,29/118,28/155,28/169,28/160,28/225,27/254,27/130,26/43|VDPP|金邊 Phnom Penh (VDPF)",
+            "Laos": "永珍|740萬|236,800 km²|$15B|LAK|~21000|佛教|21/7,23/13,26/33,28/84,28/245,28/279,28/272,28/334,28/297,26/78,23/11,21/3|VLVT|永珍 Vientiane (VLVT)",
+            "Myanmar": "奈比多|5400萬|676,578 km²|$64B|MMK|~2100|佛教|21/3,23/1,27/5,30/28,30/160,28/240,28/260,27/270,28/190,27/110,24/35,21/6|VYYY|仰光 Yangon (VYYF)",
+            "Brunei": "斯里巴加灣|45萬|5,765 km²|$14B|BND|~1.35|伊斯蘭教|27/292,27/158,27/118,28/189,28/236,28/210,28/225,28/226,27/264,27/312,27/322,27/333|WBSB|汶萊 Brunei (WBSB)",
+            "India": "新德里|14.2億|3.28M km²|$3.7T|INR|~83|印度教/伊斯蘭教|14/19,17/20,23/15,29/21,33/25,33/74,31/195,30/192,29/116,25/12,20/4,15/9|VIDP|德里 Delhi (VIDF)",
+            "Pakistan": "伊斯蘭馬巴德|2.35億|881,913 km²|$376B|PKR|~278|伊斯蘭教|10/63,12/79,16/79,22/58,27/33,31/46,30/256,29/314,26/87,21/29,15/15,11/33|OPRN|喀拉蚩 Karachi (OPKR)",
+            "Bangladesh": "達卡|1.69億|148,460 km²|$460B|BDT|~109|伊斯蘭教|19/7,22/28,26/65,28/156,28/339,28/340,28/373,28/316,28/300,27/163,23/34,19/14|VGHS|達卡 Dhaka (VGFR)",
+            "Sri Lanka": "可倫坡|2200萬|65,610 km²|$74B|LKR|~300|佛教為主|27/58,27/67,28/118,28/238,28/373,28/220,28/128,28/105,28/252,27/354,27/315,27/146|VCBI|可倫坡 Colombo (VCCF)",
+            "Nepal": "加德滿都|3000萬|147,181 km²|$40B|NPR|~133|印度教|10/14,12/17,16/31,19/54,22/114,24/256,24/379,24/334,23/183,19/59,15/8,11/14|VNKT|加德滿都 Kathmandu (VNSM)",
+            "Bhutan": "廷布|78萬|38,394 km²|$2.8B|BTN|~83|佛教|5/15,7/41,10/23,13/58,16/122,18/246,19/373,19/345,17/155,13/38,9/8,6/3|VQPR|帕羅 Paro (VQPR)",
+            "Maldives": "馬利|52萬|300 km²|$6.9B|MVR|~15.4|伊斯蘭教|28/114,28/38,28/73,29/132,29/215,28/172,28/147,28/187,28/242,28/222,28/201,28/231|VRMM|馬利 Male (VRMF)",
+            "Kazakhstan": "阿斯塔納|2000萬|2.72M km²|$259B|KZT|~450|伊斯蘭教|-14/16,-14/15,-7/18,5/21,13/35,18/37,20/50,19/29,12/22,4/27,-5/28,-11/22|UACC|阿斯塔納 Astana (UACF)",
+            "Uzbekistan": "塔什干|3600萬|448,978 km²|$90B|UZS|~12500|伊斯蘭教|2/54,3/46,9/72,15/63,21/32,26/7,28/4,26/2,21/4,14/34,8/45,3/53|UTTT|塔什干 Tashkent (UTTR)",
+            "Turkmenistan": "阿什哈巴德|650萬|491,210 km²|$81B|TMT|~3.5|伊斯蘭教|3/20,5/24,10/41,16/32,23/21,28/6,31/3,29/2,23/3,16/10,10/19,5/20|UTAA|阿什哈巴德 Ashgabat (UTAK)",
+            "Kyrgyzstan": "比斯凱克|700萬|199,951 km²|$13B|KGS|~89|伊斯蘭教|-2/26,0/33,6/43,12/61,17/59,22/23,24/16,23/12,18/16,11/34,4/36,-1/31|UCFM|比斯凱克 Bishkek (UAFM)",
+            "Tajikistan": "杜尚貝|1000萬|143,100 km²|$11B|TJS|~10.9|伊斯蘭教|2/65,4/72,9/107,15/104,19/66,24/9,26/3,25/1,20/3,14/30,9/47,4/69|UTDD|杜尚貝 Dushanbe (UTAK)",
+            "United Arab Emirates": "阿布達比|940萬|83,600 km²|$509B|AED|~3.67|伊斯蘭教|18/7,20/21,23/14,27/6,31/1,33/0,35/0,35/0,32/0,28/0,24/1,20/5|OMDB|阿聯酋 Emirates (OMAE)",
+            "Saudi Arabia": "利雅德|3600萬|2.14M km²|$1.0T|SAR|~3.75|伊斯蘭教|14/12,17/9,21/12,26/23,31/4,34/0,35/0,35/0,32/0,27/0,20/1,15/11|OERK|吉達 Jeddah (OEJD)",
+            "Israel": "耶路撒冷|970萬|22,145 km²|$522B|ILS|~3.7|猶太教|9/133,9/118,12/92,15/31,19/3,22/0,24/0,24/0,22/0,19/15,14/60,10/105|LLBG|特拉維夫 Tel Aviv (LLLL)",
+            "Turkey": "安卡拉|8500萬|783,562 km²|$905B|TRY|~32|伊斯蘭教|0/42,1/36,5/39,11/46,15/51,19/35,23/14,23/12,18/18,12/29,6/32,2/43|LTFM|安卡拉 Ankara (LTAA)",
+            "Iran": "德黑蘭|8800萬|1.64M km²|$388B|IRR|~42000|伊斯蘭教|3/34,5/32,10/39,16/33,21/15,27/3,29/1,29/1,25/1,19/11,11/24,5/33|OIIE|德黑蘭 Tehran (OIIX)",
+            "Iraq": "巴格達|4300萬|438,317 km²|$264B|IQD|~1300|伊斯蘭教|10/27,12/28,16/27,22/17,28/3,32/0,34/0,34/0,30/0,25/3,17/21,11/25|ORBI|巴格達 Baghdad (ORBB)",
+            "Qatar": "多哈|290萬|11,586 km²|$237B|QAR|~3.64|伊斯蘭教|17/13,18/17,21/16,26/8,31/3,33/0,34/0,34/0,32/0,28/1,23/3,19/12|OTHH|多哈 Doha (OTBD)",
+            "Kuwait": "科威特市|430萬|17,818 km²|$175B|KWD|~0.3|伊斯蘭教|13/30,15/10,20/18,25/11,31/0,35/0,37/0,37/0,33/0,27/1,20/18,14/25|OKBK|科威特 Kuwait (OKAC)",
+            "Oman": "馬斯喀特|450萬|309,500 km²|$114B|OMR|~0.38|伊斯蘭教|21/12,22/16,25/10,30/5,34/0,35/0,34/0,32/0,31/0,29/0,25/3,22/11|OOMS|馬斯喀特 Muscat (OOMM)",
+            "Jordan": "安曼|1100萬|89,342 km²|$47B|JOD|~0.71|伊斯蘭教|8/63,9/62,12/34,16/11,20/3,23/0,25/0,25/0,23/0,20/5,14/22,9/49|OJAI|安曼 Amman (OJAC)",
+            "Lebanon": "貝魯特|550萬|10,452 km²|$20B|LBP|~89500|伊斯蘭教/基督教|14/190,14/133,16/110,18/46,21/15,24/1,26/0,27/0,26/5,23/60,19/114,15/163|OLBA|貝魯特 Beirut (OLBB)",
+            "Syria": "大馬士革|2200萬|185,180 km²|$21B|SYP|~13000|伊斯蘭教|6/27,7/22,11/13,15/14,19/3,23/0,25/0,25/0,23/0,18/6,12/21,7/25|OSDI|大馬士革 Damascus (OSTT)",
+            "Yemen": "沙那|3400萬|527,968 km²|$21B|YER|~250|伊斯蘭教|13/5,15/4,17/10,19/33,20/45,21/13,22/68,21/87,19/22,16/5,14/2,13/4|OYSN|沙那 Sana'a (OYSC)",
+            "Bahrain": "麥納麥|150萬|780 km²|$44B|BHD|~0.37|伊斯蘭教|17/14,18/16,21/13,26/10,30/1,33/0,34/0,34/0,32/0,28/0,23/3,19/10|OBBI|巴林 Bahrain (OBBB)",
+            "Afghanistan": "喀布爾|4000萬|652,860 km²|$14B|AFN|~70|伊斯蘭教|-2/30,0/35,6/63,12/71,17/23,22/4,24/5,23/3,19/1,12/3,6/18,0/21|OAQA|喀布爾 Kabul (OAKB)",
+            "Azerbaijan": "巴庫|1000萬|86,600 km²|$78B|AZN|~1.7|伊斯蘭教|4/21,4/20,6/20,11/18,17/18,22/8,25/2,25/6,21/15,15/25,10/30,6/26|UBBB|巴庫 Baku (UBBA)",
+            "Georgia": "提比里斯|370萬|69,700 km²|$30B|GEL|~2.7|東正教|2/18,3/25,7/30,12/50,17/77,21/75,24/46,24/47,19/35,13/41,7/30,3/22|UGTB|提比里斯 Tbilisi (UGGG)",
+            "Armenia": "葉里溫|270萬|29,743 km²|$24B|AMD|~400|東正教|-3/21,-1/23,5/30,12/37,17/44,22/21,26/9,26/9,21/8,14/27,6/23,-1/19|UDYZ|葉里溫 Yerevan (UDDD)",
+            "United Kingdom": "倫敦|6700萬|242,495 km²|$3.3T|GBP|~0.79|基督教|5/55,5/40,7/41,9/43,12/50,15/45,17/45,17/49,15/49,11/71,7/63,5/53|EGLL|倫敦 London (EGTT)",
+            "France": "巴黎|6800萬|643,801 km²|$2.7T|EUR|~0.92|天主教為主|5/51,6/41,8/47,11/51,14/63,17/49,20/61,19/43,16/52,12/61,8/50,5/58|LFPG|巴黎 Paris (LFFF)",
+            "Germany": "柏林|8300萬|357,022 km²|$4.4T|EUR|~0.92|基督教/天主教|0/42,1/33,4/40,9/37,13/53,16/68,18/55,18/58,14/45,9/37,4/43,1/39|EDDF|朗根 Langen (EDGG)",
+            "Italy": "羅馬|5800萬|301,340 km²|$2.1T|EUR|~0.92|天主教為主|8/80,8/73,11/65,13/65,17/46,21/21,24/16,24/30,21/68,17/93,12/111,9/96|LIRF|羅馬 Rome (LIRR)",
+            "Spain": "馬德里|4800萬|505,990 km²|$1.5T|EUR|~0.92|天主教為主|6/33,7/35,10/25,12/45,16/50,21/21,25/11,24/11,20/25,14/53,9/43,6/50|LEMD|馬德里 Madrid (LECM)",
+            "Switzerland": "伯恩|870萬|41,285 km²|$807B|CHF|~0.9|天主教/基督教|-1/60,0/55,4/72,8/85,12/121,16/117,18/107,17/115,14/87,9/87,3/76,0/73|LSZH|瑞士 Switzerland (LSAS)",
+            "Netherlands": "阿姆斯特丹|1750萬|41,543 km²|$991B|EUR|~0.92|無宗教/天主教|3/69,3/53,5/61,8/41,12/55,14/66,17/76,17/85,14/82,11/89,7/87,4/83|EHAM|阿姆斯特丹 Amsterdam (EHAA)",
+            "Belgium": "布魯塞爾|1160萬|30,528 km²|$578B|EUR|~0.92|天主教為主|3/76,3/63,6/70,9/51,13/65,15/71,18/73,18/79,15/68,11/74,6/76,4/81|EBBR|布魯塞爾 Brussels (EBBU)",
+            "Austria": "維也納|890萬|83,871 km²|$471B|EUR|~0.92|天主教為主|0/38,1/42,5/51,10/45,14/69,18/70,20/68,19/57,15/53,10/40,5/44,1/43|LOWW|維也納 Vienna (LOVV)",
+            "Czechia": "布拉格|1050萬|78,866 km²|$330B|CZK|~23|無宗教/天主教|-1/23,0/22,3/27,8/38,13/77,16/72,18/66,17/69,13/39,8/24,3/31,0/25|LKPR|布拉格 Prague (LKAA)",
+            "Slovakia": "布拉提斯拉瓦|540萬|49,000 km²|$132B|EUR|~0.92|天主教|-1/39,0/37,4/38,10/43,14/58,18/60,20/61,19/58,15/50,10/37,5/45,0/45|LZIB|布拉提斯拉瓦 Bratislava (LZBB)",
+            "Hungary": "布達佩斯|960萬|93,030 km²|$178B|HUF|~360|天主教為主|-1/38,1/31,5/29,11/38,16/61,19/60,21/45,21/49,16/40,11/34,5/40,0/40|LHBP|布達佩斯 Budapest (LHCC)",
+            "Poland": "華沙|3800萬|312,696 km²|$688B|PLN|~4.0|天主教|-1/21,-1/25,2/28,8/34,14/55,17/64,19/73,18/60,13/46,8/32,3/34,-1/34|EPWA|華沙 Warsaw (EPWW)",
+            "Luxembourg": "盧森堡市|66萬|2,586 km²|$85B|EUR|~0.92|天主教|1/76,1/62,4/69,8/58,12/78,15/79,17/71,17/75,13/70,9/74,4/77,1/82|ELLX|盧森堡 Luxembourg",
+            "Sweden": "斯德哥爾摩|1040萬|450,295 km²|$585B|SEK|~10.5|基督教為主|-2/39,-2/27,0/26,4/30,10/30,14/45,17/72,16/66,11/55,6/50,2/53,-1/46|ESSA|瑞典 Sweden (ESAA)",
+            "Norway": "奧斯陸|540萬|385,207 km²|$482B|NOK|~10.5|基督教為主|-4/49,-4/36,-1/47,4/41,10/53,15/65,16/81,15/89,10/90,5/84,0/73,-3/55|ENGM|奧斯陸 Oslo (ENOR)",
+            "Denmark": "哥本哈根|580萬|42,933 km²|$395B|DKK|~6.8|基督教為主|1/46,1/30,3/39,6/39,11/42,15/52,17/68,17/63,13/60,9/56,5/53,2/50|EKCH|哥本哈根 Copenhagen (EKDK)",
+            "Finland": "赫爾辛基|550萬|338,424 km²|$280B|EUR|~0.92|基督教為主|-4/52,-5/36,-1/38,4/32,10/37,15/57,17/63,16/80,11/64,6/74,1/70,-2/57|EFHK|赫爾辛基 Helsinki (EFIN)",
+            "Iceland": "雷克雅維克|38萬|103,000 km²|$30B|ISK|~138|基督教|0/75,0/71,0/81,3/58,6/43,9/50,11/51,10/61,7/66,4/85,1/72,-1/78|BIKF|雷克雅維克 Reykjavik (BICC)",
+            "Estonia": "塔林|130萬|45,227 km²|$41B|EUR|~0.92|無宗教|-3/56,-4/36,-1/37,4/34,10/41,14/58,17/67,16/86,11/66,6/73,1/69,-2/63|EETN|塔林 Tallinn (EETT)",
+            "Latvia": "里加|180萬|64,589 km²|$43B|EUR|~0.92|基督教|-3/33,-3/24,0/32,6/39,11/42,15/59,17/74,17/73,12/71,7/60,2/50,-1/42|EVRA|里加 Riga (EVRR)",
+            "Lithuania": "維爾紐斯|280萬|65,300 km²|$77B|EUR|~0.92|天主教|-4/46,-4/37,-1/42,6/46,12/62,15/77,17/78,16/71,11/65,6/53,1/46,-2/49|EYVI|維爾紐斯 Vilnius (EYVL)",
+            "Russia": "莫斯科|1.43億|17.09M km²|$2.2T|RUB|~90|東正教為主|-6/46,-6/36,-1/32,6/38,13/52,17/80,19/85,17/82,11/68,5/59,-1/58,-4/56|UUEE|莫斯科 Moscow (UUWV)",
+            "Ukraine": "基輔|3800萬|603,628 km²|$160B|UAH|~38|東正教|-3/36,-2/39,2/39,9/41,15/52,18/73,20/68,19/53,14/50,8/35,2/51,-2/47|UKBB|基輔 Kyiv (UKBV)",
+            "Belarus": "明斯克|920萬|207,600 km²|$71B|BYN|~3.2|東正教|-4/45,-4/38,0/44,6/42,12/65,15/89,17/89,16/68,11/60,6/52,0/48,-3/49|UMMS|明斯克 Minsk (UMMV)",
+            "Moldova": "基希訥烏|250萬|33,846 km²|$16B|MDL|~17|東正教|-2/36,-1/31,3/34,9/39,15/46,19/65,21/62,21/56,15/62,10/39,4/38,0/37|LUKK|基希訥烏 Chisinau (LUUU)",
+            "Romania": "布加勒斯特|1900萬|238,397 km²|$300B|RON|~4.6|東正教|-1/37,1/33,5/38,11/46,16/61,20/73,22/64,22/58,17/63,11/43,5/48,0/43|LROP|布加勒斯特 Bucharest (LRBB)",
+            "Bulgaria": "索菲亞|640萬|110,994 km²|$100B|BGN|~1.8|東正教|-1/40,1/35,5/40,10/50,14/73,18/73,20/53,20/51,16/40,11/46,5/48,0/43|LBSF|索菲亞 Sofia (LBSR)",
+            "Greece": "雅典|1060萬|131,957 km²|$219B|EUR|~0.92|東正教|11/56,12/47,14/40,19/21,24/16,29/6,32/5,32/6,28/14,23/52,17/58,13/69|LGAV|雅典 Athens (LGGG)",
+            "Portugal": "里斯本|1030萬|92,090 km²|$252B|EUR|~0.92|天主教為主|12/99,12/84,14/53,16/68,18/53,22/16,24/4,24/6,23/32,19/100,15/127,12/121|LPPT|里斯本 Lisbon (LPPC)",
+            "Ireland": "都柏林|510萬|70,273 km²|$529B|EUR|~0.92|天主教為主|5/62,5/48,6/52,8/54,11/59,14/66,15/56,15/73,13/59,10/79,7/72,5/73|EIDW|香農 Shannon (EISN)",
+            "Serbia": "貝爾格勒|660萬|88,361 km²|$73B|RSD|~108|東正教|1/46,3/40,7/46,12/56,17/58,20/86,23/64,23/58,18/55,13/48,7/54,3/51|LYBE|貝爾格勒 Belgrade (LYBA)",
+            "Bosnia and Herzegovina": "塞拉耶佛|320萬|51,129 km²|$28B|BAM|~1.8|伊斯蘭教/東正教|0/68,1/64,5/70,9/77,14/72,17/90,19/72,19/66,15/70,10/77,5/86,1/81|LQSA|塞拉耶佛 Sarajevo (LQSB)",
+            "Croatia": "札格瑞布|380萬|56,594 km²|$80B|EUR|~0.92|天主教|1/43,3/38,7/52,11/59,16/72,19/95,21/77,20/87,16/81,11/71,6/62,2/54|LDZA|札格瑞布 Zagreb (LDZO)",
+            "Slovenia": "盧比安納|210萬|20,271 km²|$68B|EUR|~0.92|天主教|-1/63,0/59,4/78,9/101,14/104,18/131,20/114,19/118,15/131,10/121,5/110,0/83|LJLJ|盧比安納 Ljubljana (LJLA)",
+            "North Macedonia": "史高比耶|180萬|25,713 km²|$14B|MKD|~56|東正教|1/30,3/29,7/35,12/40,17/62,21/46,24/34,23/31,18/42,13/44,7/56,2/42|LWSK|史高比耶 Skopje (LWSS)",
+            "Albania": "地拉那|270萬|28,748 km²|$22B|ALL|~95|伊斯蘭教|6/119,7/104,10/93,13/85,17/77,22/51,25/32,25/40,21/78,16/105,12/161,8/142|LATI|地拉那 Tirana (LAAA)",
+            "Montenegro": "波德里查|61萬|13,812 km²|$7B|EUR|~0.92|東正教|5/192,6/166,9/159,13/145,18/89,23/63,26/38,26/59,21/119,16/164,11/238,6/217|LYPG|波德里查 Podgorica (LYPO)",
+            "Cyprus": "尼古西亞|120萬|9,251 km²|$32B|EUR|~0.92|東正教/伊斯蘭教|10/54,10/41,13/34,16/19,21/23,25/7,28/1,28/2,25/11,21/27,16/42,12/66|LCLK|尼古西亞 Nicosia (LCCC)",
+            "Malta": "瓦萊塔|53萬|316 km²|$20B|EUR|~0.92|天主教|12/90,12/60,13/39,15/26,19/10,23/4,26/0,27/15,24/60,21/79,17/90,14/110|LMML|馬耳他 Malta (LMMM)",
+            "United States of America": "華盛頓特區|3.34億|9.8M km²|$27T|USD|1.0|基督教為主|2/71,3/65,8/86,13/77,19/100,24/96,26/94,25/84,21/95,15/82,9/76,4/85|KLAX|紐約 New York (KZNY)",
+            "Canada": "渥太華|4000萬|9.98M km²|$2.1T|CAD|~1.35|天主教/基督教|-10/65,-8/54,-2/64,6/67,13/73,18/80,21/84,19/84,15/87,8/79,1/77,-6/73|CYYZ|多倫多 Toronto (CZYZ)",
+            "Australia": "坎培拉|2600萬|7.69M km²|$1.7T|AUD|~1.5|基督教|20/58,20/54,17/51,13/46,9/44,6/40,5/41,6/46,9/52,12/62,15/64,18/52|YSSY|墨爾本 Melbourne (YMMM)",
+            "New Zealand": "威靈頓|510萬|268,021 km²|$247B|NZD|~1.6|基督教/無宗教|16/72,16/62,15/74,13/100,11/117,9/147,8/136,9/131,10/100,12/115,13/99,15/84|NZAA|奧克蘭 Auckland (NZZC)"
         };
 
         let airportCoords = {
@@ -333,8 +360,10 @@
         // 3. MAP INITIALIZATION & RENDER
         // ==========================================
         const wrapper = document.getElementById("map-wrapper");
-        const width = wrapper.clientWidth;
-        const height = wrapper.clientHeight;
+        
+        // [FIX v2.9.4] Fallback dimensions to prevent zero-scale render issues
+        const width = wrapper.clientWidth || window.innerWidth || 800;
+        const height = wrapper.clientHeight || window.innerHeight || 600;
 
         const svg = d3.select("#map-wrapper")
             .append("svg")
@@ -364,7 +393,8 @@
         svg.call(zoom);
         const tooltip = d3.select("#tooltip");
 
-        d3.json("https://unpkg.com/world-atlas@2.0.2/countries-50m.json").then(world => {
+        // Use jsdelivr instead of unpkg for better reliability
+        d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json").then(world => {
             const countries = topojson.feature(world, world.objects.countries).features;
             
             g.selectAll("path")
@@ -392,7 +422,8 @@
                     zoomToFeature(d);
                 });
         }).catch(err => {
-            document.getElementById("default-info").innerHTML = "<span class='text-red-400'>地圖載入失敗。請檢查網路連線。</span>";
+            console.error("Map Load Error:", err);
+            document.getElementById("default-info").innerHTML = "<span class='text-red-400 font-bold'>地圖圖資載入失敗。請檢查網路連線或使用本機檔案。</span>";
         });
 
         // ==========================================
@@ -438,7 +469,7 @@
                             </div>`;
                     });
                 } else {
-                    climateContainer.innerHTML = `<div class="col-span-6 text-slate-500 py-2">[氣候數據格式錯誤或收集中]</div>`;
+                    climateContainer.innerHTML = `<div class="col-span-4 text-slate-500 py-2">[氣候數據格式錯誤或收集中]</div>`;
                 }
 
             } else {
@@ -452,7 +483,7 @@
                 });
 
                 const climateContainer = document.getElementById('info-climate');
-                climateContainer.innerHTML = `<div class="col-span-6 text-slate-500 py-2">[區域氣候數據收集中 / Intel Pending]</div>`;
+                climateContainer.innerHTML = `<div class="col-span-4 text-slate-500 py-2">[區域氣候數據收集中 / Intel Pending]</div>`;
             }
         }
 
@@ -468,13 +499,53 @@
         }
 
         // ==========================================
+        // 4.5 EXTERNAL DATABASE LOADER (JSON)
+        // ==========================================
+        const dbUpload = document.getElementById("db-upload");
+        const dbStatus = document.getElementById("db-status");
+        const routeMsg = document.getElementById("route-msg");
+
+        if (dbUpload) {
+            dbUpload.addEventListener("change", function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        let addedCount = 0;
+                        for (const key in data) {
+                            const airport = data[key];
+                            if (airport.longitude && airport.latitude) {
+                                const lon = parseFloat(airport.longitude);
+                                const lat = parseFloat(airport.latitude);
+                                if (airport.iata && airport.iata !== "\\N") { airportCoords[airport.iata] = [lon, lat]; addedCount++; }
+                                if (airport.icao && airport.icao !== "\\N") { airportCoords[airport.icao] = [lon, lat]; addedCount++; }
+                            }
+                        }
+                        dbStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-green-400 shadow-[0_0_5px_#4ade80]"></span> 掛載成功 (${addedCount} 筆)`;
+                        dbStatus.classList.replace("text-slate-500", "text-green-400");
+                        showRouteError(`機場資料庫讀取成功！已擴充 ${addedCount} 個座標。`, true);
+                    } catch (err) {
+                        dbStatus.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span> 格式錯誤`;
+                        showRouteError("解析 JSON 失敗，請確認檔案格式正確。");
+                    }
+                };
+                reader.readAsText(file);
+            });
+        }
+
+        // ==========================================
         // 5. ROUTE PLANNER LOGIC & OMNI-TRAJECTORY ENGINE
         // ==========================================
         const routeInput = document.getElementById("route-input");
         const drawBtn = document.getElementById("draw-route-btn");
-        const routeMsg = document.getElementById("route-msg");
+        const clearBtn = document.getElementById("clear-route-btn");
+        const confirmClearModal = document.getElementById("confirm-clear-modal");
+        const cancelClearBtn = document.getElementById("cancel-clear-btn");
+        const confirmClearBtn = document.getElementById("confirm-clear-btn");
         
-        // 處理手動輸入的 IATA/ICAO 繪製
         drawBtn.addEventListener("click", () => {
             const raw = routeInput.value.toUpperCase().trim();
             const codes = raw.split(/[\s,-]+/);
@@ -501,7 +572,6 @@
             renderRouteLine(validCoords);
         });
 
-        // 全能航跡解析引擎 (KML / GPX / GeoJSON / JSON / XML)
         const trackUpload = document.getElementById("track-upload");
         trackUpload.addEventListener("change", function(event) {
             const file = event.target.files[0];
@@ -519,7 +589,6 @@
                     if (ext === 'json' || ext === 'geojson') {
                         const data = JSON.parse(text);
                         
-                        // 1a. 嘗試標準 GeoJSON
                         if (data.type === 'FeatureCollection' || data.type === 'Feature') {
                             const features = data.features ? data.features : [data];
                             features.forEach(f => {
@@ -529,7 +598,6 @@
                             });
                         } 
                         
-                        // 1b. JSON 深度遞迴搜尋 (無論何種結構，找出含有 lat/lon 最長的陣列)
                         if (parsedCoords.length === 0) {
                             let bestPath = [];
                             
@@ -538,7 +606,6 @@
                                     let coords = [];
                                     for (let item of current) {
                                         if (item && typeof item === 'object') {
-                                            // 支援各種常見的經緯度命名
                                             let lat = item.pos_lat || item.lat || item.latitude;
                                             let lon = item.pos_long || item.pos_lon || item.lon || item.longitude;
                                             if (lat !== undefined && lon !== undefined && !isNaN(parseFloat(lat)) && !isNaN(parseFloat(lon))) {
@@ -546,11 +613,9 @@
                                             }
                                         }
                                     }
-                                    // 保留最長的陣列 (通常是主航線，避免被短短的 SID/STAR 或其他小陣列取代)
                                     if (coords.length > bestPath.length) {
                                         bestPath = coords;
                                     }
-                                    // 繼續往下搜尋
                                     for (let item of current) {
                                         if (typeof item === 'object') searchForCoords(item);
                                     }
@@ -565,12 +630,11 @@
                             parsedCoords = bestPath;
                         }
                     } 
-                    // 2. XML 家族 (KML / GPX / SimBrief XML)
+                    // 2. XML 家族
                     else if (ext === 'kml' || ext === 'gpx' || ext === 'xml') {
                         const parser = new DOMParser();
                         const xmlDoc = parser.parseFromString(text, "text/xml");
                         
-                        // 2a. KML 邏輯
                         if (ext === 'kml') {
                             const coordNodes = xmlDoc.getElementsByTagName("coordinates");
                             if (coordNodes.length > 0) {
@@ -591,7 +655,6 @@
                                 }
                             }
                         } 
-                        // 2b. GPX 邏輯
                         else if (ext === 'gpx') {
                             let pts = xmlDoc.getElementsByTagName("trkpt");
                             if(pts.length === 0) pts = xmlDoc.getElementsByTagName("rtept");
@@ -602,9 +665,7 @@
                                 if(!isNaN(lon) && !isNaN(lat)) parsedCoords.push([lon, lat]);
                             }
                         }
-                        // 2c. SimBrief XML 邏輯 (修正備降航線連回起點的問題)
                         else if (ext === 'xml') {
-                            // 嚴格限定只抓取「第一個 navlog」(通常是主航線)，忽略後面的 alternate navlog
                             const mainNavlog = xmlDoc.getElementsByTagName("navlog")[0];
                             if (mainNavlog) {
                                 const fixes = mainNavlog.getElementsByTagName("fix");
@@ -621,7 +682,6 @@
                         }
                     }
 
-                    // 繪製結果
                     if (parsedCoords.length > 1) {
                         routeLayer.selectAll("*").remove();
                         renderRouteLine(parsedCoords, true);
@@ -637,14 +697,27 @@
             trackUpload.value = ""; 
         });
 
-        // 共用航線渲染器
+        clearBtn.addEventListener("click", () => {
+            confirmClearModal.classList.remove("hidden");
+        });
+
+        cancelClearBtn.addEventListener("click", () => {
+            confirmClearModal.classList.add("hidden");
+        });
+
+        confirmClearBtn.addEventListener("click", () => {
+            routeLayer.selectAll("*").remove();
+            routeInput.value = "";
+            routeMsg.classList.add("hidden");
+            confirmClearModal.classList.add("hidden");
+        });
+
         function renderRouteLine(coordsArray, isImportedTrack = false) {
             const lineString = { type: "LineString", coordinates: coordsArray };
             routeLayer.append("path").datum(lineString).attr("d", path).attr("class", "route-line");
 
-            const currentZoom = d3.zoomTransform(svg.node()).k;
-            
-            // 外部軌跡折點極多，只畫起迄點以保持戰術地圖整潔
+            // [FIX v2.9.4] Fallback to prevent NaN calculations
+            const currentZoom = (svg.node() && d3.zoomTransform(svg.node())) ? d3.zoomTransform(svg.node()).k : 1;
             const pointsToDraw = isImportedTrack ? [coordsArray[0], coordsArray[coordsArray.length - 1]] : coordsArray;
 
             routeLayer.selectAll(".airport-point").data(pointsToDraw).enter().append("circle")
@@ -657,7 +730,6 @@
             const dx = bounds[1][0] - bounds[0][0];
             const dy = bounds[1][1] - bounds[0][1];
             
-            // 防呆處理：若跨越換日線 (Antimeridian)，D3 可能會算出超大邊界，此時退回全域視角
             let scale = Math.max(1, Math.min(6, 0.8 / Math.max(dx / width, dy / height)));
             if (dx < 0 || dx > Math.PI * 2) { scale = 1; } 
 
@@ -669,15 +741,9 @@
             routeMsg.innerText = msg; 
             routeMsg.classList.remove("hidden");
             if(isSuccess) {
-                routeMsg.classList.replace("text-red-400", "text-indigo-400"); 
-                routeMsg.classList.replace("text-emerald-400", "text-indigo-400"); 
-                routeMsg.classList.replace("text-purple-400", "text-indigo-400"); 
-                routeMsg.classList.replace("text-green-400", "text-indigo-400");
+                routeMsg.classList.replace("text-red-400", "text-blue-400"); 
             } else {
-                routeMsg.classList.replace("text-indigo-400", "text-red-400");
-                routeMsg.classList.replace("text-purple-400", "text-red-400");
-                routeMsg.classList.replace("text-emerald-400", "text-red-400");
-                routeMsg.classList.replace("text-green-400", "text-red-400");
+                routeMsg.classList.replace("text-blue-400", "text-red-400");
             }
         }
 
@@ -692,13 +758,17 @@
             routeMsg.classList.add("hidden");
         });
 
+        // [FIX v2.9.4] Re-calculate scale on window resize to prevent zero-scale rendering
         window.onresize = function() {
             if (typeof wrapper === 'undefined' || typeof projection === 'undefined' || typeof path === 'undefined') return;
-            const newWidth = wrapper.clientWidth;
-            const newHeight = wrapper.clientHeight;
+            const newWidth = wrapper.clientWidth || window.innerWidth || 800;
+            const newHeight = wrapper.clientHeight || window.innerHeight || 600;
             if (!newWidth || !newHeight) return;
 
-            projection.translate([newWidth / 2, newHeight / 1.5]);
+            projection
+                .scale((newWidth) / (2 * Math.PI))
+                .translate([newWidth / 2, newHeight / 1.5]);
+
             if (typeof g !== 'undefined' && g) g.selectAll("path").attr("d", path);
             if (typeof routeLayer !== 'undefined' && routeLayer) {
                 routeLayer.selectAll("path.route-line").attr("d", path);
@@ -709,7 +779,7 @@
         };
 
         // ==========================================
-        // 6. UI MODAL CONTROLS (Changelog)
+        // 6. UI MODAL CONTROLS (Changelog & Confirm)
         // ==========================================
         const changelogModal = document.getElementById("changelog-modal");
         const openChangelogBtn = document.getElementById("open-changelog");
@@ -717,7 +787,11 @@
 
         openChangelogBtn.addEventListener("click", () => changelogModal.classList.remove("hidden"));
         closeChangelogBtn.addEventListener("click", () => changelogModal.classList.add("hidden"));
-        changelogModal.addEventListener("click", (e) => { if (e.target === changelogModal) changelogModal.classList.add("hidden"); });
+        
+        window.addEventListener("click", (e) => { 
+            if (e.target === changelogModal) changelogModal.classList.add("hidden"); 
+            if (e.target === confirmClearModal) confirmClearModal.classList.add("hidden");
+        });
     </script>
 </body>
 </html>
