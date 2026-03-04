@@ -13,19 +13,18 @@
         /* Custom Styles for Map Elements */
         body { margin: 0; overflow: hidden; background-color: #0f172a; }
         .country { fill: #1e293b; stroke: #334155; stroke-width: 0.5px; transition: fill 0.2s, stroke-width 0.2s; cursor: pointer; }
-        /* 移除 hover 高亮，僅保留 active 點擊高亮 */
         .country.active { fill: #2563eb; stroke: #bfdbfe; stroke-width: 1.5px; }
         .route-line { fill: none; stroke: #fde047; stroke-width: 2.5px; opacity: 0.9; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 2px rgba(253,224,71,0.5)); }
         .airport-point { fill: #ef4444; stroke: #fff; stroke-width: 1.5px; }
         
         /* Custom Scrollbar for Info Panel */
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #475569; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<body class="text-slate-200 font-sans antialiased h-screen w-screen flex flex-col md:flex-row overflow-hidden">
+<body class="text-slate-200 font-sans antialiased h-screen w-screen overflow-hidden bg-slate-900 relative">
 
     <!-- Changelog Modal -->
     <div id="changelog-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -40,26 +39,56 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v2.9.7 -->
-                <div class="relative pl-4 border-l-2 border-emerald-400">
+                <!-- v2.9.11 -->
+                <div class="relative pl-4 border-l-2 border-pink-500">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v2.9.7 (Current)
-                        <span class="bg-emerald-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">Latest</span>
+                        v2.9.11 (Current)
+                        <span class="bg-pink-600 text-white text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">Latest</span>
                     </h4>
-                    <ul class="space-y-3 list-none">
+                    <ul class="space-y-2 list-none">
                         <li>
-                            <p class="text-emerald-400 font-medium text-xs mb-0.5">[進化] 真實動態收折與 ResizeObserver (True Collapse & Dynamic Redraw)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">解除了面板固定佔用 50% 高度的限制。現在點選「Ｘ」或海域取消選取後，面板會極致壓縮至底部，將螢幕最大化還給地圖。並導入 ResizeObserver，使地圖能完美跟隨空間變化瞬間調整比例與重繪。<br><span class="italic text-[10px]">Removed fixed height constraints allowing the panel to truly collapse. Introduced ResizeObserver for perfect dynamic D3 re-projection whenever layout dimensions shift.</span></p>
+                            <p class="text-pink-400 font-medium text-xs mb-0.5">[修復] 雙核心圖資備援機制 (Dual-CDN Map Fallback)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">修復 <code>Failed to fetch</code> 錯誤。導入智慧路由，當主節點被防火牆或跨域原則阻擋時，自動無縫切換至備用圖資伺服器，確保地圖100%載入。<br><span class="italic text-[10px]">Implemented a dual-CDN fallback mechanism for TopoJSON to resolve "Failed to fetch" errors caused by restrictive CORS/sandbox environments.</span></p>
                         </li>
                     </ul>
                 </div>
-                <!-- v2.9.6 -->
-                <div class="relative pl-4 border-l-2 border-emerald-600 opacity-80">
-                    <h4 class="text-white font-bold text-base mb-2">v2.9.6</h4>
-                    <ul class="space-y-3 list-none">
+                <!-- v2.9.10 -->
+                <div class="relative pl-4 border-l-2 border-purple-500 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.10</h4>
+                    <ul class="space-y-2 list-none">
                         <li>
-                            <p class="text-emerald-500 font-medium text-xs mb-0.5">[優化] 點擊互動與自動收折機制 (Click-to-Highlight & Auto-Collapse)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">取消懸停高亮，改為「僅點擊時亮起」。新增點擊海域取消選取並提供關閉按鈕。</p>
+                            <p class="text-purple-400 font-medium text-xs mb-0.5">[重構] 戰術浮動資訊面板 (Tactical Floating Panel)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">廢除分割視窗，改用浮動於地圖上方的沉浸式面板。新增「靠左/靠右」停靠切換功能。<br><span class="italic text-[10px]">Refactored layout to a floating overlay panel. Added Left/Right docking toggle.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.9 -->
+                <div class="relative pl-4 border-l-2 border-indigo-400 opacity-80">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.9</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-indigo-400 font-medium text-xs mb-0.5">[修復] iPad 智慧排版 (Smart iPad HUD)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">重構斷點邏輯，修復 iPad 直立模式下會殘留高度空殼的問題。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.8 -->
+                <div class="relative pl-4 border-l-2 border-emerald-400 opacity-70">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.8</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-emerald-400 font-medium text-xs mb-0.5">[突破] 絕對收折協議 (Absolute Collapse Protocol)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">移除隱藏狀態下的提示佔位區塊，確保 UI 完美壓縮至底緣。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.7 -->
+                <div class="relative pl-4 border-l-2 border-teal-500 opacity-60">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.7</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-teal-400 font-medium text-xs mb-0.5">[優化] 動態重繪 (Dynamic Redraw Engine)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">導入 ResizeObserver，使地圖跟隨空間變化瞬間調整比例。</p>
                         </li>
                     </ul>
                 </div>
@@ -84,106 +113,106 @@
         </div>
     </div>
 
-    <!-- Map Container -->
-    <div id="map-wrapper" class="relative flex-1 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-700 shadow-inner overflow-hidden min-h-[40vh] md:min-h-full">
-        <div class="absolute top-4 left-4 z-10 flex flex-col gap-2">
-            <button id="zoom-in" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-lg shadow-lg backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition">+</button>
-            <button id="zoom-out" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-lg shadow-lg backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition">-</button>
-            <button id="reset-map" class="bg-slate-800/80 hover:bg-slate-700 p-2 rounded-lg shadow-lg backdrop-blur text-xs text-white focus:outline-none transition mt-2">重置</button>
+    <!-- Map Container: Absolute Full Screen -->
+    <div id="map-wrapper" class="absolute inset-0 z-0 overflow-hidden w-full h-full">
+        <!-- Moved map controls to bottom-left to avoid panel collision -->
+        <div class="absolute bottom-8 left-4 md:bottom-10 md:left-6 z-10 flex flex-col gap-2">
+            <button id="zoom-in" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition border border-slate-600">+</button>
+            <button id="zoom-out" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition border border-slate-600">-</button>
+            <button id="reset-map" class="bg-slate-800/80 hover:bg-slate-700 p-2 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur text-xs text-white focus:outline-none transition mt-2 border border-slate-600 font-medium tracking-wide">重置</button>
         </div>
         <div id="tooltip" class="absolute hidden bg-slate-800/90 text-white text-sm px-3 py-1.5 rounded pointer-events-none z-20 backdrop-blur border border-slate-600 shadow-xl whitespace-nowrap"></div>
     </div>
 
-    <!-- Side/Bottom Panel (Modified for Dynamic Collapsing) -->
-    <!-- Removed fixed h-[50%], added max-h-[60vh] to allow shrinking to content size -->
-    <div class="w-full md:w-[320px] md:shrink-0 flex flex-col shadow-2xl z-10 overflow-hidden border-t md:border-t-0 border-slate-700 bg-slate-800 max-h-[65vh] md:max-h-full md:h-full transition-all duration-300">
+    <!-- Floating Panel: Default right-4, toggleable to left-4 -->
+    <div id="floating-panel" class="absolute top-4 right-4 w-[calc(100vw-2rem)] sm:w-[360px] flex flex-col shadow-[0_15px_50px_rgba(0,0,0,0.6)] z-20 overflow-hidden border border-slate-600 bg-slate-800/85 backdrop-blur-xl rounded-2xl max-h-[calc(100vh-2rem)] transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]">
+        
         <!-- Header -->
-        <div class="p-3 md:p-4 border-b border-slate-700 bg-slate-800/50 shrink-0 flex justify-between items-start">
-            <div>
-                <h1 class="text-lg md:text-xl font-bold tracking-wider text-blue-400 flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    TACTICAL GEO-INT
-                </h1>
-                <p class="text-[10px] md:text-xs text-slate-400 mt-1 font-mono">Fact-Check Protocol: ACTIVE (Global Cov.)</p>
+        <div class="p-3.5 border-b border-slate-700 bg-slate-900/40 shrink-0 flex justify-between items-start">
+            <div class="flex flex-col">
+                <div class="flex items-center gap-2">
+                    <h1 class="text-lg font-bold tracking-wider text-blue-400 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        TACTICAL HUD
+                    </h1>
+                    <!-- Dock toggle button -->
+                    <button id="toggle-side-btn" class="text-slate-400 hover:text-white p-1 bg-slate-800 rounded border border-slate-600 hover:bg-slate-700 transition focus:outline-none ml-1 shadow-inner" title="切換靠左/靠右停靠">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" /></svg>
+                    </button>
+                </div>
+                <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
-            <button id="open-changelog" class="bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-500 px-2 py-1 rounded text-[10px] font-mono transition shadow shrink-0 ml-2">
-                v2.9.7
+            <button id="open-changelog" class="bg-pink-600 hover:bg-pink-500 text-white border border-pink-500 px-2 py-1 rounded-md text-[10px] font-mono transition shadow-lg shadow-pink-500/20 shrink-0 ml-2">
+                v2.9.11
             </button>
         </div>
 
-        <!-- Route Planner -->
-        <div class="p-3 md:p-4 border-b border-slate-700 shrink-0 bg-slate-800">
-            <h2 class="text-xs md:text-sm font-semibold text-slate-300 mb-2 uppercase tracking-wider flex items-center justify-between">
-                <span class="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" /></svg>
-                    航線輸入 (Route / Trajectory)
+        <!-- Route Planner (Always visible part) -->
+        <div class="p-4 border-b border-slate-700 shrink-0 bg-slate-800/40">
+            <h2 class="text-xs font-semibold text-slate-300 mb-2.5 uppercase tracking-wider flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                    航線與軌跡引擎
+                    <span id="default-hint" class="text-[10px] text-slate-500 normal-case ml-1 tracking-normal transition-opacity">(點擊地圖展開情報)</span>
                 </span>
             </h2>
             
-            <div class="flex flex-col gap-2 w-full">
-                <input type="text" id="route-input" placeholder="例: RCTP VHHH ZYR" class="w-full bg-slate-900 border border-slate-600 rounded px-2 py-1.5 md:px-3 md:py-2 text-xs md:text-sm focus:outline-none focus:border-blue-500 font-mono text-yellow-300 placeholder-slate-500 uppercase">
+            <div class="flex flex-col gap-2.5 w-full">
+                <input type="text" id="route-input" placeholder="例: RCTP VHHH ZYR" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 font-mono text-yellow-300 placeholder-slate-500 uppercase transition shadow-inner">
                 
                 <div class="grid grid-cols-3 gap-2 w-full">
-                    <label class="bg-indigo-600 hover:bg-indigo-500 text-white px-1 py-1.5 md:py-2 rounded text-xs font-medium transition shadow-lg shadow-indigo-500/30 cursor-pointer flex items-center justify-center whitespace-nowrap text-center" title="支援 KML / GPX / GeoJSON / JSON / XML">
+                    <label class="bg-indigo-600 hover:bg-indigo-500 text-white py-2 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(79,70,229,0.3)] cursor-pointer flex items-center justify-center whitespace-nowrap" title="支援 KML / GPX / GeoJSON / JSON / XML">
                         匯入航跡
                         <input type="file" id="track-upload" accept=".kml,.gpx,.geojson,.json,.xml" class="hidden">
                     </label>
 
-                    <button id="draw-route-btn" class="bg-blue-600 hover:bg-blue-500 text-white px-1 py-1.5 md:py-2 rounded text-xs font-medium transition shadow-lg shadow-blue-500/30 whitespace-nowrap text-center">繪製</button>
+                    <button id="draw-route-btn" class="bg-blue-600 hover:bg-blue-500 text-white py-2 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(37,99,235,0.3)] whitespace-nowrap">繪製</button>
                     
-                    <button id="clear-route-btn" class="bg-red-600 hover:bg-red-500 text-white px-1 py-1.5 md:py-2 rounded text-xs font-medium transition shadow-lg shadow-red-500/30 whitespace-nowrap text-center" title="清除航線">清除</button>
+                    <button id="clear-route-btn" class="bg-red-600 hover:bg-red-500 text-white py-2 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(220,38,38,0.3)] whitespace-nowrap" title="清除航線">清除</button>
                 </div>
             </div>
-            <p id="route-msg" class="text-[10px] text-red-400 mt-1.5 hidden truncate"></p>
+            <p id="route-msg" class="text-[10px] text-red-400 mt-2 hidden truncate bg-slate-900/50 p-1.5 rounded"></p>
         </div>
 
-        <!-- Country Info Container (Wraps the scrollable area) -->
-        <div class="overflow-y-auto bg-slate-900/30 flex-1 flex flex-col relative">
-            <!-- 預設提示區塊 (收折時僅顯示此細長條) -->
-            <div id="default-info" class="flex-1 flex items-center justify-center p-4 text-slate-500 text-xs md:text-sm py-5">
-                <span class="flex items-center gap-1.5 opacity-70">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" /></svg>
-                    點擊地圖國家以展開情報
-                </span>
-            </div>
-            
-            <div id="country-data" class="hidden flex-col gap-3 p-3 md:p-4 pb-6">
-                <div class="border-b border-slate-700 pb-3 flex justify-between items-start">
+        <!-- Info Section (Hidden by default, flex when country clicked) -->
+        <div id="info-section" class="hidden overflow-y-auto flex-col relative w-full flex-1">
+            <div id="country-data" class="flex flex-col gap-3 p-4 pb-6 w-full">
+                <div class="border-b border-slate-600/60 pb-3 flex justify-between items-start">
                     <div>
-                        <h2 id="info-name" class="text-xl md:text-2xl font-bold text-white tracking-wide">國家名稱</h2>
-                        <p id="info-icao-acc" class="text-[11px] md:text-xs text-yellow-400 font-mono mt-1 tracking-wider bg-slate-800/80 p-1.5 rounded inline-block border border-yellow-700/50">
+                        <h2 id="info-name" class="text-xl font-bold text-white tracking-wide">國家名稱</h2>
+                        <p id="info-icao-acc" class="text-xs text-yellow-400 font-mono mt-1.5 tracking-wider bg-slate-900/80 px-2 py-1 rounded inline-block border border-yellow-700/50 shadow-inner">
                             ICAO: ---- | ACC: ----
                         </p>
                     </div>
-                    <!-- 新增手動關閉(收折)資訊面板按鈕 -->
-                    <button id="close-info-btn" class="text-slate-400 hover:text-white p-1 rounded-md hover:bg-slate-700 transition focus:outline-none" title="關閉並收折面板">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                    <!-- Close button -->
+                    <button id="close-info-btn" class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-700 transition focus:outline-none bg-slate-800 border border-slate-700 shadow-sm" title="關閉並收折面板">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
                 </div>
 
                 <!-- Info Grid -->
-                <div class="grid grid-cols-1 gap-y-2 gap-x-3 text-xs md:text-sm">
-                    <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">首都 (Capital)</span><span id="info-capital" class="font-medium text-slate-100"></span></div>
-                    <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">人口 (Population)</span><span id="info-population" class="font-medium text-slate-100"></span></div>
+                <div class="grid grid-cols-1 gap-y-2 gap-x-3 text-sm mt-1">
+                    <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm"><span class="text-slate-400 text-[10px] mb-0.5">首都 (Capital)</span><span id="info-capital" class="font-medium text-slate-100"></span></div>
+                    <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm"><span class="text-slate-400 text-[10px] mb-0.5">人口 (Population)</span><span id="info-population" class="font-medium text-slate-100"></span></div>
                     
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 overflow-hidden"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">面積 (Area)</span><span id="info-area" class="font-medium text-slate-100 truncate"></span></div>
-                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 overflow-hidden"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">GDP</span><span id="info-gdp" class="font-medium text-slate-100 truncate"></span></div>
+                        <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm overflow-hidden"><span class="text-slate-400 text-[10px] mb-0.5">面積 (Area)</span><span id="info-area" class="font-medium text-slate-100 truncate"></span></div>
+                        <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm overflow-hidden"><span class="text-slate-400 text-[10px] mb-0.5">GDP</span><span id="info-gdp" class="font-medium text-slate-100 truncate"></span></div>
                     </div>
                     
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 overflow-hidden"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">貨幣 (Currency)</span><span id="info-currency" class="font-medium text-slate-100 truncate"></span></div>
-                        <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 overflow-hidden"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">匯率 (Exchange)</span><span id="info-exchange" class="font-medium text-slate-100 font-mono text-green-400 text-[10px] md:text-xs truncate"></span></div>
+                        <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm overflow-hidden"><span class="text-slate-400 text-[10px] mb-0.5">貨幣 (Currency)</span><span id="info-currency" class="font-medium text-slate-100 truncate"></span></div>
+                        <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm overflow-hidden"><span class="text-slate-400 text-[10px] mb-0.5">匯率 (Exchange)</span><span id="info-exchange" class="font-medium text-slate-100 font-mono text-green-400 text-[11px] truncate"></span></div>
                     </div>
                     
-                    <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700"><span class="text-slate-400 text-[10px] md:text-xs mb-0.5">宗教 (Religion)</span><span id="info-religion" class="font-medium text-slate-100"></span></div>
+                    <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm"><span class="text-slate-400 text-[10px] mb-0.5">宗教 (Religion)</span><span id="info-religion" class="font-medium text-slate-100"></span></div>
                     
-                    <div class="flex flex-col bg-slate-800/80 p-1.5 md:p-2 rounded border border-slate-700 col-span-1">
-                        <span class="text-slate-400 text-[10px] md:text-xs mb-1.5 flex items-center gap-1">
+                    <div class="flex flex-col bg-slate-800/80 p-2 rounded-lg border border-slate-600/50 shadow-sm mt-1">
+                        <span class="text-slate-400 text-[10px] mb-2 flex items-center gap-1.5 border-b border-slate-700 pb-1">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" /></svg>
                             各月氣溫(°C) / 降雨(mm)
                         </span>
-                        <div id="info-climate" class="grid grid-cols-4 gap-1 text-[9px] md:text-[10px] text-center"></div>
+                        <div id="info-climate" class="grid grid-cols-4 gap-1.5 text-[10px] text-center"></div>
                     </div>
                 </div>
             </div>
@@ -331,32 +360,6 @@
             "New Zealand": "威靈頓|510萬|268,021 km²|$247B|NZD|~1.6|基督教/無宗教|16/72,16/62,15/74,13/100,11/117,9/147,8/136,9/131,10/100,12/115,13/99,15/84|NZAA|奧克蘭 Auckland (NZZC)"
         };
 
-        let airportCoords = {
-            "RCTP": [121.2328, 25.0777], "RJTT": [139.7796, 35.5522], "ZBAA": [116.5845, 40.0798], "RKSI": [126.4505, 37.4692],
-            "ZKPY": [125.6702, 39.2241], "ZMCK": [106.8184, 47.6521], "WSSS": [103.9940, 1.3502], "RPLL": [121.0194, 14.5086], 
-            "WIII": [106.6558, -6.1256], "VTBS": [100.7473, 13.6811], "WMKK": [101.7042, 2.7433], "VVNB": [105.8072, 21.2212], 
-            "VDPP": [104.8441, 11.5466], "VLVT": [102.5633, 17.9883], "VYYY": [96.1332, 16.9043], "WBSB": [114.9283, 4.9442],
-            "VIDP": [77.1000, 28.5665], "OPRN": [73.0992, 33.6167], "VGHS": [90.4005, 23.8433], "VCBI": [79.8833, 7.1805],
-            "VNKT": [85.3592, 27.6975], "VQPR": [89.4246, 27.4032], "VRMM": [73.5291, 4.1918], "UACC": [71.4667, 51.0222], 
-            "UTTT": [69.2812, 41.2579], "UTAA": [58.3610, 37.9800], "UCFM": [74.4776, 43.0613], "UTDD": [68.8250, 38.5433],
-            "OMDB": [55.3644, 25.2532], "OERK": [46.6988, 24.9576], "LLBG": [34.8855, 32.0113], "LTFM": [28.7424, 41.2622],
-            "OIIE": [51.1522, 35.4161], "ORBI": [44.2345, 33.2625], "OTHH": [51.6080, 25.2730], "OKBK": [47.9689, 29.2266],
-            "OOMS": [58.2817, 23.5933], "OJAI": [35.9836, 31.7226], "OLBA": [35.4884, 33.8213], "OSDI": [36.5144, 33.4116],
-            "OYSN": [44.2197, 15.4763], "OBBI": [50.6336, 26.2708], "OAQA": [69.2125, 34.5658], "UBBB": [49.9822, 40.4675], "UGTB": [44.9547, 41.6692], 
-            "UDYZ": [44.3959, 40.1473],
-            "EGLL": [-0.4614, 51.4700], "LFPG": [2.5500, 49.0097], "EDDF": [8.5705, 50.0333], "LIRF": [12.2389, 41.8003],
-            "LEMD": [-3.5679, 40.4719], "LSZH": [8.5491, 47.4647], "EHAM": [4.7638, 52.3080], "EBBR": [4.4844, 50.9013],
-            "LOWW": [16.5697, 48.1102], "LKPR": [14.2600, 50.1008], "LZIB": [17.2127, 48.1700], "LHBP": [19.2611, 47.4369],
-            "EPWA": [20.9671, 52.1657], "ELLX": [6.2116, 49.6265], "ESSA": [17.9186, 59.6519], "ENGM": [11.1004, 60.1939],
-            "EKCH": [12.6497, 55.6179], "EFHK": [24.9633, 60.3172], "BIKF": [-22.6056, 63.9850], "EETN": [24.8328, 59.4133],
-            "EVRA": [23.9711, 56.9236], "EYVI": [25.2878, 54.6341], "UUEE": [37.4146, 55.9726], "UKBB": [30.8947, 50.3450],
-            "UMMS": [28.0307, 53.8825], "LUKK": [28.9314, 46.9277], "LROP": [26.1025, 44.5721], "LBSF": [23.4061, 42.6952],
-            "LGAV": [23.9444, 37.9363], "LPPT": [-9.1359, 38.7741], "EIDW": [-6.2499, 53.4213], "LYBE": [20.3092, 44.8184],
-            "LQSA": [18.3314, 43.8247], "LDZA": [16.0688, 45.7431], "LJLJ": [14.4576, 46.2237], "LWSK": [21.6214, 41.9616],
-            "LATI": [19.7206, 41.4147], "LYPG": [19.2519, 42.3594], "LCLK": [33.6249, 34.8751], "LMML": [14.4775, 35.8575],
-            "KLAX": [-118.4085, 33.9416], "CYYZ": [-79.6306, 43.6772], "YSSY": [151.1772, -33.9461], "NZAA": [174.7916, -37.0080]
-        };
-
         // ==========================================
         // 3. MAP INITIALIZATION & RENDER
         // ==========================================
@@ -374,7 +377,6 @@
         const g = svg.append("g");
         const routeLayer = svg.append("g");
 
-        // 將 projection 設定為 let 以便在 Resize 時重新賦值更新
         let projection = d3.geoMercator()
             .scale((width) / (2 * Math.PI))
             .translate([width / 2, height / 1.5]);
@@ -400,7 +402,19 @@
             }
         });
 
-        d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json").then(world => {
+        // [v2.9.11] Dual-CDN Map Loader Fallback
+        const loadMapData = async () => {
+            try {
+                // Primary CDN: unpkg
+                return await d3.json("https://unpkg.com/world-atlas@2.0.2/countries-50m.json");
+            } catch (err1) {
+                console.warn("Primary CDN failed, switching to backup jsdelivr...", err1);
+                // Fallback CDN: jsdelivr
+                return await d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json");
+            }
+        };
+
+        loadMapData().then(world => {
             const countries = topojson.feature(world, world.objects.countries).features;
             
             g.selectAll("path")
@@ -430,15 +444,21 @@
                 });
         }).catch(err => {
             console.error("Map Load Error:", err);
-            document.getElementById("default-info").innerHTML = "<span class='text-red-400 font-bold'>地圖圖資載入失敗。請檢查網路連線或使用本機檔案。</span>";
+            document.getElementById("route-msg").innerHTML = "<span class='text-red-400 font-bold'>地圖圖資載入失敗 (CDN阻擋)。請檢查網路環境。</span>";
+            document.getElementById("route-msg").classList.remove("hidden");
         });
 
         // ==========================================
         // 4. SMART DATA POPULATION ENGINE
         // ==========================================
         function populateDataPanel(enName) {
-            document.getElementById("default-info").classList.add("hidden");
-            document.getElementById("country-data").classList.replace("hidden", "flex");
+            const infoSec = document.getElementById("info-section");
+            if (infoSec) {
+                infoSec.classList.remove("hidden");
+                infoSec.classList.add("flex");
+            }
+            const hint = document.getElementById("default-hint");
+            if (hint) hint.classList.add("hidden");
 
             const zhName = countryDict[enName] || enName;
             document.getElementById("info-name").innerText = `${zhName}`;
@@ -466,7 +486,7 @@
                     monthsData.forEach((data, i) => {
                         const [temp, rain] = data.split('/');
                         climateContainer.innerHTML += `
-                            <div class="bg-slate-900/50 p-1 rounded border border-slate-700/50 flex flex-col justify-center items-center">
+                            <div class="bg-slate-900/50 py-1.5 rounded border border-slate-700/50 flex flex-col justify-center items-center shadow-sm">
                                 <span class="text-blue-400 font-bold mb-0.5">${i + 1}月</span>
                                 <div class="flex items-center gap-0.5">
                                     <span class="text-white">${temp}°</span>
@@ -496,8 +516,15 @@
 
         function clearCountrySelection() {
             d3.selectAll(".country").classed("active", false);
-            document.getElementById("country-data").classList.replace("flex", "hidden");
-            document.getElementById("default-info").classList.remove("hidden");
+            
+            const infoSec = document.getElementById("info-section");
+            if (infoSec) {
+                infoSec.classList.remove("flex");
+                infoSec.classList.add("hidden");
+            }
+            
+            const hint = document.getElementById("default-hint");
+            if (hint) hint.classList.remove("hidden");
         }
 
         document.getElementById("close-info-btn").addEventListener("click", clearCountrySelection);
@@ -727,14 +754,12 @@
             document.getElementById("route-msg").classList.add("hidden");
         });
 
-        // [v2.9.7] 導入 ResizeObserver 動態重繪地圖，解決版面收折時的變形問題
         const mapResizeObserver = new ResizeObserver(() => {
             if (typeof wrapper === 'undefined' || typeof projection === 'undefined' || typeof path === 'undefined') return;
             const newWidth = wrapper.clientWidth || window.innerWidth || 800;
             const newHeight = wrapper.clientHeight || window.innerHeight || 600;
             if (!newWidth || !newHeight) return;
 
-            // 即時更新 D3 投影比例與中心點
             projection
                 .scale((newWidth) / (2 * Math.PI))
                 .translate([newWidth / 2, newHeight / 1.5]);
@@ -748,11 +773,10 @@
             }
         });
         
-        // 監聽 map-wrapper 的變化
         mapResizeObserver.observe(wrapper);
 
         // ==========================================
-        // 6. UI MODAL CONTROLS (Changelog & Confirm)
+        // 6. UI MODAL CONTROLS (Changelog, Confirm & Docking)
         // ==========================================
         const changelogModal = document.getElementById("changelog-modal");
         const openChangelogBtn = document.getElementById("open-changelog");
@@ -764,6 +788,22 @@
         window.addEventListener("click", (e) => { 
             if (e.target === changelogModal) changelogModal.classList.add("hidden"); 
             if (e.target === confirmClearModal) confirmClearModal.classList.add("hidden");
+        });
+
+        // 浮動面板左右停靠切換邏輯
+        const toggleSideBtn = document.getElementById("toggle-side-btn");
+        const floatingPanel = document.getElementById("floating-panel");
+        let isPanelDockedRight = true;
+
+        toggleSideBtn.addEventListener("click", () => {
+            isPanelDockedRight = !isPanelDockedRight;
+            if (isPanelDockedRight) {
+                floatingPanel.classList.remove("left-4");
+                floatingPanel.classList.add("right-4");
+            } else {
+                floatingPanel.classList.remove("right-4");
+                floatingPanel.classList.add("left-4");
+            }
         });
     </script>
 </body>
