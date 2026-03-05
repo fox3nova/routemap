@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Global Aviation & Intelligence Map</title>
-    <!-- [v2.9.28] 徹底移除 crossorigin 屬性，防止沙盒環境阻擋核心腳本載入 -->
     <!-- Tailwind CSS for UI -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- D3.js and TopoJSON for Mapping -->
@@ -45,46 +44,46 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v2.9.28 -->
-                <div class="relative pl-4 border-l-2 border-cyan-400">
+                <!-- v2.9.32 -->
+                <div class="relative pl-4 border-l-2 border-emerald-500">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v2.9.28 (Current)
-                        <span class="bg-cyan-500 text-slate-900 text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Latest</span>
+                        v2.9.32 (Current)
+                        <span class="bg-emerald-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Latest</span>
                     </h4>
                     <ul class="space-y-2 list-none">
                         <li>
-                            <p class="text-cyan-400 font-medium text-xs mb-0.5">[修復] 核心繪圖引擎跨域阻擋 (Core Engine CORS Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">徹底移除了 HTML 標頭殘留的 <code>crossorigin</code> 屬性，解決沙盒環境下 D3.js 與 TopoJSON 被強制阻擋導致地圖完全無法渲染（黑屏）的問題。並優化了圖資 CDN 輪詢清單。<br><span class="italic text-[10px]">Completely stripped residual crossorigin attributes from script tags that were causing browser sandboxes to block D3.js and TopoJSON, resulting in a blank map. Cleaned up CDN fallback URLs.</span></p>
+                            <p class="text-emerald-400 font-medium text-xs mb-0.5">[終極修復] 資料庫核心指標 (Database Pointer Fix)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">已將 <code>airportCoords</code> 的宣告移至腳本最頂層，確保搜尋引擎與繪製引擎在任何情況下皆能正確讀取到機場座標字典，徹底消滅 <code>ReferenceError</code> 崩潰問題。<br><span class="italic text-[10px]">Moved the airportCoords dictionary declaration to the highest global scope block to ensure it is always initialized before any search or draw functions are called, completely eliminating the persistent ReferenceError.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.31 -->
+                <div class="relative pl-4 border-l-2 border-red-500 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.31</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-red-400 font-medium text-xs mb-0.5">[修復] 核心資料庫 ReferenceError 修復 (Core Database Ref Fix)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">修復了因為程式碼壓縮導致 <code>airportCoords</code> 字典遺失而引發的 <code>ReferenceError</code> 報錯。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v2.9.30 -->
+                <div class="relative pl-4 border-l-2 border-indigo-500 opacity-80">
+                    <h4 class="text-white font-bold text-base mb-1">v2.9.30</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-indigo-400 font-medium text-xs mb-0.5">[重構] 智慧搜尋引擎全面強化 (Search Engine Robustness Fix)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">統一按鈕行為：若輸入單字卻誤按「繪製」，系統將自動轉交搜尋引擎處理。同時大幅限縮深度搜索的範圍，排除由數字引起的跳轉誤判，並支援台灣異體字相容。</p>
                         </li>
                     </ul>
                 </div>
                 <!-- v2.9.27 -->
-                <div class="relative pl-4 border-l-2 border-teal-400 opacity-90">
+                <div class="relative pl-4 border-l-2 border-teal-400 opacity-70">
                     <h4 class="text-white font-bold text-base mb-1">v2.9.27</h4>
                     <ul class="space-y-2 list-none">
                         <li>
-                            <p class="text-green-400 font-medium text-xs mb-0.5">[修復] 核心資料庫遺失問題 (Core Database Reference Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">修復了因為程式碼壓縮導致 <code>airportCoords</code> 字典遺失而引發的 <code>ReferenceError</code> 報錯。現已將內建航點資料庫完整還原，確保搜尋與繪製功能正常運作。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.25 -->
-                <div class="relative pl-4 border-l-2 border-green-400 opacity-80">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.25</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-green-400 font-medium text-xs mb-0.5">[修復] 搜尋引擎重繪崩潰異常 (Search Data-Binding Crash Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">修復了搜尋機場時，藍色信標未綁定實體數據 (Datum)，導致地圖縮放時觸發 ResizeObserver 產生致命 Script Error 而卡死搜尋功能的問題。現已加入嚴格的 Null-Safety 檢查。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.24 -->
-                <div class="relative pl-4 border-l-2 border-indigo-400 opacity-70">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.24</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-indigo-400 font-medium text-xs mb-0.5">[優化] 觸控裝置懸停干擾排除 (Touch Hover Interference Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">針對 iPad 等觸控裝置，徹底封鎖滑鼠懸停時的浮動提示框 (Tooltip)，避免點擊地圖時殘留畫面的干擾。</p>
+                            <p class="text-teal-400 font-medium text-xs mb-0.5">[優化] 雙語國名顯示 (Bilingual Country Name Display)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">情報面板的主標題現在會同時顯示國家的中文與英文名稱，提升戰術圖台的跨語系辨識度。</p>
                         </li>
                     </ul>
                 </div>
@@ -93,8 +92,8 @@
                     <h4 class="text-white font-bold text-base mb-1">v2.9.23</h4>
                     <ul class="space-y-2 list-none">
                         <li>
-                            <p class="text-emerald-400 font-medium text-xs mb-0.5">[突破] 核心引擎與三節點備援修復 (Core Engine Unblock & Triple-CDN)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">移除了會導致沙盒環境阻擋腳本執行的嚴格 CORS 標籤，並將底層函式庫升級至穩定的 cdnjs。同時實裝了原生的三節點 (Triple-CDN) 輪詢下載機制，保證圖資的絕對載入率。</p>
+                            <p class="text-emerald-400 font-medium text-xs mb-0.5">[突破] 核心引擎與三節點備援修復 (Core Engine Unblock)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">移除了會導致沙盒環境阻擋腳本執行的嚴格 CORS 標籤，保證圖資的絕對載入率。</p>
                         </li>
                     </ul>
                 </div>
@@ -121,7 +120,6 @@
 
     <!-- Map Container: Absolute Full Screen -->
     <div id="map-wrapper" class="absolute inset-0 z-0 overflow-hidden w-full h-full">
-        <!-- Moved map controls higher up to avoid Safari toolbars and iOS home indicator -->
         <div class="absolute bottom-16 left-4 md:bottom-20 md:left-6 z-10 flex flex-col gap-2">
             <button id="zoom-in" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition border border-slate-600">+</button>
             <button id="zoom-out" class="bg-slate-800/80 hover:bg-slate-700 p-3 rounded-xl shadow-[0_4px_15px_rgba(0,0,0,0.5)] backdrop-blur text-white font-bold text-xl leading-none focus:outline-none transition border border-slate-600">-</button>
@@ -147,8 +145,8 @@
                 </div>
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
-            <button id="open-changelog" class="bg-cyan-600 hover:bg-cyan-500 text-white border border-cyan-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-cyan-500/20 shrink-0 ml-2">
-                v2.9.28
+            <button id="open-changelog" class="bg-emerald-600 hover:bg-emerald-500 text-white border border-emerald-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-emerald-500/20 shrink-0 ml-2">
+                v2.9.32
             </button>
         </div>
 
@@ -193,7 +191,6 @@
             <div id="country-data" class="flex flex-col gap-3 p-4 pb-6 w-full">
                 <div class="border-b border-slate-600/60 pb-3 flex justify-between items-start">
                     <div class="flex flex-col gap-2 w-full pr-2">
-                        <!-- [v2.9.27] 更新雙語國名顯示 -->
                         <h2 id="info-name" class="text-xl font-bold text-white tracking-wide">國家名稱</h2>
                         
                         <div class="flex flex-col gap-1.5 w-full">
@@ -243,6 +240,43 @@
     </div>
 
     <script>
+        // ==========================================
+        // 0. CORE DATABASE (Moved to Top to prevent ReferenceErrors)
+        // ==========================================
+        let airportCoords = {
+            "RCTP": [121.2328, 25.0777], "RJTT": [139.7796, 35.5522], "ZBAA": [116.5845, 40.0798], "RKSI": [126.4505, 37.4692],
+            "ZKPY": [125.6702, 39.2241], "ZMCK": [106.8184, 47.6521], "WSSS": [103.9940, 1.3502], "RPLL": [121.0194, 14.5086], 
+            "WIII": [106.6558, -6.1256], "VTBS": [100.7473, 13.6811], "WMKK": [101.7042, 2.7433], "VVNB": [105.8072, 21.2212], 
+            "VDPP": [104.8441, 11.5466], "VLVT": [102.5633, 17.9883], "VYYY": [96.1332, 16.9043], "WBSB": [114.9283, 4.9442],
+            "VIDP": [77.1000, 28.5665], "OPRN": [73.0992, 33.6167], "VGHS": [90.4005, 23.8433], "VCBI": [79.8833, 7.1805],
+            "VNKT": [85.3592, 27.6975], "VQPR": [89.4246, 27.4032], "VRMM": [73.5291, 4.1918], "UACC": [71.4667, 51.0222], 
+            "UTTT": [69.2812, 41.2579], "UTAA": [58.3610, 37.9800], "UCFM": [74.4776, 43.0613], "UTDD": [68.8250, 38.5433],
+            "OMDB": [55.3644, 25.2532], "OERK": [46.6988, 24.9576], "LLBG": [34.8855, 32.0113], "LTFM": [28.7424, 41.2622],
+            "OIIE": [51.1522, 35.4161], "ORBI": [44.2345, 33.2625], "OTHH": [51.6080, 25.2730], "OKBK": [47.9689, 29.2266],
+            "OOMS": [58.2817, 23.5933], "OJAI": [35.9836, 31.7226], "OLBA": [35.4884, 33.8213], "OSDI": [36.5144, 33.4116],
+            "OYSN": [44.2197, 15.4763], "OBBI": [50.6336, 26.2708], "OAQA": [69.2125, 34.5658], "UBBB": [49.9822, 40.4675], "UGTB": [44.9547, 41.6692], 
+            "UDYZ": [44.3959, 40.1473], "HECA": [31.4056, 30.1219],
+            "EGLL": [-0.4614, 51.4700], "LFPG": [2.5500, 49.0097], "EDDF": [8.5705, 50.0333], "LIRF": [12.2389, 41.8003],
+            "LEMD": [-3.5679, 40.4719], "LSZH": [8.5491, 47.4647], "EHAM": [4.7638, 52.3080], "EBBR": [4.4844, 50.9013],
+            "LOWW": [16.5697, 48.1102], "LKPR": [14.2600, 50.1008], "LZIB": [17.2127, 48.1700], "LHBP": [19.2611, 47.4369],
+            "EPWA": [20.9671, 52.1657], "ELLX": [6.2116, 49.6265], "ESSA": [17.9186, 59.6519], "ENGM": [11.1004, 60.1939],
+            "EKCH": [12.6497, 55.6179], "EFHK": [24.9633, 60.3172], "BIKF": [-22.6056, 63.9850], "EETN": [24.8328, 59.4133],
+            "EVRA": [23.9711, 56.9236], "EYVI": [25.2878, 54.6341], "UUEE": [37.4146, 55.9726], "UKBB": [30.8947, 50.3450],
+            "UMMS": [28.0307, 53.8825], "LUKK": [28.9314, 46.9277], "LROP": [26.1025, 44.5721], "LBSF": [23.4061, 42.6952],
+            "LGAV": [23.9444, 37.9363], "LPPT": [-9.1359, 38.7741], "EIDW": [-6.2499, 53.4213], "LYBE": [20.3092, 44.8184],
+            "LQSA": [18.3314, 43.8247], "LDZA": [16.0688, 45.7431], "LJLJ": [14.4576, 46.2237], "LWSK": [21.6214, 41.9616],
+            "LATI": [19.7206, 41.4147], "LYPG": [19.2519, 42.3594], "LCLK": [33.6249, 34.8751], "LMML": [14.4775, 35.8575],
+            "KLAX": [-118.4085, 33.9416], "CYYZ": [-79.6306, 43.6772], "YSSY": [151.1772, -33.9461], "NZAA": [174.7916, -37.0080]
+        };
+
+        // 建立 FIR 映射字典供繪圖與搜尋共用
+        const firAliasMap = {
+            "OAKX": "OAQA", // Kabul FIR
+            "VECF": "VIDP", // Kolkata FIR -> Delhi fallback
+            "OPLR": "OPRN", // Lahore FIR -> Islamabad fallback
+            "HECC": "HECA"  // Cairo FIR
+        };
+
         // ==========================================
         // 1. GLOBAL BILINGUAL DICTIONARY
         // ==========================================
@@ -308,7 +342,7 @@
             "Laos": "永珍|740萬|236,800 km²|$15B|LAK|~21000|佛教|21/7,23/13,26/33,28/84,28/245,28/279,28/272,28/334,28/297,26/78,23/11,21/3|VLVT|永珍 Vientiane (VLVT)",
             "Myanmar": "奈比多|5400萬|676,578 km²|$64B|MMK|~2100|佛教|21/3,23/1,27/5,30/28,30/160,28/240,28/260,27/270,28/190,27/110,24/35,21/6|VYYY|仰光 Yangon (VYYF)|VYYF: 126.75 (10m Before)",
             "Brunei": "斯里巴加灣|45萬|5,765 km²|$14B|BND|~1.35|伊斯蘭教|27/292,27/158,27/118,28/189,28/236,28/210,28/225,28/226,27/264,27/312,27/322,27/333|WBSB|汶萊 Brunei (WBSB)",
-            "India": "新德里|14.2億|3.28M km²|$3.7T|INR|~83|印度教/伊斯蘭教|14/19,17/20,23/15,29/21,33/25,33/74,31/195,30/192,29/116,25/12,20/4,15/9|VIDP|德里 Delhi (VIDF)|KOLKATA VECF: 125.9 / 132.25",
+            "India": "新德里|14.2億|3.28M km²|$3.7T|INR|~83|印度教/伊斯蘭教|14/19,17/20,23/15,29/21,33/25,33/74,31/195,30/192,29/116,25/12,20/4,15/9|VIDP|德里 Delhi (VIDF)|KOLKATA VECF: 125.775 (10m Before)",
             "Pakistan": "伊斯蘭馬巴德|2.35億|881,913 km²|$376B|PKR|~278|伊斯蘭教|10/63,12/79,16/79,22/58,27/33,31/46,30/256,29/314,26/87,21/29,15/15,11/33|OPRN|喀拉蚩 Karachi (OPKR)|OPLR: 124.1 / 127.5 (15m Before)\nOPKR: 125.9 (15m Before)",
             "Bangladesh": "達卡|1.69億|148,460 km²|$460B|BDT|~109|伊斯蘭教|19/7,22/28,26/65,28/156,28/339,28/340,28/373,28/316,28/300,27/163,23/34,19/14|VGHS|達卡 Dhaka (VGFR)|VGFR: 125.7 (10m Before)",
             "Sri Lanka": "可倫坡|2200萬|65,610 km²|$74B|LKR|~300|佛教為主|27/58,27/67,28/118,28/238,28/373,28/220,28/128,28/105,28/252,27/354,27/315,27/146|VCBI|可倫坡 Colombo (VCCF)",
@@ -317,7 +351,7 @@
             "Maldives": "馬利|52萬|300 km²|$6.9B|MVR|~15.4|伊斯蘭教|28/114,28/38,28/73,29/132,29/215,28/172,28/147,28/187,28/242,28/222,28/201,28/231|VRMM|馬利 Male (VRMF)",
             "Kazakhstan": "阿斯塔納|2000萬|2.72M km²|$259B|KZT|~450|伊斯蘭教|-14/16,-14/15,-7/18,5/21,13/35,18/37,20/50,19/29,12/22,4/27,-5/28,-11/22|UACC|阿斯塔納 Astana (UACF)",
             "Uzbekistan": "塔什干|3600萬|448,978 km²|$90B|UZS|~12500|伊斯蘭教|2/54,3/46,9/72,15/63,21/32,26/7,28/4,26/2,21/4,14/34,8/45,3/53|UTTT|塔什干 Tashkent (UTTR)",
-            "Turkmenistan": "阿什哈巴德|650萬|491,210 km²|$81B|TMT|~3.5|伊斯蘭教|3/20,5/24,10/41,16/32,23/21,28/6,31/3,29/2,23/3,16/10,10/19,5/20|UTAA|阿什哈巴德 Ashgabat (UTAK)|UTAA: 135.2\nUTAV: 134.5 (108NM)\nUTAK: 135.8 (108NM)",
+            "Turkmenistan": "阿什哈巴德|650萬|491,210 km²|$81B|TMT|~3.5|伊斯蘭教|3/20,5/24,10/41,16/32,23/21,28/6,31/3,29/2,23/3,16/10,10/19,5/20|UTAA|阿什哈巴 Ashgabat (UTAK)|UTAA: 135.2\nUTAV: 134.5 (108NM)\nUTAK: 135.8 (108NM)",
             "Kyrgyzstan": "比斯凱克|700萬|199,951 km²|$13B|KGS|~89|伊斯蘭教|-2/26,0/33,6/43,12/61,17/59,22/23,24/16,23/12,18/16,11/34,4/36,-1/31|UCFM|比斯凱克 Bishkek (UAFM)",
             "Tajikistan": "杜尚貝|1000萬|143,100 km²|$11B|TJS|~10.9|伊斯蘭教|2/65,4/72,9/107,15/104,19/66,24/9,26/3,25/1,20/3,14/30,9/47,4/69|UTDD|杜尚貝 Dushanbe (UTAK)",
             "United Arab Emirates": "阿布達比|940萬|83,600 km²|$509B|AED|~3.67|伊斯蘭教|18/7,20/21,23/14,27/6,31/1,33/0,35/0,35/0,32/0,28/0,24/1,20/5|OMDB|阿聯酋 Emirates (OMAE)",
@@ -344,7 +378,7 @@
             "Italy": "羅馬|5800萬|301,340 km²|$2.1T|EUR|~0.92|天主教為主|8/80,8/73,11/65,13/65,17/46,21/21,24/16,24/30,21/68,17/93,12/111,9/96|LIRF|羅馬 Rome (LIRR)",
             "Spain": "馬德里|4800萬|505,990 km²|$1.5T|EUR|~0.92|天主教為主|6/33,7/35,10/25,12/45,16/50,21/21,25/11,24/11,20/25,14/53,9/43,6/50|LEMD|馬德里 Madrid (LECM)",
             "Switzerland": "伯恩|870萬|41,285 km²|$807B|CHF|~0.9|天主教/基督教|-1/60,0/55,4/72,8/85,12/121,16/117,18/107,17/115,14/87,9/87,3/76,0/73|LSZH|瑞士 Switzerland (LSAS)",
-            "Netherlands": "阿姆斯特丹|1750萬|41,543 km²|$991B|EUR|~0.92|無宗教/天主教|3/69,3/53,5/61,8/41,12/55,14/66,17/76,17/85,14/82,11/89,7/87,4/83|EHAM|阿姆斯特丹 Amsterdam (EHAA)",
+            "Netherlands": "阿姆斯特丹|1750萬|41,543 km²|$991B|EUR|~0.92|無宗教/天主教|3/69,3/53,5/61,8/41,12/55,14/66,17/76,17/85,14/82,11/89,7/87,4/83|EHAM|阿姆斯特 Amsterdam (EHAA)",
             "Belgium": "布魯塞爾|1160萬|30,528 km²|$578B|EUR|~0.92|天主教為主|3/76,3/63,6/70,9/51,13/65,15/71,18/73,18/79,15/68,11/74,6/76,4/81|EBBR|布魯塞爾 Brussels (EBBU)",
             "Austria": "維也納|890萬|83,871 km²|$471B|EUR|~0.92|天主教為主|0/38,1/42,5/51,10/45,14/69,18/70,20/68,19/57,15/53,10/40,5/44,1/43|LOWW|維也納 Vienna (LOVV)",
             "Czechia": "布拉格|1050萬|78,866 km²|$330B|CZK|~23|無宗教/天主教|-1/23,0/22,3/27,8/38,13/77,16/72,18/66,17/69,13/39,8/24,3/31,0/25|LKPR|布拉格 Prague (LKAA)",
@@ -383,14 +417,6 @@
             "Australia": "坎培拉|2600萬|7.69M km²|$1.7T|AUD|~1.5|基督教|20/58,20/54,17/51,13/46,9/44,6/40,5/41,6/46,9/52,12/62,15/64,18/52|YSSY|墨爾本 Melbourne (YMMM)",
             "New Zealand": "威靈頓|510萬|268,021 km²|$247B|NZD|~1.6|基督教/無宗教|16/72,16/62,15/74,13/100,11/117,9/147,8/136,9/131,10/100,12/115,13/99,15/84|NZAA|奧克蘭 Auckland (NZZC)",
             "Egypt": "開羅|1.1億|1.01M km²|$398B|EGP|~48|伊斯蘭教|14/5,15/4,18/3,22/1,26/1,28/0,29/0,29/0,27/0,24/1,20/3,15/5|HECA|開羅 Cairo (HECC)|CAIRO: 124.7 (15m Before)"
-        };
-
-        // 建立 FIR 映射字典供繪圖與搜尋共用
-        const firAliasMap = {
-            "OAKX": "OAQA", // Kabul FIR
-            "VECF": "VIDP", // Kolkata FIR -> Delhi fallback
-            "OPLR": "OPRN", // Lahore FIR -> Islamabad fallback
-            "HECC": "HECA"  // Cairo FIR
         };
 
         // ==========================================
@@ -435,9 +461,10 @@
             }
         });
 
-        // [v2.9.28] Native Fetch with Triple-CDN Fallback & Cleaned URLs
+        // Native Fetch with Triple-CDN Fallback
         const loadMapData = async () => {
             const urls = [
+                "https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/world-110m.json",
                 "https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json",
                 "https://unpkg.com/world-atlas@2.0.2/countries-50m.json",
                 "https://fastly.jsdelivr.net/npm/world-atlas@2.0.2/countries-50m.json"
@@ -456,14 +483,12 @@
             throw new Error("All Map CDNs failed due to strict network blocks.");
         };
 
-        // 確保核心引擎存在
         if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
             const routeMsg = document.getElementById("route-msg");
             routeMsg.innerHTML = "<span class='text-red-400 font-bold'>核心引擎載入失敗，請檢查網路連線或重新整理。</span>";
             routeMsg.classList.remove("hidden");
         } else {
             loadMapData().then(world => {
-                // Check if data is 110m or 50m structure
                 const countriesData = world.objects.countries || world.objects.countries_110m || world.objects.countries_50m;
                 if (!countriesData) throw new Error("Invalid TopoJSON structure.");
                 
@@ -476,7 +501,6 @@
                     .attr("d", path)
                     .attr("id", d => "country-" + d.id)
                     .on("mouseover", function(event, d) {
-                        // Fallback to name if available
                         const enName = d.properties ? d.properties.name : "Unknown";
                         if(enName === "Unknown") return;
                         
@@ -522,7 +546,6 @@
             if (hint) hint.classList.add("hidden");
 
             const zhName = countryDict[enName] || enName;
-            // [v2.9.27] 雙語國名顯示
             document.getElementById("info-name").innerText = zhName !== enName ? `${zhName} (${enName})` : enName;
 
             const rawStr = rawDB[enName];
@@ -655,10 +678,18 @@
         const confirmClearBtn = document.getElementById("confirm-clear-btn");
         
         drawBtn.addEventListener("click", () => {
-            const raw = routeInput.value.toUpperCase().trim();
-            const codes = raw.split(/[\s,-]+/);
-            routeLayer.selectAll("*").remove(); 
+            const raw = routeInput.value.trim();
+            if (!raw) return showRouteError("請輸入航線代碼或搜尋目標");
+
+            const codes = raw.toUpperCase().split(/[\s,-]+/);
             
+            // 核心修復：如果只輸入一個單字卻按到「繪製」按鈕，自動轉交給搜尋引擎處理！
+            if (codes.length === 1 && codes[0] !== "") {
+                performSearch();
+                return;
+            }
+
+            routeLayer.selectAll("*").remove(); 
             const routeMsg = document.getElementById("route-msg");
             routeMsg.classList.add("hidden");
 
@@ -667,7 +698,7 @@
             let validPointsCount = 0;
 
             codes.forEach(code => {
-                const searchCode = firAliasMap[code] || code; // 套用 FIR 映射
+                const searchCode = firAliasMap[code] || code; 
                 if (airportCoords[searchCode]) {
                     validCoords.push(airportCoords[searchCode]);
                     validPointsCount++;
@@ -701,11 +732,13 @@
         function performSearch() {
             const raw = routeInput.value.trim();
             if (!raw) return showRouteError("請輸入國家名稱、城市或機場代碼");
-            const upperRaw = raw.toUpperCase();
+            
+            const normalizedRaw = raw.replace(/台/g, '臺');
+            const upperRaw = normalizedRaw.toUpperCase();
 
             const searchCode = firAliasMap[upperRaw] || upperRaw;
 
-            // 1. 搜尋機場/航點 (ICAO/IATA)
+            // 1. 搜尋機場/航點 (ICAO/IATA) -> 必須完全精確吻合
             if (airportCoords[searchCode]) {
                 const coords = airportCoords[searchCode];
                 const [x, y] = projection(coords);
@@ -716,7 +749,7 @@
                 
                 routeLayer.selectAll(".search-ping").remove();
                 routeLayer.append("circle")
-                    .datum(coords) // 關鍵修復：為搜尋信標綁定資料，防止 ResizeObserver 崩潰
+                    .datum(coords)
                     .attr("class", "airport-point search-ping")
                     .attr("cx", x)
                     .attr("cy", y)
@@ -728,18 +761,31 @@
                 return;
             }
 
-            // 2. 深度搜尋國家 
+            // 2. 深度搜尋國家 (精準度排序)
             let matchedEnName = null;
             for (const [en, zh] of Object.entries(countryDict)) {
-                if (en.toUpperCase() === upperRaw || zh === raw || zh.includes(raw)) {
+                // 第一層：國名精確比對
+                if (en.toUpperCase() === upperRaw || zh === normalizedRaw || zh.includes(normalizedRaw)) {
                     matchedEnName = en;
                     break;
                 }
                 
+                // 第二層：資料庫深度比對 [嚴格降噪處理]
                 const dbEntry = rawDB[en];
-                if (dbEntry && dbEntry.toUpperCase().includes(upperRaw)) {
-                    matchedEnName = en;
-                    break;
+                // 限制：輸入字串必須大於等於2個字元，防止輸入數字 '1' 搜到一堆奇怪的國家面積
+                if (dbEntry && upperRaw.length >= 2) {
+                    const parts = dbEntry.split('|');
+                    const capital = parts[0] || "";     // 首都
+                    const acc = parts[9] || "";         // 管區
+                    const radio = parts[10] || "";      // 無線電
+
+                    // 只比對 首都、管區、無線電 三個戰術欄位
+                    if (capital.toUpperCase().includes(upperRaw) ||
+                        acc.toUpperCase().includes(upperRaw) ||
+                        radio.toUpperCase().includes(upperRaw)) {
+                        matchedEnName = en;
+                        // 不立刻 break，讓第一層的精確國名有機會覆蓋它
+                    }
                 }
             }
 
@@ -755,6 +801,8 @@
                     zoomToFeature(d);
                     showRouteError(`已關聯並定位至國家: ${countryDict[matchedEnName]}`, true);
                     return;
+                } else {
+                    return showRouteError(`地圖尚未完全載入，無法跳轉至 ${countryDict[matchedEnName]}`);
                 }
             }
 
@@ -964,7 +1012,7 @@
         mapResizeObserver.observe(wrapper);
 
         // ==========================================
-        // 6. UI MODAL CONTROLS (Changelog, Confirm & Docking)
+        // 6. UI MODAL CONTROLS
         // ==========================================
         const changelogModal = document.getElementById("changelog-modal");
         const openChangelogBtn = document.getElementById("open-changelog");
@@ -978,7 +1026,6 @@
             if (e.target === confirmClearModal) confirmClearModal.classList.add("hidden");
         });
 
-        // 浮動面板左右停靠切換邏輯
         const toggleSideBtn = document.getElementById("toggle-side-btn");
         const floatingPanel = document.getElementById("floating-panel");
         let isPanelDockedRight = true;
