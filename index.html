@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Global Aviation & Intelligence Map</title>
-    <!-- Tailwind CSS for UI -->
+    
+    <!-- [v3.0.2] 純淨單一 HTML 架構：全面使用高穩定度雲端 CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- D3.js and TopoJSON for Mapping -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+
     <style>
         /* Custom Styles for Map Elements */
         body { margin: 0; overflow: hidden; background-color: #0f172a; }
@@ -45,46 +46,36 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v3.0.0 -->
-                <div class="relative pl-4 border-l-2 border-violet-500">
+                <!-- v3.0.2 -->
+                <div class="relative pl-4 border-l-2 border-sky-500">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v3.0.0 (Current)
-                        <span class="bg-violet-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Major Release</span>
+                        v3.0.2 (Current)
+                        <span class="bg-sky-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Single File</span>
                     </h4>
                     <ul class="space-y-2 list-none">
                         <li>
+                            <p class="text-sky-400 font-medium text-xs mb-0.5">[重構] 單一雲端檔案架構 (Cloud-Only Single File)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">拔除繁雜的本地端檔案備援代碼，回歸最乾淨的單一 HTML 檔案架構。透過高穩定度的企業級 CDN 存取所有資源，隨開即用（需連網環境）。<br><span class="italic text-[10px]">Reverted to a pure, cloud-dependent single HTML file architecture. Removed local file fallbacks to keep the codebase clean and standalone.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v3.0.1 -->
+                <div class="relative pl-4 border-l-2 border-amber-500 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v3.0.1</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-amber-400 font-medium text-xs mb-0.5">[重構] 雙軌離線架構 (Hybrid Offline Protocol)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">引入過渡性的本地離線備援機制（本版本已移除以換取單一檔案乾淨度）。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v3.0.0 -->
+                <div class="relative pl-4 border-l-2 border-violet-500 opacity-80">
+                    <h4 class="text-white font-bold text-base mb-1">v3.0.0</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
                             <p class="text-violet-400 font-medium text-xs mb-0.5">[里程碑] 系統全面升級與正式釋出 (System Major Release)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">戰術圖台迎來 v3.0.0 重大里程碑！完美整合多重航線疊加、智慧雙語深度搜尋引擎、高反差戰術色盤，以及涵蓋全球的精確飛航通訊情報庫。底層架構全面優化，提供最極致的導航與情報比對體驗。<br><span class="italic text-[10px]">Major milestone reached! Integrated multi-route overlay, smart bilingual search, tactical color cycling, and comprehensive global comms database.</span></p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.33 -->
-                <div class="relative pl-4 border-l-2 border-fuchsia-500 opacity-90">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.33</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-fuchsia-400 font-medium text-xs mb-0.5">[進化] 多重航線疊加與色彩識別 (Multi-Route Overlay Protocol)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">移除了繪製或匯入新航線時會自動清除舊航線的限制。導入智慧色盤輪詢引擎，方便疊加顯示與路線比對。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.32 -->
-                <div class="relative pl-4 border-l-2 border-emerald-500 opacity-80">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.32</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-emerald-400 font-medium text-xs mb-0.5">[終極修復] 資料庫核心指標 (Database Pointer Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">已將 <code>airportCoords</code> 的宣告移至腳本最頂層，徹底消滅 <code>ReferenceError</code> 崩潰問題。</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- v2.9.30 -->
-                <div class="relative pl-4 border-l-2 border-indigo-500 opacity-70">
-                    <h4 class="text-white font-bold text-base mb-1">v2.9.30</h4>
-                    <ul class="space-y-2 list-none">
-                        <li>
-                            <p class="text-indigo-400 font-medium text-xs mb-0.5">[重構] 智慧搜尋引擎全面強化 (Search Engine Robustness Fix)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">統一按鈕行為：若輸入單字卻誤按「繪製」，系統將自動轉交搜尋引擎處理。</p>
+                            <p class="text-xs leading-relaxed text-slate-400">完美整合多重航線疊加、智慧雙語深度搜尋引擎、高反差戰術色盤，以及涵蓋全球的精確飛航通訊情報庫。</p>
                         </li>
                     </ul>
                 </div>
@@ -136,8 +127,8 @@
                 </div>
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
-            <button id="open-changelog" class="bg-violet-600 hover:bg-violet-500 text-white border border-violet-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-violet-500/20 shrink-0 ml-2">
-                v3.0.0
+            <button id="open-changelog" class="bg-sky-600 hover:bg-sky-500 text-white border border-sky-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-sky-500/20 shrink-0 ml-2">
+                v3.0.2
             </button>
         </div>
 
@@ -280,7 +271,7 @@
             "Canada": "加拿大", "Central African Rep.": "中非共和國", "Chad": "查德", "Chile": "智利", "China": "中國",
             "Colombia": "哥倫比亞", "Comoros": "葛摩", "Congo": "剛果", "Dem. Rep. Congo": "剛果民主共和國", "Costa Rica": "哥斯大黎加",
             "Croatia": "克羅埃西亞", "Cuba": "古巴", "Cyprus": "賽普勒斯", "Czechia": "捷克", "Denmark": "丹麥", "Djibouti": "吉布地",
-            "Dominica": "多明尼克", "Dominican Rep.": "多明尼加", "Ecuador": "厄瓜多", "Egypt": "埃及", "El Salvador": "薩爾瓦多",
+            "Dominica": "多米尼克", "Dominican Rep.": "多明尼加", "Ecuador": "厄瓜多", "Egypt": "埃及", "El Salvador": "薩爾瓦多",
             "Eq. Guinea": "赤道幾內亞", "Eritrea": "厄利垂亞", "Estonia": "愛沙尼亞", "Eswatini": "史瓦帝尼", "Ethiopia": "衣索比亞",
             "Fiji": "斐濟", "Finland": "芬蘭", "France": "法國", "Gabon": "加彭", "Gambia": "甘比亞", "Georgia": "喬治亞",
             "Germany": "德國", "Ghana": "迦納", "Greece": "希臘", "Grenada": "格瑞那達", "Guatemala": "瓜地馬拉", "Guinea": "幾內亞",
@@ -667,7 +658,6 @@
         const cancelClearBtn = document.getElementById("cancel-clear-btn");
         const confirmClearBtn = document.getElementById("confirm-clear-btn");
         
-        // [v2.9.33] 定義航線色彩輪詢陣列 (高反差戰術色)
         const routeColors = ['#fde047', '#38bdf8', '#a78bfa', '#4ade80', '#fb7185', '#f97316'];
         let routeColorIndex = 0;
 
@@ -683,14 +673,11 @@
 
             const codes = raw.toUpperCase().split(/[\s,-]+/);
             
-            // 核心修復：如果只輸入一個單字卻按到「繪製」按鈕，自動轉交給搜尋引擎處理！
             if (codes.length === 1 && codes[0] !== "") {
                 performSearch();
                 return;
             }
 
-            // [v2.9.33] 移除 routeLayer.selectAll("*").remove(); 允許航線疊加
-            // 僅隱藏錯誤訊息
             const routeMsg = document.getElementById("route-msg");
             routeMsg.classList.add("hidden");
 
@@ -739,7 +726,7 @@
 
             const searchCode = firAliasMap[upperRaw] || upperRaw;
 
-            // 1. 搜尋機場/航點 (ICAO/IATA) -> 必須完全精確吻合
+            // 1. 搜尋機場/航點 (ICAO/IATA)
             if (airportCoords[searchCode]) {
                 const coords = airportCoords[searchCode];
                 const [x, y] = projection(coords);
@@ -762,30 +749,25 @@
                 return;
             }
 
-            // 2. 深度搜尋國家 (精準度排序)
+            // 2. 深度搜尋國家
             let matchedEnName = null;
             for (const [en, zh] of Object.entries(countryDict)) {
-                // 第一層：國名精確比對
                 if (en.toUpperCase() === upperRaw || zh === normalizedRaw || zh.includes(normalizedRaw)) {
                     matchedEnName = en;
                     break;
                 }
                 
-                // 第二層：資料庫深度比對 [嚴格降噪處理]
                 const dbEntry = rawDB[en];
-                // 限制：輸入字串必須大於等於2個字元，防止輸入數字 '1' 搜到一堆奇怪的國家面積
                 if (dbEntry && upperRaw.length >= 2) {
                     const parts = dbEntry.split('|');
-                    const capital = parts[0] || "";     // 首都
-                    const acc = parts[9] || "";         // 管區
-                    const radio = parts[10] || "";      // 無線電
+                    const capital = parts[0] || "";     
+                    const acc = parts[9] || "";         
+                    const radio = parts[10] || "";      
 
-                    // 只比對 首都、管區、無線電 三個戰術欄位
                     if (capital.toUpperCase().includes(upperRaw) ||
                         acc.toUpperCase().includes(upperRaw) ||
                         radio.toUpperCase().includes(upperRaw)) {
                         matchedEnName = en;
-                        // 不立刻 break，讓第一層的精確國名有機會覆蓋它
                     }
                 }
             }
@@ -913,7 +895,6 @@
                     }
 
                     if (parsedCoords.length > 1) {
-                        // [v2.9.33] 移除 routeLayer.selectAll("*").remove(); 允許航線疊加
                         renderRouteLine(parsedCoords, true);
                         showRouteError(`成功匯入 ${ext.toUpperCase()} 軌跡: ${file.name} (共 ${parsedCoords.length} 個折點)`, true);
                     } else {
@@ -940,7 +921,6 @@
             routeInput.value = "";
             document.getElementById("route-msg").classList.add("hidden");
             confirmClearModal.classList.add("hidden");
-            // [v2.9.33] 清除時重置色盤輪詢
             routeColorIndex = 0;
         });
 
@@ -948,7 +928,6 @@
             const lineColor = getNextRouteColor();
             const lineString = { type: "LineString", coordinates: coordsArray };
             
-            // [v2.9.33] 將每條航線與其端點獨立打包進 g 群組，避免互相干擾
             const routeGroup = routeLayer.append("g").attr("class", "route-group");
             
             routeGroup.append("path")
@@ -961,13 +940,12 @@
             const currentZoom = (svg.node() && d3.zoomTransform(svg.node())) ? d3.zoomTransform(svg.node()).k : 1;
             const pointsToDraw = isImportedTrack ? [coordsArray[0], coordsArray[coordsArray.length - 1]] : coordsArray;
 
-            // 增加 Null-Safety 檢查，確保 d 存在才呼叫 projection
             routeGroup.selectAll(".airport-point").data(pointsToDraw).enter().append("circle")
                 .attr("class", "airport-point")
                 .attr("cx", d => (d && typeof projection !== 'undefined' && projection(d)) ? projection(d)[0] : 0)
                 .attr("cy", d => (d && typeof projection !== 'undefined' && projection(d)) ? projection(d)[1] : 0)
                 .attr("r", 4 / currentZoom)
-                .style("fill", lineColor); // 讓航點顏色與航線顏色一致
+                .style("fill", lineColor); 
 
             const bounds = path.bounds(lineString);
             const dx = bounds[1][0] - bounds[0][0];
@@ -998,7 +976,6 @@
             clearCountrySelection();
             routeLayer.selectAll("*").remove();
             document.getElementById("route-msg").classList.add("hidden");
-            // [v2.9.33] 重置地圖時也重置色盤
             routeColorIndex = 0;
         });
 
@@ -1017,7 +994,6 @@
                 if (typeof g !== 'undefined' && g) g.selectAll("path").attr("d", path);
                 if (typeof routeLayer !== 'undefined' && routeLayer) {
                     routeLayer.selectAll("path.route-line").attr("d", path);
-                    // 嚴格檢查資料 d，防止投影計算錯誤導致全局腳本崩潰
                     routeLayer.selectAll("circle.airport-point")
                         .attr("cx", d => (d && projection(d)) ? projection(d)[0] : 0)
                         .attr("cy", d => (d && projection(d)) ? projection(d)[1] : 0);
