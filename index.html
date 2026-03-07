@@ -46,21 +46,41 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v3.0.2 -->
-                <div class="relative pl-4 border-l-2 border-sky-500">
+                <!-- v3.1.4 -->
+                <div class="relative pl-4 border-l-2 border-slate-500">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v3.0.2 (Current)
-                        <span class="bg-sky-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Single File</span>
+                        v3.1.4 (Current)
+                        <span class="bg-slate-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Patch</span>
                     </h4>
                     <ul class="space-y-2 list-none">
                         <li>
+                            <p class="text-slate-400 font-medium text-xs mb-0.5">[優化] 移除雷達脈衝動畫 (Radar Pulse Removed)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">根據戰術視覺需求，移除了飛機信標底部過大的動態雷達擴散光圈，保持畫面絕對乾淨，僅保留精確的飛機實體圖示。<br><span class="italic text-[10px]">Removed the animated radar pulse ring beneath the aircraft icon for a cleaner, distraction-free tactical display.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v3.1.3 -->
+                <div class="relative pl-4 border-l-2 border-yellow-500 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v3.1.3</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-blue-400 font-medium text-xs mb-0.5">[微調] 強制 24 小時制輸入 (Strict 24H Format)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">將 Off Block (出發時間) 欄位改為純文字輸入，並加入 24 小時制格式驗證，徹底解決 iPad 等行動裝置被系統強制作為 AM/PM 選擇器的問題。</p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v3.1.0 -->
+                <div class="relative pl-4 border-l-2 border-green-500 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-1">v3.1.0</h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
                             <p class="text-sky-400 font-medium text-xs mb-0.5">[重構] 單一雲端檔案架構 (Cloud-Only Single File)</p>
-                            <p class="text-xs leading-relaxed text-slate-400">拔除繁雜的本地端檔案備援代碼，回歸最乾淨的單一 HTML 檔案架構。透過高穩定度的企業級 CDN 存取所有資源，隨開即用（需連網環境）。<br><span class="italic text-[10px]">Reverted to a pure, cloud-dependent single HTML file architecture. Removed local file fallbacks to keep the codebase clean and standalone.</span></p>
+                            <p class="text-xs leading-relaxed text-slate-400">拔除繁雜的本地端檔案備援代碼，回歸最乾淨的單一 HTML 檔案架構。透過高穩定度的企業級 CDN 存取所有資源，隨開即用。</p>
                         </li>
                     </ul>
                 </div>
                 <!-- v3.0.1 -->
-                <div class="relative pl-4 border-l-2 border-amber-500 opacity-90">
+                <div class="relative pl-4 border-l-2 border-amber-500 opacity-80">
                     <h4 class="text-white font-bold text-base mb-1">v3.0.1</h4>
                     <ul class="space-y-2 list-none">
                         <li>
@@ -70,7 +90,7 @@
                     </ul>
                 </div>
                 <!-- v3.0.0 -->
-                <div class="relative pl-4 border-l-2 border-violet-500 opacity-80">
+                <div class="relative pl-4 border-l-2 border-violet-500 opacity-70">
                     <h4 class="text-white font-bold text-base mb-1">v3.0.0</h4>
                     <ul class="space-y-2 list-none">
                         <li>
@@ -127,8 +147,8 @@
                 </div>
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
-            <button id="open-changelog" class="bg-sky-600 hover:bg-sky-500 text-white border border-sky-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-sky-500/20 shrink-0 ml-2">
-                v3.0.2
+            <button id="open-changelog" class="bg-slate-600 hover:bg-slate-500 text-white border border-slate-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-slate-500/20 shrink-0 ml-2">
+                v3.1.4
             </button>
         </div>
 
@@ -166,6 +186,33 @@
                 </div>
             </div>
             <p id="route-msg" class="text-[10px] text-red-400 mt-2 hidden truncate bg-slate-900/50 p-1.5 rounded"></p>
+        </div>
+
+        <!-- [v3.1.0] Flight Tracker Panel -->
+        <div class="p-4 border-b border-slate-700 shrink-0 bg-slate-800/20">
+            <h2 class="text-xs font-semibold text-emerald-400 mb-2.5 uppercase tracking-wider flex items-center justify-between">
+                <span class="flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    飛行進度模擬器 (需先繪製航線)
+                </span>
+            </h2>
+            <div class="flex items-center gap-2 w-full">
+                <div class="flex-1 flex gap-2">
+                    <div class="relative w-1/2">
+                        <!-- [v3.1.3] 標示改為 UTC -->
+                        <label class="absolute -top-2 left-2 bg-slate-800 px-1 text-[9px] text-slate-400 uppercase tracking-wider">Off Block (UTC)</label>
+                        <input type="text" id="off-block-time" placeholder="ex: 1430" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-emerald-500 font-mono text-emerald-300 placeholder-slate-600 shadow-inner" maxlength="4">
+                    </div>
+                    <div class="relative w-1/2">
+                        <label class="absolute -top-2 left-2 bg-slate-800 px-1 text-[9px] text-slate-400 uppercase tracking-wider">Flt Time (HHMM)</label>
+                        <input type="text" id="flight-time" placeholder="ex: 0430" class="w-full bg-slate-900 border border-slate-600 rounded-lg px-2 py-1.5 text-sm focus:outline-none focus:border-emerald-500 font-mono text-emerald-300 placeholder-slate-600 shadow-inner" maxlength="4">
+                    </div>
+                </div>
+                <button id="estimate-btn" class="shrink-0 bg-emerald-600 hover:bg-emerald-500 text-white py-1.5 px-3 rounded-lg text-xs font-medium transition shadow-[0_4px_10px_rgba(16,185,129,0.3)] whitespace-nowrap h-full border border-emerald-500">
+                    計算
+                </button>
+            </div>
+            <p id="tracker-msg" class="text-[10px] text-emerald-400 mt-2 hidden truncate bg-slate-900/50 p-1.5 rounded"></p>
         </div>
 
         <!-- Info Section -->
@@ -251,6 +298,7 @@
             "KLAX": [-118.4085, 33.9416], "CYYZ": [-79.6306, 43.6772], "YSSY": [151.1772, -33.9461], "NZAA": [174.7916, -37.0080]
         };
 
+        // 建立 FIR 映射字典供繪圖與搜尋共用
         const firAliasMap = {
             "OAKX": "OAQA", 
             "VECF": "VIDP", 
@@ -431,6 +479,13 @@
                 g.selectAll("path").style("stroke-width", 0.5 / event.transform.k + "px");
                 routeLayer.selectAll("path.route-line").style("stroke-width", 2.5 / event.transform.k + "px");
                 routeLayer.selectAll("circle.airport-point").attr("r", 4 / event.transform.k);
+                // [v3.1.0] 縮放時調整飛機圖示大小
+                routeLayer.selectAll("path.aircraft-icon").attr("transform", function() {
+                    const currentTransform = d3.select(this).attr("transform");
+                    const translatePart = currentTransform.match(/translate\([^)]+\)/)[0];
+                    const rotatePart = currentTransform.match(/rotate\([^)]+\)/) ? currentTransform.match(/rotate\([^)]+\)/)[0] : "";
+                    return `${translatePart} scale(${1 / event.transform.k}) ${rotatePart}`;
+                });
             });
 
         svg.call(zoom);
@@ -660,6 +715,7 @@
         
         const routeColors = ['#fde047', '#38bdf8', '#a78bfa', '#4ade80', '#fb7185', '#f97316'];
         let routeColorIndex = 0;
+        let lastDrawnRouteGroup = null; // 記錄最後一條畫的航線，供模擬器使用
 
         function getNextRouteColor() {
             const color = routeColors[routeColorIndex];
@@ -922,6 +978,8 @@
             document.getElementById("route-msg").classList.add("hidden");
             confirmClearModal.classList.add("hidden");
             routeColorIndex = 0;
+            lastDrawnRouteGroup = null; // 重置追蹤目標
+            document.getElementById("tracker-msg").classList.add("hidden");
         });
 
         function renderRouteLine(coordsArray, isImportedTrack = false) {
@@ -929,10 +987,11 @@
             const lineString = { type: "LineString", coordinates: coordsArray };
             
             const routeGroup = routeLayer.append("g").attr("class", "route-group");
+            lastDrawnRouteGroup = routeGroup; // 更新追蹤目標為最新繪製的這條線
             
             routeGroup.append("path")
                 .datum(lineString)
-                .attr("class", "route-line")
+                .attr("class", "route-line target-route-path")
                 .attr("d", path)
                 .style("stroke", lineColor)
                 .style("filter", `drop-shadow(0 0 2px ${lineColor}80)`);
@@ -958,6 +1017,113 @@
             svg.transition().duration(1000).call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(scale));
         }
 
+        // ==========================================
+        // [v3.1.0] FLIGHT PROGRESS TRACKER LOGIC
+        // ==========================================
+        const estimateBtn = document.getElementById("estimate-btn");
+        const offBlockInput = document.getElementById("off-block-time");
+        const flightTimeInput = document.getElementById("flight-time");
+        const trackerMsg = document.getElementById("tracker-msg");
+
+        function showTrackerError(msg, isSuccess = false) {
+            trackerMsg.innerText = msg;
+            trackerMsg.classList.remove("hidden");
+            if (isSuccess) {
+                trackerMsg.classList.replace("text-emerald-400", "text-blue-400");
+            } else {
+                trackerMsg.classList.replace("text-blue-400", "text-emerald-400");
+            }
+        }
+
+        estimateBtn.addEventListener("click", () => {
+            if (!lastDrawnRouteGroup) return showTrackerError("請先繪製或匯入一條航線");
+            
+            const offBlockVal = offBlockInput.value.trim();
+            const flightTimeVal = flightTimeInput.value.trim();
+
+            if (!offBlockVal || !/^([01][0-9]|2[0-3])[0-5][0-9]$/.test(offBlockVal)) return showTrackerError("出發時間需為4碼 (HHMM)，例如 1430");
+            if (!flightTimeVal || !/^\d{2}[0-5]\d$/.test(flightTimeVal)) return showTrackerError("總飛時需為4碼 (HHMM)，例如 0430");
+
+            // [v3.1.3] 全面切換為 UTC 時間運算
+            const now = new Date(); // 當下絕對時間點
+            const offHour = parseInt(offBlockVal.substring(0, 2), 10);
+            const offMin = parseInt(offBlockVal.substring(2, 4), 10);
+            
+            // 使用 Date.UTC 建立以當日 UTC 日期為基準的設定時間
+            let offBlockDate = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), offHour, offMin));
+            
+            // 如果輸入的 UTC 出發時間大於現在的 UTC 時間，代表這是「昨天」出發的跨日航班
+            if (offBlockDate > now) {
+                offBlockDate.setUTCDate(offBlockDate.getUTCDate() - 1);
+            }
+
+            // 利用絕對時間戳 (getTime) 運算分鐘差，不受任何時區干擾
+            const elapsedMinutes = (now.getTime() - offBlockDate.getTime()) / (1000 * 60);
+            
+            // 解析總飛時
+            const ftHour = parseInt(flightTimeVal.substring(0, 2), 10);
+            const ftMin = parseInt(flightTimeVal.substring(2, 4), 10);
+            const totalFlightMinutes = (ftHour * 60) + ftMin;
+
+            if (totalFlightMinutes <= 0) return showTrackerError("總飛時必須大於 0");
+
+            let progressRatio = elapsedMinutes / totalFlightMinutes;
+            
+            // 狀態判定
+            if (progressRatio < 0) progressRatio = 0; // 尚未起飛
+            if (progressRatio > 1) progressRatio = 1; // 已降落
+
+            // 抓取 SVG 路徑並計算長度
+            const routePathNode = lastDrawnRouteGroup.select(".target-route-path").node();
+            if (!routePathNode) return showTrackerError("無法讀取航線資料");
+
+            const totalLength = routePathNode.getTotalLength();
+            const targetPoint = routePathNode.getPointAtLength(totalLength * progressRatio);
+
+            // 清除舊的飛機信標
+            routeLayer.selectAll(".live-tracker-beacon").remove();
+
+            // 計算航向角 (Heading) 讓飛機圖示轉向
+            let angle = 0;
+            if (progressRatio > 0 && progressRatio < 1) {
+                // 抓取前後一丁點的位置來算斜率
+                const delta = 0.001;
+                const p1 = routePathNode.getPointAtLength(totalLength * Math.max(0, progressRatio - delta));
+                const p2 = routePathNode.getPointAtLength(totalLength * Math.min(1, progressRatio + delta));
+                angle = Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI;
+            }
+
+            // 繪製飛機圖示
+            const currentZoom = (svg.node() && d3.zoomTransform(svg.node())) ? d3.zoomTransform(svg.node()).k : 1;
+            const iconScale = 1 / currentZoom; // 讓飛機圖示不受地圖縮放影響保持物理大小
+
+            // 飛機 SVG Path (頂視圖)
+            const planeSVGPath = "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z";
+
+            routeLayer.append("path")
+                .attr("class", "live-tracker-beacon aircraft-icon")
+                .attr("d", planeSVGPath)
+                .attr("fill", "#4ade80") // Emerald-400
+                .attr("stroke", "#0f172a") // 加上深色邊框增加對比
+                .attr("stroke-width", "1")
+                // 飛機圖標中心大約在 (12, 12)，所以要扣掉一半長寬來對齊座標，加上旋轉角(原本SVG圖是朝上的，加90度轉向X軸正向)
+                .attr("transform", `translate(${targetPoint.x}, ${targetPoint.y}) scale(${iconScale}) rotate(${angle + 90}) translate(-12, -12)`)
+                .style("filter", "drop-shadow(0 0 3px rgba(74, 222, 128, 0.8))"); // 僅保留飛機本身的靜態微光
+
+            if (progressRatio === 0) {
+                showTrackerError(`[${(progressRatio * 100).toFixed(1)}%] 航班尚未出發`, true);
+            } else if (progressRatio === 1) {
+                showTrackerError(`[100%] 航班已抵達目的地`, true);
+            } else {
+                showTrackerError(`[${(progressRatio * 100).toFixed(1)}%] 估算位置已標記於航線上`, true);
+            }
+
+            // 鏡頭對焦過去
+            const targetScale = 6;
+            const translate = [width / 2 - targetScale * targetPoint.x, height / 2 - targetScale * targetPoint.y];
+            svg.transition().duration(1500).call(zoom.transform, d3.zoomIdentity.translate(translate[0], translate[1]).scale(targetScale));
+        });
+
         function showRouteError(msg, isSuccess = false) { 
             const routeMsg = document.getElementById("route-msg");
             routeMsg.innerText = msg; 
@@ -976,7 +1142,9 @@
             clearCountrySelection();
             routeLayer.selectAll("*").remove();
             document.getElementById("route-msg").classList.add("hidden");
+            document.getElementById("tracker-msg").classList.add("hidden");
             routeColorIndex = 0;
+            lastDrawnRouteGroup = null;
         });
 
         // RequestAnimationFrame 與 Null-Safety 雙重防護
@@ -997,6 +1165,13 @@
                     routeLayer.selectAll("circle.airport-point")
                         .attr("cx", d => (d && projection(d)) ? projection(d)[0] : 0)
                         .attr("cy", d => (d && projection(d)) ? projection(d)[1] : 0);
+                    
+                    // [v3.1.0] 當視窗改變時，如果目前有飛機信標，需要重算它的位置
+                    const trackerMsgEl = document.getElementById("tracker-msg");
+                    if (trackerMsgEl && !trackerMsgEl.classList.contains("hidden") && lastDrawnRouteGroup) {
+                         // 重新觸發一次估算按鈕，讓它用新的 projection 重畫
+                         estimateBtn.click();
+                    }
                 }
             });
         });
