@@ -18,6 +18,7 @@
         /* 基礎樣式保留，顏色將由 JS 動態覆寫 */
         .route-line { fill: none; stroke-width: 2.5px; opacity: 0.9; stroke-linecap: round; stroke-linejoin: round; }
         .airport-point { stroke: #fff; stroke-width: 1.5px; }
+        .country-label { fill: #e2e8f0; font-size: 9px; font-weight: 700; text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: rgba(15, 23, 42, 0.95); stroke-width: 3px; stroke-linejoin: round; letter-spacing: 0.15px; user-select: none; }
         
         /* Custom Scrollbar for Info Panel */
         ::-webkit-scrollbar { width: 6px; }
@@ -46,11 +47,37 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
-                <!-- v3.1.4 -->
-                <div class="relative pl-4 border-l-2 border-slate-500">
+                <!-- v3.1.6 -->
+                <div class="relative pl-4 border-l-2 border-blue-500">
                     <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
-                        v3.1.4 (Current)
-                        <span class="bg-slate-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Patch</span>
+                        v3.1.6 (Current)
+                        <span class="bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Patch</span>
+                    </h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-slate-300 font-medium text-xs mb-0.5">[優化] 國名縮放分級顯示 (Zoom-Based Label Density)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">新增「縮放倍率 + 文字碰撞避讓」雙層控制：遠景優先顯示主要且面積較大的國家，放大後再逐步補上更多英文國名，明顯降低全球視圖的重疊與雜訊。<br><span class="italic text-[10px]">Added a dual-layer label engine with zoom-based density control and collision avoidance, so the world view stays clean while more country names appear progressively as you zoom in.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v3.1.5 -->
+                <div class="relative pl-4 border-l-2 border-slate-500 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
+                        v3.1.5
+                        <span class="bg-slate-700 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Patch</span>
+                    </h4>
+                    <ul class="space-y-2 list-none">
+                        <li>
+                            <p class="text-slate-400 font-medium text-xs mb-0.5">[新增] 國家英文標籤 (English Country Labels)</p>
+                            <p class="text-xs leading-relaxed text-slate-400">於地圖上的各國區塊上方加入英文國名標籤，並同步支援縮放與視窗尺寸改變時的位置重算，維持地圖閱讀性與穩定度。<br><span class="italic text-[10px]">Added English country-name labels above each country and kept them aligned during zoom and resize events.</span></p>
+                        </li>
+                    </ul>
+                </div>
+                <!-- v3.1.4 -->
+                <div class="relative pl-4 border-l-2 border-slate-500 opacity-90">
+                    <h4 class="text-white font-bold text-base mb-2 flex items-center gap-2">
+                        v3.1.4
+                        <span class="bg-slate-700 text-white text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider">Patch</span>
                     </h4>
                     <ul class="space-y-2 list-none">
                         <li>
@@ -148,7 +175,7 @@
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
             <button id="open-changelog" class="bg-slate-600 hover:bg-slate-500 text-white border border-slate-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-slate-500/20 shrink-0 ml-2">
-                v3.1.4
+                v3.1.5
             </button>
         </div>
 
@@ -471,14 +498,117 @@
 
         let path = d3.geoPath().projection(projection);
 
+        const COUNTRY_LABEL_PRIORITY = new Set([
+            "United States of America", "Canada", "Brazil", "Argentina", "Mexico",
+            "United Kingdom", "France", "Germany", "Spain", "Italy", "Portugal",
+            "Norway", "Sweden", "Finland", "Poland", "Ukraine", "Turkey", "Greece",
+            "Russia", "China", "India", "Japan", "South Korea", "Indonesia",
+            "Saudi Arabia", "United Arab Emirates", "Egypt", "South Africa",
+            "Australia", "New Zealand"
+        ]);
+        let currentMapZoom = 1;
+        let countryLabelRefreshRaf = null;
+
+        const getCountryLabelPosition = (feature) => {
+            const centroid = path.centroid(feature);
+            if (!centroid || !Number.isFinite(centroid[0]) || !Number.isFinite(centroid[1])) return null;
+            return [centroid[0], centroid[1] - 8];
+        };
+
+        const getCountryLabelPriority = (feature) => {
+            const enName = feature && feature.properties ? feature.properties.name : "";
+            const projectedArea = Math.max(0, path.area(feature) || 0);
+            const hasPanelData = rawDB[enName] ? 15000 : 0;
+            const isPriority = COUNTRY_LABEL_PRIORITY.has(enName) ? 1000000 : 0;
+            return projectedArea + hasPanelData + isPriority;
+        };
+
+        const getCountryLabelAreaThreshold = (zoomLevel = 1) => {
+            if (zoomLevel < 1.35) return 2200;
+            if (zoomLevel < 1.8) return 1300;
+            if (zoomLevel < 2.4) return 700;
+            if (zoomLevel < 3.2) return 320;
+            if (zoomLevel < 4.8) return 130;
+            if (zoomLevel < 6.5) return 55;
+            return 0;
+        };
+
+        const boxesOverlap = (a, b) => !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
+
+        const updateCountryLabels = () => {
+            g.selectAll("text.country-label")
+                .attr("x", d => {
+                    const pos = getCountryLabelPosition(d);
+                    return pos ? pos[0] : -9999;
+                })
+                .attr("y", d => {
+                    const pos = getCountryLabelPosition(d);
+                    return pos ? pos[1] : -9999;
+                });
+        };
+
+        const updateCountryLabelVisibility = (zoomLevel = currentMapZoom) => {
+            currentMapZoom = zoomLevel;
+            const acceptedBoxes = [];
+            const minArea = getCountryLabelAreaThreshold(zoomLevel);
+            const labels = g.selectAll("text.country-label")
+                .sort((a, b) => d3.descending(getCountryLabelPriority(a), getCountryLabelPriority(b)));
+
+            labels.attr("display", "none");
+
+            labels.each(function(d) {
+                const pos = getCountryLabelPosition(d);
+                const projectedArea = Math.max(0, path.area(d) || 0);
+                if (!pos || projectedArea < minArea) return;
+
+                const label = d3.select(this);
+                label.attr("display", null);
+
+                const rect = this.getBoundingClientRect();
+                if (!rect || !Number.isFinite(rect.width) || !Number.isFinite(rect.height) || rect.width === 0 || rect.height === 0) {
+                    label.attr("display", "none");
+                    return;
+                }
+
+                const paddedRect = {
+                    left: rect.left - 2,
+                    top: rect.top - 1,
+                    right: rect.right + 2,
+                    bottom: rect.bottom + 1
+                };
+
+                if (acceptedBoxes.some(existing => boxesOverlap(existing, paddedRect))) {
+                    label.attr("display", "none");
+                    return;
+                }
+
+                acceptedBoxes.push(paddedRect);
+            });
+        };
+
+        const scheduleCountryLabelRefresh = (zoomLevel = currentMapZoom) => {
+            currentMapZoom = zoomLevel;
+            if (countryLabelRefreshRaf) cancelAnimationFrame(countryLabelRefreshRaf);
+            countryLabelRefreshRaf = window.requestAnimationFrame(() => {
+                countryLabelRefreshRaf = null;
+                updateCountryLabels();
+                updateCountryLabelVisibility(currentMapZoom);
+            });
+        };
+
         const zoom = d3.zoom()
             .scaleExtent([1, 15])
             .on("zoom", (event) => {
+                currentMapZoom = event.transform.k;
                 g.attr("transform", event.transform);
                 routeLayer.attr("transform", event.transform);
                 g.selectAll("path").style("stroke-width", 0.5 / event.transform.k + "px");
+                g.selectAll("text.country-label")
+                    .style("font-size", `${9 / event.transform.k}px`)
+                    .style("stroke-width", `${3 / event.transform.k}px`);
                 routeLayer.selectAll("path.route-line").style("stroke-width", 2.5 / event.transform.k + "px");
                 routeLayer.selectAll("circle.airport-point").attr("r", 4 / event.transform.k);
+                scheduleCountryLabelRefresh(event.transform.k);
                 // [v3.1.0] 縮放時調整飛機圖示大小
                 routeLayer.selectAll("path.aircraft-icon").attr("transform", function() {
                     const currentTransform = d3.select(this).attr("transform");
@@ -561,6 +691,14 @@
                         populateDataPanel(enName);
                         zoomToFeature(d);
                     });
+
+                g.selectAll("text.country-label")
+                    .data(countries.filter(d => d.properties && d.properties.name))
+                    .enter().append("text")
+                    .attr("class", "country-label")
+                    .text(d => d.properties.name);
+
+                scheduleCountryLabelRefresh(currentMapZoom);
             }).catch(err => {
                 console.error("Map Load Error:", err);
                 const routeMsg = document.getElementById("route-msg");
@@ -1159,7 +1297,10 @@
                     .scale((newWidth) / (2 * Math.PI))
                     .translate([newWidth / 2, newHeight / 1.5]);
 
-                if (typeof g !== 'undefined' && g) g.selectAll("path").attr("d", path);
+                if (typeof g !== 'undefined' && g) {
+                    g.selectAll("path").attr("d", path);
+                    scheduleCountryLabelRefresh(currentMapZoom);
+                }
                 if (typeof routeLayer !== 'undefined' && routeLayer) {
                     routeLayer.selectAll("path.route-line").attr("d", path);
                     routeLayer.selectAll("circle.airport-point")
