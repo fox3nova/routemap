@@ -18,7 +18,9 @@
         /* 基礎樣式保留，顏色將由 JS 動態覆寫 */
         .route-line { fill: none; stroke-width: 2.5px; opacity: 0.9; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
         .airport-point { stroke: #fff; stroke-width: 1.5px; vector-effect: non-scaling-stroke; }
-        .country-label { fill: #e2e8f0; font-size: 9px; font-weight: 700; text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: rgba(15, 23, 42, 0.95); stroke-width: 3px; stroke-linejoin: round; letter-spacing: 0.15px; user-select: none; text-rendering: optimizeSpeed; }
+        .country-label { fill: #e2e8f0; font-size: 8.6px; font-weight: 700; text-anchor: middle; pointer-events: none; paint-order: stroke; stroke: rgba(15, 23, 42, 0.95); stroke-width: 3px; stroke-linejoin: round; letter-spacing: 0.1px; user-select: none; text-rendering: optimizeSpeed; dominant-baseline: hanging; }
+        .country-label .label-zh { font-size: 1em; }
+        .country-label .label-en { font-size: 0.78em; opacity: 0.95; letter-spacing: 0.12px; }
         
         /* Custom Scrollbar for Info Panel */
         ::-webkit-scrollbar { width: 6px; }
@@ -47,10 +49,32 @@
                 </button>
             </div>
             <div class="p-5 overflow-y-auto text-sm text-slate-300 space-y-6">
+                <!-- v3.1.9 -->
+                <div class="p-4 rounded-xl bg-slate-900/40 border border-emerald-500/40 shadow-[0_0_0_1px_rgba(16,185,129,0.15)]">
+                    <div class="flex items-center justify-between mb-2">
+                        <h4 class="text-white font-bold text-base">v3.1.9 (Current)</h4>
+                        <span class="text-[10px] font-mono px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">BILINGUAL LABELS</span>
+                    </div>
+                    <div class="space-y-2">
+                        <div>
+                            <p class="text-sm font-semibold text-emerald-300">國家標籤改為中英雙語顯示</p>
+                            <p class="text-xs leading-relaxed text-slate-400">地圖上的國家標籤改成「中文在上、英文在下」的雙語模式；若該國沒有中文對照則自動退回英文單語顯示。<br><span class="italic text-[10px]">Country labels now render in bilingual form with Chinese on the first line and English on the second, while countries without a Chinese mapping gracefully fall back to English-only labels.</span></p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-emerald-300">雙語標籤碰撞模型同步更新</p>
+                            <p class="text-xs leading-relaxed text-slate-400">同步調整標籤寬高估算與碰撞避讓，讓雙語標籤在遠景模式下不會因為文字變長而大量重疊。<br><span class="italic text-[10px]">The label collision model has been recalibrated for bilingual width and height so the world view remains readable even with longer two-line labels.</span></p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-semibold text-emerald-300">主介面版號同步更新</p>
+                            <p class="text-xs leading-relaxed text-slate-400">主畫面版本按鈕與更新日誌頂端 Current 標示都已同步改為 v3.1.9，避免檔名與畫面版本不一致。<br><span class="italic text-[10px]">The visible build number has been updated consistently to v3.1.9 across both the main UI and the changelog current header.</span></p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- v3.1.8 -->
                 <div class="p-4 rounded-xl bg-slate-900/40 border border-emerald-500/40 shadow-[0_0_0_1px_rgba(16,185,129,0.15)]">
                     <div class="flex items-center justify-between mb-2">
-                        <h4 class="text-white font-bold text-base">v3.1.8 (Current)</h4>
+                        <h4 class="text-white font-bold text-base">v3.1.8</h4>
                         <span class="text-[10px] font-mono px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">PERF HOTFIX</span>
                     </div>
                     <div class="space-y-2">
@@ -209,7 +233,7 @@
                 <p class="text-[10px] text-slate-400 mt-1 font-mono tracking-wide">Global Aviation Intelligence</p>
             </div> 
             <button id="open-changelog" class="bg-slate-600 hover:bg-slate-500 text-white border border-slate-500 px-2 py-1 rounded-md text-[10px] font-bold font-mono transition shadow-lg shadow-slate-500/20 shrink-0 ml-2">
-                v3.1.8
+                v3.1.9
             </button>
         </div>
 
@@ -548,12 +572,14 @@
         let isMapInteracting = false;
         let pendingZoomFrame = null;
         let pendingZoomTransform = d3.zoomIdentity;
-        const COUNTRY_LABEL_FONT_PX = 9;
+        const COUNTRY_LABEL_FONT_PX = 8.6;
         const COUNTRY_LABEL_STROKE_PX = 3;
-        const COUNTRY_LABEL_COLLISION_PADDING_X = 2;
-        const COUNTRY_LABEL_COLLISION_PADDING_Y = 1;
-        const COUNTRY_LABEL_APPROX_CHAR_WIDTH = 5.6;
-        const COUNTRY_LABEL_APPROX_HEIGHT = 11;
+        const COUNTRY_LABEL_COLLISION_PADDING_X = 3;
+        const COUNTRY_LABEL_COLLISION_PADDING_Y = 2;
+        const COUNTRY_LABEL_APPROX_CHAR_WIDTH_EN = 5.4;
+        const COUNTRY_LABEL_APPROX_CHAR_WIDTH_ZH = 8.4;
+        const COUNTRY_LABEL_APPROX_HEIGHT_SINGLE = 11;
+        const COUNTRY_LABEL_APPROX_HEIGHT_BILINGUAL = 20;
 
         const getCountryLabelPosition = (feature) => {
             const centroid = path.centroid(feature);
@@ -561,8 +587,19 @@
             return [centroid[0], centroid[1] - 8];
         };
 
+        const getCountryLabelMeta = (feature) => {
+            const enName = feature && feature.properties ? (feature.properties.name || "") : "";
+            const zhCandidate = countryDict[enName] || "";
+            const hasZh = zhCandidate && zhCandidate !== enName;
+            return {
+                enName,
+                zhName: hasZh ? zhCandidate : "",
+                isBilingual: Boolean(hasZh)
+            };
+        };
+
         const getCountryLabelPriority = (feature) => {
-            const enName = feature && feature.properties ? feature.properties.name : "";
+            const { enName } = getCountryLabelMeta(feature);
             const projectedArea = Math.max(0, path.area(feature) || 0);
             const hasPanelData = rawDB[enName] ? 15000 : 0;
             const isPriority = COUNTRY_LABEL_PRIORITY.has(enName) ? 1000000 : 0;
@@ -585,17 +622,19 @@
             const pos = getCountryLabelPosition(feature);
             if (!pos) return null;
 
-            const name = feature && feature.properties ? (feature.properties.name || "") : "";
+            const { enName, zhName, isBilingual } = getCountryLabelMeta(feature);
             const screenX = pos[0] * zoomTransform.k + zoomTransform.x;
             const screenY = pos[1] * zoomTransform.k + zoomTransform.y;
-            const width = Math.max(18, name.length * COUNTRY_LABEL_APPROX_CHAR_WIDTH);
-            const height = COUNTRY_LABEL_APPROX_HEIGHT;
+            const zhWidth = zhName ? zhName.length * COUNTRY_LABEL_APPROX_CHAR_WIDTH_ZH : 0;
+            const enWidth = enName ? enName.length * COUNTRY_LABEL_APPROX_CHAR_WIDTH_EN : 0;
+            const width = Math.max(20, zhWidth, enWidth);
+            const height = isBilingual ? COUNTRY_LABEL_APPROX_HEIGHT_BILINGUAL : COUNTRY_LABEL_APPROX_HEIGHT_SINGLE;
 
             return {
                 left: screenX - width / 2 - COUNTRY_LABEL_COLLISION_PADDING_X,
-                top: screenY - height - COUNTRY_LABEL_COLLISION_PADDING_Y,
+                top: screenY - COUNTRY_LABEL_COLLISION_PADDING_Y,
                 right: screenX + width / 2 + COUNTRY_LABEL_COLLISION_PADDING_X,
-                bottom: screenY + COUNTRY_LABEL_COLLISION_PADDING_Y
+                bottom: screenY + height + COUNTRY_LABEL_COLLISION_PADDING_Y
             };
         };
 
@@ -624,15 +663,14 @@
 
         const updateCountryLabels = () => {
             if (!countryLabelSelection) return;
-            countryLabelSelection
-                .attr("x", d => {
-                    const pos = getCountryLabelPosition(d);
-                    return pos ? pos[0] : -9999;
-                })
-                .attr("y", d => {
-                    const pos = getCountryLabelPosition(d);
-                    return pos ? pos[1] : -9999;
-                });
+            countryLabelSelection.each(function(d) {
+                const pos = getCountryLabelPosition(d);
+                const x = pos ? pos[0] : -9999;
+                const y = pos ? pos[1] : -9999;
+                const label = d3.select(this);
+                label.attr("x", x).attr("y", y);
+                label.selectAll("tspan").attr("x", x);
+            });
         };
 
         const updateCountryLabelVisibility = (zoomLevel = currentMapZoom) => {
@@ -803,7 +841,23 @@
                     .attr("class", "country-label")
                     .style("font-size", `${COUNTRY_LABEL_FONT_PX / currentMapZoom}px`)
                     .style("stroke-width", `${COUNTRY_LABEL_STROKE_PX / currentMapZoom}px`)
-                    .text(d => d.properties.name);
+                    .each(function(d) {
+                        const { enName, zhName, isBilingual } = getCountryLabelMeta(d);
+                        const label = d3.select(this);
+                        label.text(null);
+                        if (isBilingual) {
+                            label.append("tspan")
+                                .attr("class", "label-zh")
+                                .attr("dy", "0em")
+                                .text(zhName);
+                            label.append("tspan")
+                                .attr("class", "label-en")
+                                .attr("dy", "1.05em")
+                                .text(enName);
+                        } else {
+                            label.text(enName);
+                        }
+                    });
 
                 scheduleCountryLabelRefresh(currentMapZoom, { reposition: true, immediate: true });
             }).catch(err => {
